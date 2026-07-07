@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>SPLAT RUN</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a1a22">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
   * { box-sizing: border-box; }
   html, body {
@@ -1717,5 +1721,14 @@
 })();
 </script>
 
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('sw.js').catch(function(err) {
+        console.log('SW registration failed:', err);
+      });
+    });
+  }
+</script>
 </body>
 </html>

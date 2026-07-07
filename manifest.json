@@ -1,0 +1,25 @@
+{
+  "name": "Splat Run",
+  "short_name": "Splat Run",
+  "description": "Retro veres platformer egy tricolor sheltie-vel",
+  "start_url": "./splat_run.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#0f0f14",
+  "theme_color": "#1a1a22",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
