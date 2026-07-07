@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>SPLAT RUN — Phaser teszt</title>
+<style>
+  body {
+    margin: 0;
+    background: #0f0f14;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Courier New', Courier, monospace;
+    color: #e6e6ee;
+  }
+  h1 {
+    color: #ff2e5b;
+    letter-spacing: 6px;
+    font-size: 22px;
+    margin: 20px 0 6px;
+  }
+  p.note {
+    font-size: 13px;
+    color: #9a9aa6;
+    max-width: 600px;
+    text-align: center;
+    padding: 0 12px;
+    margin: 0 0 14px;
+  }
+  #game-container {
+    border: 3px solid #33333d;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .touch-controls {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px auto 0;
+    padding: 0 4px;
+    max-width: 600px;
+  }
+  .dpad {
+    display: grid;
+    grid-template-columns: repeat(3, clamp(74px, 24vw, 102px));
+    grid-template-rows: repeat(3, clamp(74px, 24vw, 102px));
+    gap: 9px;
+  }
+  .touch-btn {
+    background: #2a2a34;
+    border: 1px solid #45454f;
+    border-radius: 14px;
+    color: #e6e6ee;
+    font-size: clamp(28px, 8vw, 38px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .touch-btn:active { background: #3a3a46; }
+  .touch-btn.empty { background: transparent; border: none; }
+  .jump-btn {
+    width: clamp(150px, 40vw, 190px);
+    height: clamp(150px, 40vw, 190px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ff5c7a, #a3183a);
+    box-shadow: 0 6px 0 #5c0e22, inset 0 0 0 2px rgba(255,255,255,0.15);
+    color: #ffffff;
+    font-size: clamp(20px, 6vw, 26px);
+    font-weight: bold;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .jump-btn:active {
+    box-shadow: 0 2px 0 #5c0e22, inset 0 0 0 2px rgba(255,255,255,0.15);
+    transform: translateY(4px);
+  }
+  @media (pointer: coarse) {
+    .touch-controls { display: flex; }
+  }
+</style>
+</head>
+<body>
+
+<h1>SPLAT RUN — PHASER TESZT</h1>
+<p class="note">1. lepes: csak a mozgas es ugras erzeset teszteljuk az uj motorral. Nyilak / WASD mozgashoz, szokoz ugrashoz (tartva magasabb, level a levegoben meg egyszer dupla ugras).</p>
+<div id="game-container"></div>
+
+<div class="touch-controls">
+  <div class="dpad">
+    <div class="touch-btn empty"></div>
+    <div class="touch-btn" id="btnUp">&#9650;</div>
+    <div class="touch-btn empty"></div>
+    <div class="touch-btn" id="btnLeft">&#9664;</div>
+    <div class="touch-btn empty"></div>
+    <div class="touch-btn" id="btnRight">&#9654;</div>
+    <div class="touch-btn empty"></div>
+    <div class="touch-btn" id="btnDown">&#9660;</div>
+    <div class="touch-btn empty"></div>
+  </div>
+  <div class="jump-btn" id="btnJump">UGRAS</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+<script>
+(function() {
+  var W = 600, H = 340;
+  var DOG_W = 18, DOG_H = 26;
+  var MARGIN_X = 14, MARGIN_Y = 10;
+  var TEX_W = DOG_W + MARGIN_X + 24;
+  var TEX_H = DOG_H + MARGIN_Y * 2;
+
+  function qPoint(x0, y0, cx, cy, x1, y1, t) {
+    var mt = 1 - t;
+    return [
+      mt * mt * x0 + 2 * mt * t * cx + t * t * x1,
+      mt * mt * y0 + 2 * mt * t * cy + t * t * y1
+    ];
+  }
+
+  function drawDogArt(g, x, y, w, h) {
+    g.fillStyle(0x211f1e, 1);
+    g.beginPath();
+    g.moveTo(x - 1, y + h * 0.5);
+    var steps = 5, i, t, p;
+    for (i = 1; i <= steps; i++) {
+      t = i / steps;
+      p = qPoint(x - 1, y + h * 0.5, x - 7, y + h * 0.32, x - 3, y + h * 0.1, t);
+      g.lineTo(p[0], p[1]);
+    }
+    for (i = 1; i <= steps; i++) {
+      t = i / steps;
+      p = qPoint(x - 3, y + h * 0.1, x - 1, y + h * 0.3, x + 3, y + h * 0.48, t);
+      g.lineTo(p[0], p[1]);
+    }
+    g.closePath();
+    g.fillPath();
+
+    g.fillStyle(0xb8752f, 1);
+    g.fillRect(x + 3, y + h - 6, 4, 6);
+    g.fillRect(x + w - 7, y + h - 6, 4, 6);
+    g.fillStyle(0xf4f1e6, 1);
+    g.fillRect(x + 3, y + h - 2, 4, 2);
+    g.fillRect(x + w - 7, y + h - 2, 4, 2);
+
+    g.fillStyle(0x211f1e, 1);
+    g.fillEllipse(x + w * 0.5, y + h * 0.58, w * 1.04, h * 0.68);
+
+    g.fillStyle(0xb8752f, 1);
+    g.fillEllipse(x + w * 0.3, y + h * 0.62, w * 0.32, h * 0.44);
+
+    g.fillStyle(0xf4f1e6, 1);
+    g.fillEllipse(x + w * 0.46, y + h * 0.72, w * 0.6, h * 0.56);
+
+    g.fillStyle(0xb8752f, 1);
+    g.fillCircle(x + w * 0.62, y + h * 0.26, w * 0.42);
+
+    g.fillStyle(0x211f1e, 1);
+    g.fillEllipse(x + w * 0.55, y + h * 0.12, w * 0.68, h * 0.32);
+
+    g.fillStyle(0xf4f1e6, 1);
+    g.fillEllipse(x + w * 0.78, y + h * 0.3, w * 0.4, h * 0.3);
+
+    g.fillStyle(0x211f1e, 1);
+    g.fillTriangle(x + w * 0.4, y + h * 0.06, x + w * 0.26, y - h * 0.08, x + w * 0.54, y + h * 0.13);
+    g.fillTriangle(x + w * 0.82, y + h * 0.06, x + w * 0.98, y - h * 0.05, x + w * 0.7, y + h * 0.14);
+
+    g.fillStyle(0xb8752f, 1);
+    g.fillTriangle(x + w * 0.42, y + h * 0.1, x + w * 0.33, y, x + w * 0.5, y + h * 0.14);
+    g.fillTriangle(x + w * 0.8, y + h * 0.1, x + w * 0.92, y + h * 0.02, x + w * 0.72, y + h * 0.15);
+
+    g.fillStyle(0xf4f1e6, 1);
+    g.fillEllipse(x + w * 0.9, y + h * 0.32, w * 0.32, h * 0.22);
+
+    g.fillStyle(0x211f1e, 1);
+    g.fillCircle(x + w * 1.02, y + h * 0.3, 1.6);
+    g.fillCircle(x + w * 0.68, y + h * 0.22, 1.4);
+  }
+
+  var JUMP_MIN = -420;
+  var JUMP_HOLD_ACCEL = -900;
+  var JUMP_MAX_HOLD_MS = 220;
+  var DOUBLE_JUMP_VEL = -320;
+  var MOVE_SPEED = 200;
+
+  var player, platforms, cursors, jumpKey, keyA, keyD;
+  var jumpsUsed = 0;
+  var isJumping = false;
+  var jumpHoldTime = 0;
+
+  var touchState = { left: false, right: false, jumpHeld: false, jumpPressed: false };
+
+  function bindHold(el, onDown, onUp) {
+    el.addEventListener('touchstart', function(e) { e.preventDefault(); onDown(); }, { passive: false });
+    el.addEventListener('touchend', function(e) { e.preventDefault(); onUp(); }, { passive: false });
+    el.addEventListener('mousedown', function(e) { e.preventDefault(); onDown(); });
+    el.addEventListener('mouseup', function(e) { e.preventDefault(); onUp(); });
+  }
+
+  bindHold(document.getElementById('btnLeft'), function() { touchState.left = true; }, function() { touchState.left = false; });
+  bindHold(document.getElementById('btnRight'), function() { touchState.right = true; }, function() { touchState.right = false; });
+  bindHold(document.getElementById('btnJump'),
+    function() { touchState.jumpHeld = true; touchState.jumpPressed = true; },
+    function() { touchState.jumpHeld = false; }
+  );
+
+  function preload() {}
+
+  function create() {
+    var g = this.add.graphics();
+    drawDogArt(g, MARGIN_X, MARGIN_Y, DOG_W, DOG_H);
+    g.generateTexture('dog', TEX_W, TEX_H);
+    g.destroy();
+
+    platforms = this.physics.add.staticGroup();
+
+    var ground = this.add.rectangle(300, 320, 600, 40, 0x5a4a38);
+    this.physics.add.existing(ground, true);
+    platforms.add(ground);
+
+    var ledge = this.add.rectangle(420, 220, 140, 20, 0x5a4a38);
+    this.physics.add.existing(ledge, true);
+    platforms.add(ledge);
+
+    player = this.physics.add.sprite(40, 250, 'dog');
+    player.setOrigin(0, 0);
+    player.body.setSize(DOG_W, DOG_H);
+    player.body.setOffset(MARGIN_X, MARGIN_Y);
+    player.setCollideWorldBounds(true);
+
+    this.physics.add.collider(player, platforms, function() {
+      if (player.body.blocked.down) {
+        jumpsUsed = 0;
+        isJumping = false;
+      }
+    });
+
+    cursors = this.input.keyboard.createCursorKeys();
+    keyA = this.input.keyboard.addKey('A');
+    keyD = this.input.keyboard.addKey('D');
+    jumpKey = this.input.keyboard.addKey('SPACE');
+  }
+
+  function update(time, delta) {
+    var left = cursors.left.isDown || keyA.isDown || touchState.left;
+    var right = cursors.right.isDown || keyD.isDown || touchState.right;
+
+    if (left) {
+      player.body.setVelocityX(-MOVE_SPEED);
+      player.setFlipX(true);
+    } else if (right) {
+      player.body.setVelocityX(MOVE_SPEED);
+      player.setFlipX(false);
+    } else {
+      player.body.setVelocityX(0);
+    }
+
+    var onGround = player.body.blocked.down;
+    var jumpJustPressed = Phaser.Input.Keyboard.JustDown(jumpKey) || touchState.jumpPressed;
+    touchState.jumpPressed = false;
+    var jumpIsHeld = jumpKey.isDown || touchState.jumpHeld;
+
+    if (jumpJustPressed) {
+      if (onGround) {
+        player.body.setVelocityY(JUMP_MIN);
+        isJumping = true;
+        jumpHoldTime = 0;
+        jumpsUsed = 1;
+      } else if (jumpsUsed === 1) {
+        player.body.setVelocityY(DOUBLE_JUMP_VEL);
+        jumpsUsed = 2;
+        isJumping = false;
+      }
+    }
+
+    if (isJumping) {
+      if (jumpIsHeld && jumpHoldTime < JUMP_MAX_HOLD_MS) {
+        player.body.velocity.y += JUMP_HOLD_ACCEL * (delta / 1000);
+        jumpHoldTime += delta;
+      } else {
+        isJumping = false;
+      }
+    }
+  }
+
+  var config = {
+    type: Phaser.AUTO,
+    width: W,
+    height: H,
+    parent: 'game-container',
+    backgroundColor: '#2b1b3d',
+    physics: {
+      default: 'arcade',
+      arcade: { gravity: { y: 1700 }, debug: false }
+    },
+    scene: { preload: preload, create: create, update: update }
+  };
+
+  new Phaser.Game(config);
+})();
+</script>
+
+</body>
+</html>
