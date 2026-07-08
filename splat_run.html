@@ -2,6 +2,7 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>SPLAT RUN</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1a1a22">
@@ -152,6 +153,70 @@
   @media (pointer: coarse) {
     .touch-controls { display: flex; }
     .hint { display: none; }
+  }
+
+  /* Telepitett PWA (standalone) mod: teljes kepernyos jatek, lebego vezerlokkel */
+  html.standalone-app, html.standalone-app body {
+    height: 100%;
+    overflow: hidden;
+  }
+  html.standalone-app body {
+    display: block;
+  }
+  html.standalone-app .frame {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  html.standalone-app .title { display: none; }
+  html.standalone-app .hud {
+    padding: 6px 10px 0;
+    flex: 0 0 auto;
+  }
+  html.standalone-app .screen-wrap {
+    flex: 1 1 auto;
+    border-radius: 0;
+    border: none;
+    min-height: 0;
+  }
+  html.standalone-app .screen-wrap canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  html.standalone-app .hint { display: none; }
+
+  /* Lebego, mindig lathato erintovezerlok telepitett app modban */
+  html.standalone-app .touch-controls {
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    max-width: none;
+    padding: 0 max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-right));
+    pointer-events: none;
+    z-index: 5;
+  }
+  html.standalone-app .touch-controls .dpad,
+  html.standalone-app .touch-controls .jump-btn {
+    pointer-events: auto;
+    opacity: 0.85;
+  }
+  html.standalone-app .dpad {
+    grid-template-columns: repeat(3, clamp(56px, 15vw, 84px));
+    grid-template-rows: repeat(3, clamp(56px, 15vw, 84px));
+  }
+  html.standalone-app .jump-btn {
+    width: clamp(96px, 22vw, 140px);
+    height: clamp(96px, 22vw, 140px);
   }
 </style>
 </head>
@@ -1729,6 +1794,35 @@
       });
     });
   }
+</script>
+<script>
+(function() {
+  function isStandalone() {
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+      (window.matchMedia && window.matchMedia('(display-mode: fullscreen)').matches) ||
+      window.navigator.standalone === true;
+  }
+
+  if (isStandalone()) {
+    document.documentElement.classList.add('standalone-app');
+  }
+
+  function requestFullscreenAndLock() {
+    if (!isStandalone()) return;
+    var el = document.documentElement;
+    var request = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+    if (request && !document.fullscreenElement) {
+      request.call(el).catch(function() {});
+    }
+    if (screen.orientation && screen.orientation.lock) {
+      screen.orientation.lock('landscape').catch(function() {});
+    }
+  }
+
+  requestFullscreenAndLock();
+  document.addEventListener('click', requestFullscreenAndLock, { once: true });
+  document.addEventListener('touchstart', requestFullscreenAndLock, { once: true });
+})();
 </script>
 </body>
 </html>
