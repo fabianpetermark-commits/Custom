@@ -1232,38 +1232,42 @@
     return isIos && isSafari;
   }
 
-  function canOfferInstall() {
-    return !window.__isStandaloneApp && (!!window.__deferredInstallPrompt || isIosSafari());
-  }
-
   function menuItemList() {
     var items = pausedGame ? [{ action: 'resume', label: 'FOLYTATAS' }] : [];
     items = items.concat([
       { action: 'new', label: 'UJ JATEK' },
       { action: 'load', label: 'JATEK BETOLTESE' },
       { action: 'save', label: 'JATEK MENTESE' },
-      { action: 'rank', label: 'RANGSOR' }
+      { action: 'rank', label: 'RANGSOR' },
+      { action: 'install', label: 'TELEPITES' }
     ]);
-    if (canOfferInstall()) items.push({ action: 'install', label: 'TELEPITES' });
     return items;
   }
 
   function triggerInstall() {
+    if (window.__isStandaloneApp) {
+      showInstallInstructions('MAR TELEPITVE VAN EZEN AZ ESZKOZON.');
+      return;
+    }
     if (window.__deferredInstallPrompt) {
       var promptEvent = window.__deferredInstallPrompt;
       window.__deferredInstallPrompt = null;
       promptEvent.prompt();
       promptEvent.userChoice.then(function() { renderMenu(); });
-    } else {
-      showInstallInstructions();
+      return;
     }
+    if (isIosSafari()) {
+      showInstallInstructions('SAFARIBAN: KOPPINTS A MEGOSZTAS IKONRA,<br>MAJD VALASZD: "KEZDOKEPERNYOHOZ ADAS"');
+      return;
+    }
+    showInstallInstructions('EZ A BONGESZO NEM TAMOGATJA A KOZVETLEN TELEPITEST.<br>HASZNALD A BONGESZO MENUJET: "TELEPITES" / "HOZZAADAS A KEZDOKEPERNYOHOZ".');
   }
 
-  function showInstallInstructions() {
+  function showInstallInstructions(message) {
     gameState = 'install';
     overlay.innerHTML =
       '<div class="overlay-title">TELEPITES</div>' +
-      '<div>SAFARIBAN: KOPPINTS A MEGOSZTAS IKONRA,<br>MAJD VALASZD: "KEZDOKEPERNYOHOZ ADAS"</div>' +
+      '<div>' + message + '</div>' +
       '<div class="menu-list"><div class="menu-item selected" id="installBack">VISSZA</div></div>';
     overlay.classList.remove('hidden');
     var btn = document.getElementById('installBack');
