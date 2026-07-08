@@ -656,6 +656,9 @@
   var menuIndex = 0;
   var playerIdentity = null;
   var supabaseClient = null;
+  var asyncOpToken = 0;
+  var nameSubmitInFlight = false;
+  var savingInFlight = false;
 
   var SUPABASE_URL = 'https://rrqrmbiclapopgrcypye.supabase.co';
   var SUPABASE_KEY = 'sb_publishable_hbjYoyagZNpg7tt90PlC0w_i-7TT1IR';
@@ -717,6 +720,7 @@
   var FIXED_DT = 1000 / 60;
 
   function startRun() {
+    asyncOpToken++;
     gameState = 'playing';
     pausedGame = false;
     deaths = 0;
@@ -736,6 +740,7 @@
   }
 
   function resumeGame() {
+    asyncOpToken++;
     pausedGame = false;
     gameState = 'playing';
     beginLoop();
@@ -1236,8 +1241,8 @@
     var items = pausedGame ? [{ action: 'resume', label: 'FOLYTATAS' }] : [];
     items = items.concat([
       { action: 'new', label: 'UJ JATEK' },
-      { action: 'load', label: 'JATEK BETOLTESE' },
-      { action: 'save', label: 'JATEK MENTESE' },
+      { action: 'load', label: 'JATEK BETOLTESE', disabled: savingInFlight },
+      { action: 'save', label: 'JATEK MENTESE', disabled: savingInFlight },
       { action: 'rank', label: 'RANGSOR' },
       { action: 'install', label: 'TELEPITES' }
     ]);
@@ -1275,6 +1280,7 @@
   }
 
   function showMenu(msg, msgIsError) {
+    asyncOpToken++;
     running = false;
     transitioning = false;
     gameState = 'menu';
@@ -1289,7 +1295,7 @@
     var items = menuItemList();
     if (menuIndex >= items.length) menuIndex = 0;
     var itemsHtml = items.map(function(item, i) {
-      var cls = 'menu-item' + (i === menuIndex ? ' selected' : '');
+      var cls = 'menu-item' + (i === menuIndex ? ' selected' : '') + (item.disabled ? ' disabled' : '');
       return '<div class="' + cls + '" data-action="' + item.action + '">' + item.label + '</div>';
     }).join('');
     overlay.innerHTML =
@@ -1299,6 +1305,7 @@
       '<div class="menu-msg' + (msgIsError ? ' error' : '') + '">' + (msg ? escapeHtml(msg) : '') + '</div>';
     Array.prototype.forEach.call(overlay.querySelectorAll('.menu-item'), function(el, i) {
       el.addEventListener('click', function() {
+        if (items[i].disabled) return;
         menuIndex = i;
         handleMenuAction(items[i].action);
       });
@@ -1318,7 +1325,7 @@
       renderMenu();
       e.preventDefault();
     } else if (key === 'enter' || key === ' ') {
-      handleMenuAction(items[menuIndex].action);
+      if (!items[menuIndex].disabled) handleMenuAction(items[menuIndex].action);
       e.preventDefault();
     }
   }
@@ -1342,6 +1349,7 @@
 
   function showNamePrompt(errorMsg) {
     gameState = 'nameEntry';
+    nameSubmitInFlight = false;
     overlay.innerHTML =
       '<div class="overlay-title">SPLAT RUN</div>' +
       '<div>ADD MEG A NEVED</div>' +
@@ -1364,12 +1372,18 @@
   }
 
   function submitName() {
+    if (nameSubmitInFlight) return;
     var input = document.getElementById('nameInput');
     var name = input ? input.value.trim() : '';
     if (!name) { showNamePrompt('Adj meg egy nevet!'); return; }
     if (!supabaseClient) { showNamePrompt('Nincs kapcsolat a szerverrel.'); return; }
+    nameSubmitInFlight = true;
+    var submitBtn = document.getElementById('nameSubmit');
+    if (submitBtn) submitBtn.classList.add('disabled');
+    var myToken = ++asyncOpToken;
     var id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('id-' + Date.now() + '-' + Math.random().toString(16).slice(2));
     supabaseClient.from('players').insert({ id: id, name: name }).then(function(res) {
+      if (myToken !== asyncOpToken) return;
       if (res.error) {
         if (res.error.code === '23505') {
           showNamePrompt('Ez a nev mar foglalt, valassz mast!');
@@ -1382,19 +1396,26 @@
       localStorage.setItem('splatRunPlayer', JSON.stringify(playerIdentity));
       startRun();
     }).catch(function() {
+      if (myToken !== asyncOpToken) return;
       showNamePrompt('Nincs kapcsolat a szerverrel.');
     });
   }
 
   function saveGame() {
+    if (savingInFlight) return;
     if (!playerIdentity) { showNamePrompt(); return; }
     if (!supabaseClient) { showMenu('Nincs kapcsolat a szerverrel.', true); return; }
+    savingInFlight = true;
+    renderMenu();
+    var myToken = ++asyncOpToken;
     supabaseClient.from('players').update({
       level_index: levelIndex,
       total_time: elapsed,
       total_deaths: deaths,
       updated_at: new Date().toISOString()
     }).eq('id', playerIdentity.id).then(function(res) {
+      savingInFlight = false;
+      if (myToken !== asyncOpToken) return;
       if (res.error) { showMenu('Mentesi hiba!', true); return; }
       showMenu('JATEKALLAS MENTVE');
     });
@@ -1403,8 +1424,10 @@
   function loadGame() {
     if (!playerIdentity) { showNamePrompt(); return; }
     if (!supabaseClient) { showMenu('Nincs kapcsolat a szerverrel.', true); return; }
+    var myToken = ++asyncOpToken;
     supabaseClient.from('players').select('level_index, total_time, total_deaths').eq('id', playerIdentity.id).single()
       .then(function(res) {
+        if (myToken !== asyncOpToken) return;
         if (res.error || !res.data) { showMenu('Nincs elmentett allas.', true); return; }
         pausedGame = false;
         gameState = 'playing';
@@ -1420,6 +1443,7 @@
 
   function showRanking() {
     gameState = 'ranking';
+    var myToken = ++asyncOpToken;
     overlay.innerHTML = '<div class="overlay-title">RANGSOR</div><div class="menu-msg">Betoltes...</div>';
     overlay.classList.remove('hidden');
     if (!supabaseClient) {
@@ -1431,6 +1455,7 @@
       .order('level_index', { ascending: false })
       .order('total_time', { ascending: true })
       .then(function(res) {
+        if (myToken !== asyncOpToken) return;
         renderRankingList(res.data || [], !!res.error);
       });
   }
