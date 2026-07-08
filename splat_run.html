@@ -4,6 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>SPLAT RUN</title>
+<script>
+  window.__deferredInstallPrompt = null;
+  window.__isStandaloneApp = (window.matchMedia && (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches)) || window.navigator.standalone === true;
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    window.__deferredInstallPrompt = e;
+  });
+  window.addEventListener('appinstalled', function() {
+    window.__deferredInstallPrompt = null;
+    window.__isStandaloneApp = true;
+  });
+</script>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1a1a22">
 <link rel="icon" href="icon-192.png">
@@ -1213,14 +1225,49 @@
     beginLoop();
   }
 
+  function isIosSafari() {
+    var ua = window.navigator.userAgent;
+    var isIos = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+    var isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(ua);
+    return isIos && isSafari;
+  }
+
+  function canOfferInstall() {
+    return !window.__isStandaloneApp && (!!window.__deferredInstallPrompt || isIosSafari());
+  }
+
   function menuItemList() {
     var items = pausedGame ? [{ action: 'resume', label: 'FOLYTATAS' }] : [];
-    return items.concat([
+    items = items.concat([
       { action: 'new', label: 'UJ JATEK' },
       { action: 'load', label: 'JATEK BETOLTESE' },
       { action: 'save', label: 'JATEK MENTESE' },
       { action: 'rank', label: 'RANGSOR' }
     ]);
+    if (canOfferInstall()) items.push({ action: 'install', label: 'TELEPITES' });
+    return items;
+  }
+
+  function triggerInstall() {
+    if (window.__deferredInstallPrompt) {
+      var promptEvent = window.__deferredInstallPrompt;
+      window.__deferredInstallPrompt = null;
+      promptEvent.prompt();
+      promptEvent.userChoice.then(function() { renderMenu(); });
+    } else {
+      showInstallInstructions();
+    }
+  }
+
+  function showInstallInstructions() {
+    gameState = 'install';
+    overlay.innerHTML =
+      '<div class="overlay-title">TELEPITES</div>' +
+      '<div>SAFARIBAN: KOPPINTS A MEGOSZTAS IKONRA,<br>MAJD VALASZD: "KEZDOKEPERNYOHOZ ADAS"</div>' +
+      '<div class="menu-list"><div class="menu-item selected" id="installBack">VISSZA</div></div>';
+    overlay.classList.remove('hidden');
+    var btn = document.getElementById('installBack');
+    if (btn) btn.addEventListener('click', function() { showMenu(); });
   }
 
   function showMenu(msg, msgIsError) {
@@ -1278,6 +1325,7 @@
     else if (action === 'load') loadGame();
     else if (action === 'save') saveGame();
     else if (action === 'rank') showRanking();
+    else if (action === 'install') triggerInstall();
   }
 
   function startNewGame() {
@@ -2028,7 +2076,7 @@
 
     if (gameState === 'menu') { handleMenuKeydown(e); return; }
     if (gameState === 'nameEntry') { return; }
-    if (gameState === 'ranking') {
+    if (gameState === 'ranking' || gameState === 'install') {
       if (key === 'enter' || key === ' ' || key === 'escape' || key === 'arrowup' || key === 'arrowdown') {
         e.preventDefault();
         showMenu();
@@ -2086,7 +2134,7 @@
 
   document.getElementById('btnJump').addEventListener('touchstart', function(e) {
     e.preventDefault();
-    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking') return;
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install') return;
     if (!running && !transitioning) { startRun(); return; }
     if (!running && transitioning) { advanceAfterOverlay(); return; }
     if (player.onRope) { keys.up = true; setTimeout(function() { keys.up = false; }, 50); return; }
@@ -2101,7 +2149,7 @@
 
   document.getElementById('btnJump').addEventListener('mousedown', function(e) {
     e.preventDefault();
-    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking') return;
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install') return;
     if (!running && !transitioning) { startRun(); return; }
     if (!running && transitioning) { advanceAfterOverlay(); return; }
     if (player.onRope) { keys.up = true; setTimeout(function() { keys.up = false; }, 50); return; }
