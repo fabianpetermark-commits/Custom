@@ -2,7 +2,7 @@
   "name": "Splat Run",
   "short_name": "Splat Run",
   "description": "Retro veres platformer egy tricolor sheltie-vel",
-  "start_url": "./splat_run.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "fullscreen",
   "display_override": ["fullscreen", "standalone"],
