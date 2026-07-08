@@ -318,7 +318,7 @@
 <div class="frame">
   <div class="title">SPLAT RUN</div>
   <div class="hud">
-    <span class="level" id="levelLabel">PALYA 1/5</span>
+    <span class="level" id="levelLabel">PALYA 1/10</span>
     <span class="deaths" id="deaths">HALALOK: 0</span>
     <span class="time" id="timer">IDO: 0.0s</span>
     <span class="music-toggle" id="musicToggle">ZENE: BE</span>
@@ -368,8 +368,10 @@
   var JUMP_MAX_HOLD = 14;
   var DOUBLE_JUMP_FORCE = -5.0;
   var CLIMB_SPEED = 2.6;
-  var ROPE_PUMP = 0.006;
+  var ROPE_PUMP = 0.0018;
   var ROPE_GRAB_RADIUS = 22;
+  var MAX_ROPE_ANGLE = 1.25;
+  var MAX_ROPE_ANGVEL = 0.05;
 
   function osc(min, max, speed, phase, frame) {
     return min + (max - min) * (0.5 + 0.5 * Math.sin(frame * speed + phase));
@@ -512,10 +514,14 @@
   function buildLevels() {
     var lvl2Ground = { x: 0, y: 300, w: 120, h: 40, color: '#3ee08a', move: { axis: 'y', min: 270, max: 330, speed: 0.025, phase: 1.5708 } };
     var lvl4Island = { x: 220, y: 300, w: 100, h: 44, color: '#3ee08a', move: { axis: 'x', min: 180, max: 280, speed: 0.02, phase: 0 } };
+    var lvl7Branch = { x: 250, y: 230, w: 90, h: 18, color: '#3ee08a', move: { axis: 'x', min: 190, max: 300, speed: 0.025, phase: 0 } };
+    var lvl8Log = { x: 230, y: 300, w: 90, h: 36, color: '#3ee08a', move: { axis: 'y', min: 265, max: 305, speed: 0.03, phase: 0.8 } };
+    var lvl10Log = { x: 200, y: 300, w: 90, h: 36, color: '#3ee08a', move: { axis: 'y', min: 255, max: 305, speed: 0.035, phase: 0.4 } };
 
     return [
       {
         name: 'BEVEZETES',
+        theme: 'dungeon',
         start: { x: 20, y: 274 },
         platforms: [
           { x: 0, y: 300, w: 90, h: 40, color: '#3ee08a' },
@@ -526,6 +532,7 @@
         spikes: [{ x: 320, y: 288, w: 50, h: 12 }],
         saws: [],
         blades: [],
+        mosquitoSwarms: [],
         pendulums: [
           { anchorX: 255, anchorY: 40, length: 170, minAngle: -0.7, maxAngle: 0.7, speed: 0.035, phase: 0, r: 13 }
         ],
@@ -543,6 +550,7 @@
       },
       {
         name: 'FURESZEK',
+        theme: 'dungeon',
         start: { x: 20, y: 304, followPlatform: lvl2Ground },
         platforms: [
           lvl2Ground,
@@ -559,6 +567,7 @@
           { cx: 520, cy: 112, r: 13, axis: 'x', min: 475, max: 587, speed: 0.05, phase: 0 }
         ],
         blades: [],
+        mosquitoSwarms: [],
         pendulums: [],
         ladders: [{ x: 410, y: 140, w: 16, h: 80 }],
         ropes: [],
@@ -568,6 +577,7 @@
       },
       {
         name: 'TORONY',
+        theme: 'dungeon',
         start: { x: 20, y: 274 },
         platforms: [
           { x: 0, y: 300, w: 380, h: 40, color: '#3ee08a' },
@@ -580,6 +590,7 @@
           { cx: 150, cy: 288, r: 13, axis: 'x', min: 100, max: 210, speed: 0.045, phase: 1 }
         ],
         blades: [],
+        mosquitoSwarms: [],
         pendulums: [
           { anchorX: 290, anchorY: 30, length: 150, minAngle: -0.85, maxAngle: 0.85, speed: 0.035, phase: 0, r: 14 }
         ],
@@ -593,6 +604,7 @@
       },
       {
         name: 'KOTELHINTA',
+        theme: 'dungeon',
         start: { x: 20, y: 274 },
         platforms: [
           { x: 0, y: 300, w: 140, h: 40, color: '#3ee08a' },
@@ -606,9 +618,12 @@
           { cx: 390, cy: 0, r: 13, axis: 'y', min: 170, max: 280, speed: 0.045, phase: 0 }
         ],
         blades: [],
+        mosquitoSwarms: [],
         pendulums: [],
         ladders: [],
-        ropes: [],
+        ropes: [
+          { anchorX: 290, anchorY: 25, length: 165, vineSkin: true, angle: 0, angVel: 0 }
+        ],
         water: [{ x: 140, y: 310, w: 300, h: 30 }],
         fishSpawners: [
           { rangeMin: 410, rangeMax: 410, waterY: 310, r: 12, jumpHeight: 75, jumpDuration: 40, timer: 90, cooldownMin: 90, cooldownMax: 210, active: false, phase: 0 }
@@ -617,6 +632,7 @@
       },
       {
         name: 'FINALE',
+        theme: 'dungeon',
         start: { x: 20, y: 274 },
         platforms: [
           { x: 0, y: 300, w: 100, h: 40, color: '#3ee08a' },
@@ -632,6 +648,7 @@
           { cx: 460, cy: 0, r: 12, axis: 'y', min: 14, max: 260, speed: 0.045, phase: 0.5 }
         ],
         blades: [],
+        mosquitoSwarms: [],
         pendulums: [
           { anchorX: 270, anchorY: 90, length: 130, minAngle: -0.8, maxAngle: 0.8, speed: 0.04, phase: 1, r: 13 }
         ],
@@ -642,6 +659,167 @@
           { rangeMin: 120, rangeMax: 200, waterY: 310, r: 11, jumpHeight: 65, jumpDuration: 36, timer: 70, cooldownMin: 80, cooldownMax: 190, active: false, phase: 0 }
         ],
         goal: { x: 560, y: 200, w: 30, h: 40 }
+      },
+      {
+        name: 'INGOVANY',
+        theme: 'rainforest',
+        start: { x: 20, y: 274 },
+        platforms: [
+          { x: 0, y: 300, w: 100, h: 40, color: '#3ee08a' },
+          { x: 170, y: 300, w: 90, h: 40, color: '#3ee08a' },
+          { x: 330, y: 300, w: 90, h: 40, color: '#3ee08a' },
+          { x: 490, y: 300, w: 110, h: 40, color: '#f7c948' }
+        ],
+        spikes: [
+          { x: 195, y: 288, w: 30, h: 12 }
+        ],
+        saws: [
+          { cx: 330, cy: 280, r: 13, axis: 'y', min: 258, max: 300, speed: 0.05, phase: 0 }
+        ],
+        blades: [],
+        mosquitoSwarms: [
+          { x: 250, y: 230, r: 16, ampX: 12, ampY: 8, speedX: 0.045, speedY: 0.07, phaseX: 0, phaseY: 2 }
+        ],
+        pendulums: [],
+        ladders: [],
+        ropes: [],
+        water: [
+          { x: 100, y: 310, w: 70, h: 30 },
+          { x: 260, y: 310, w: 70, h: 30 },
+          { x: 420, y: 310, w: 70, h: 30 }
+        ],
+        fishSpawners: [
+          { spots: [135, 295, 455], waterY: 310, r: 12, jumpHeight: 90, jumpDuration: 42, timer: 60, cooldownMin: 70, cooldownMax: 100, active: false, phase: 0 }
+        ],
+        goal: { x: 560, y: 260, w: 30, h: 40 }
+      },
+      {
+        name: 'LOMBKORONA',
+        theme: 'rainforest',
+        start: { x: 20, y: 274 },
+        platforms: [
+          { x: 0, y: 300, w: 110, h: 40, color: '#3ee08a' },
+          lvl7Branch,
+          { x: 360, y: 170, w: 90, h: 20, color: '#f7c948' },
+          { x: 500, y: 100, w: 100, h: 20, color: '#6ce0ff' }
+        ],
+        spikes: [
+          { x: 220, y: 218, w: 20, h: 12, follow: { platform: lvl7Branch, offsetX: 35, offsetY: -12 } }
+        ],
+        saws: [
+          { cx: 440, cy: 130, r: 13, axis: 'y', min: 100, max: 170, speed: 0.05, phase: 0 }
+        ],
+        blades: [],
+        mosquitoSwarms: [
+          { x: 150, y: 230, r: 15, ampX: 10, ampY: 14, speedX: 0.05, speedY: 0.06, phaseX: 0.5, phaseY: 1.8 },
+          { x: 430, y: 150, r: 16, ampX: 14, ampY: 8, speedX: 0.06, speedY: 0.045, phaseX: 2, phaseY: 0.3 }
+        ],
+        pendulums: [],
+        ladders: [],
+        ropes: [],
+        water: [{ x: 110, y: 310, w: 490, h: 30 }],
+        fishSpawners: [
+          { cruise: true, x: 300, rangeMin: 150, rangeMax: 550, waterY: 312, r: 11, speed: 0.018, phase: 0 }
+        ],
+        goal: { x: 560, y: 60, w: 30, h: 40 }
+      },
+      {
+        name: 'PIOCAS MOCSAR',
+        theme: 'rainforest',
+        start: { x: 20, y: 274 },
+        platforms: [
+          { x: 0, y: 300, w: 90, h: 40, color: '#3ee08a' },
+          lvl8Log,
+          { x: 420, y: 240, w: 80, h: 20, color: '#f7c948' },
+          { x: 540, y: 180, w: 60, h: 20, color: '#6ce0ff' }
+        ],
+        spikes: [
+          { x: 258, y: 288, w: 24, h: 12, follow: { platform: lvl8Log, offsetX: 33, offsetY: -12 } },
+          { x: 430, y: 228, w: 30, h: 12 }
+        ],
+        saws: [
+          { cx: 500, cy: 170, r: 13, axis: 'x', min: 460, max: 540, speed: 0.05, phase: 0 }
+        ],
+        blades: [],
+        mosquitoSwarms: [
+          { x: 275, y: 230, r: 16, ampX: 8, ampY: 10, speedX: 0.06, speedY: 0.05, phaseX: 1, phaseY: 0.4 }
+        ],
+        pendulums: [
+          { anchorX: 160, anchorY: 30, length: 150, minAngle: -0.75, maxAngle: 0.75, speed: 0.035, phase: 0, r: 13 }
+        ],
+        ladders: [],
+        ropes: [],
+        water: [{ x: 90, y: 310, w: 510, h: 30 }],
+        fishSpawners: [
+          { cruise: true, x: 300, rangeMin: 100, rangeMax: 520, waterY: 312, r: 12, speed: 0.022, phase: 0 },
+          { spots: [240, 460], waterY: 310, r: 12, jumpHeight: 95, jumpDuration: 44, timer: 65, cooldownMin: 70, cooldownMax: 110, active: false, phase: 0 }
+        ],
+        goal: { x: 560, y: 140, w: 30, h: 40 }
+      },
+      {
+        name: 'ODU',
+        theme: 'rainforest',
+        start: { x: 20, y: 274 },
+        platforms: [
+          { x: 0, y: 300, w: 140, h: 40, color: '#3ee08a' },
+          { x: 0, y: 110, w: 130, h: 20, color: '#3ee08a' },
+          { x: 380, y: 110, w: 100, h: 20, color: '#f7c948' },
+          { x: 380, y: 20, w: 220, h: 20, color: '#6ce0ff' }
+        ],
+        spikes: [],
+        saws: [],
+        blades: [],
+        mosquitoSwarms: [
+          { x: 70, y: 150, r: 14, ampX: 10, ampY: 16, speedX: 0.05, speedY: 0.06, phaseX: 0, phaseY: 1 }
+        ],
+        pendulums: [
+          { anchorX: 500, anchorY: 0, length: 70, minAngle: -0.6, maxAngle: 0.6, speed: 0.05, phase: 0, r: 12 }
+        ],
+        ladders: [
+          { x: 50, y: 110, w: 18, h: 190 },
+          { x: 430, y: 20, w: 18, h: 90 }
+        ],
+        ropes: [
+          { anchorX: 255, anchorY: 20, length: 110, vineSkin: true, angle: 0, angVel: 0 }
+        ],
+        water: [{ x: 140, y: 310, w: 460, h: 30 }],
+        fishSpawners: [],
+        goal: { x: 540, y: -20, w: 30, h: 40 }
+      },
+      {
+        name: 'VADON FINALE',
+        theme: 'rainforest',
+        start: { x: 20, y: 274 },
+        platforms: [
+          { x: 0, y: 300, w: 90, h: 40, color: '#3ee08a' },
+          lvl10Log,
+          { x: 360, y: 190, w: 90, h: 20, color: '#f7c948' },
+          { x: 500, y: 90, w: 100, h: 60, color: '#6ce0ff' }
+        ],
+        spikes: [
+          { x: 258, y: 288, w: 24, h: 12, follow: { platform: lvl10Log, offsetX: 33, offsetY: -12 } },
+          { x: 370, y: 178, w: 30, h: 12 }
+        ],
+        saws: [
+          { cx: 520, cy: 60, r: 12, axis: 'y', min: 20, max: 130, speed: 0.045, phase: 0.3 }
+        ],
+        blades: [],
+        mosquitoSwarms: [
+          { x: 400, y: 150, r: 16, ampX: 12, ampY: 10, speedX: 0.055, speedY: 0.05, phaseX: 1.2, phaseY: 0.7 }
+        ],
+        pendulums: [
+          { anchorX: 150, anchorY: 30, length: 140, minAngle: -0.8, maxAngle: 0.8, speed: 0.04, phase: 0.5, r: 13 }
+        ],
+        ladders: [],
+        ropes: [
+          { anchorX: 475, anchorY: 20, length: 110, vineSkin: true, angle: 0, angVel: 0 }
+        ],
+        water: [{ x: 90, y: 310, w: 510, h: 30 }],
+        fishSpawners: [
+          { spots: [135, 290], waterY: 310, r: 12, jumpHeight: 95, jumpDuration: 44, timer: 60, cooldownMin: 70, cooldownMax: 100, active: false, phase: 0 },
+          { cruise: true, x: 480, rangeMin: 400, rangeMax: 560, waterY: 312, r: 11, speed: 0.02, phase: 0 }
+        ],
+        goal: { x: 560, y: 50, w: 30, h: 40 }
       }
     ];
   }
@@ -685,10 +863,11 @@
   function loadLevel(idx) {
     levelIndex = idx;
     level = LEVELS[idx];
-    levelEl.textContent = 'PALYA ' + (idx + 1) + '/5';
+    levelEl.textContent = 'PALYA ' + (idx + 1) + '/' + LEVELS.length;
     frameCount = 0;
     level._solidRects = level.platforms.concat(level.spikes).concat(level.ladders);
     updateMovingPlatforms();
+    syncFollowSpikes();
     resetPlayer();
     particles = [];
     bloodStains = [];
@@ -779,13 +958,19 @@
     return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
   }
 
-  function currentHazardRects() {
-    var rects = [];
+  function syncFollowSpikes() {
     level.spikes.forEach(function(s) {
       if (s.follow) {
         s.x = s.follow.platform.x + s.follow.offsetX;
         s.y = s.follow.platform.y + s.follow.offsetY;
       }
+    });
+  }
+
+  function currentHazardRects() {
+    var rects = [];
+    syncFollowSpikes();
+    level.spikes.forEach(function(s) {
       rects.push(s);
     });
     level.saws.forEach(function(s) {
@@ -801,6 +986,12 @@
       var x = b.axis === 'x' ? pos : b.x;
       b._x = x; b._y = y;
       rects.push({ x: x, y: y, w: b.w, h: b.h });
+    });
+    level.mosquitoSwarms.forEach(function(m) {
+      var mx = m.x + m.ampX * Math.sin(frameCount * m.speedX + m.phaseX);
+      var my = m.y + m.ampY * Math.sin(frameCount * m.speedY + m.phaseY);
+      m._x = mx; m._y = my;
+      rects.push({ x: mx - m.r, y: my - m.r, w: m.r * 2, h: m.r * 2 });
     });
     level.pendulums.forEach(function(p) {
       var angle = osc(p.minAngle, p.maxAngle, p.speed, p.phase, frameCount);
@@ -982,16 +1173,21 @@
       if (keys.left) r.angVel -= ROPE_PUMP;
       if (keys.right) r.angVel += ROPE_PUMP;
       r.angVel += angAcc;
-      r.angVel *= 0.999;
+      r.angVel *= 0.992;
+      if (r.angVel > MAX_ROPE_ANGVEL) r.angVel = MAX_ROPE_ANGVEL;
+      if (r.angVel < -MAX_ROPE_ANGVEL) r.angVel = -MAX_ROPE_ANGVEL;
       r.angle += r.angVel;
+      var releaseAngVel = r.angVel;
+      if (r.angle > MAX_ROPE_ANGLE) { r.angle = MAX_ROPE_ANGLE; r.angVel = 0; }
+      if (r.angle < -MAX_ROPE_ANGLE) { r.angle = -MAX_ROPE_ANGLE; r.angVel = 0; }
 
       var bob = ropeBobPos(r);
       player.x = bob.x - player.w / 2;
       player.y = bob.y - player.h / 2;
 
       if (keys.up) {
-        var vx = r.length * Math.cos(r.angle) * r.angVel;
-        var vy = -r.length * Math.sin(r.angle) * r.angVel;
+        var vx = r.length * Math.cos(r.angle) * releaseAngVel;
+        var vy = -r.length * Math.sin(r.angle) * releaseAngVel;
         player.onRope = null;
         player.vx = vx;
         player.vy = vy - 2;
@@ -1464,7 +1660,7 @@
     var rowsHtml = list.map(function(p) {
       return '<div class="rank-row">' +
         '<span class="rname">' + escapeHtml(p.name) + '</span>' +
-        '<span>PALYA ' + (p.level_index + 1) + '/5</span>' +
+        '<span>PALYA ' + (p.level_index + 1) + '/' + LEVELS.length + '</span>' +
         '<span>IDO ' + pad1(p.total_time) + 's</span>' +
         '<span>HALALOK ' + p.total_deaths + '</span>' +
         '</div>';
@@ -1584,8 +1780,9 @@
   function drawSpikeShape(s) {
     var count = Math.max(1, Math.round(s.w / 14));
     var segW = s.w / count;
+    var rainforest = level.theme === 'rainforest';
 
-    ctx.fillStyle = 'rgba(120,10,20,0.35)';
+    ctx.fillStyle = rainforest ? 'rgba(20,60,15,0.35)' : 'rgba(120,10,20,0.35)';
     ctx.beginPath();
     ctx.ellipse(s.x + s.w / 2, s.y + s.h + 2, s.w * 0.55, 5, 0, 0, Math.PI * 2);
     ctx.fill();
@@ -1593,18 +1790,18 @@
     for (var i = 0; i < count; i++) {
       var sx = s.x + i * segW;
       var tipX = sx + segW / 2;
-      ctx.fillStyle = '#4a4744';
+      ctx.fillStyle = rainforest ? '#4a5a2e' : '#4a4744';
       ctx.beginPath();
       ctx.moveTo(sx, s.y + s.h);
       ctx.lineTo(tipX, s.y);
       ctx.lineTo(sx + segW, s.y + s.h);
       ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = '#201e1d';
+      ctx.strokeStyle = rainforest ? '#26330f' : '#201e1d';
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      ctx.fillStyle = '#9c1524';
+      ctx.fillStyle = rainforest ? '#7a4a1e' : '#9c1524';
       ctx.beginPath();
       ctx.moveTo(tipX - 1.5, s.y);
       ctx.lineTo(tipX + 1.5, s.y);
@@ -1635,8 +1832,9 @@
   function drawSaw(s) {
     var cx = s._cx !== undefined ? s._cx : s.cx;
     var cy = s._cy !== undefined ? s._cy : s.cy;
+    var rainforest = level.theme === 'rainforest';
     var teeth = 8;
-    ctx.fillStyle = '#c9c9d4';
+    ctx.fillStyle = rainforest ? '#6e4a24' : '#c9c9d4';
     ctx.beginPath();
     for (var i = 0; i < teeth * 2; i++) {
       var ang = (Math.PI * 2 * i) / (teeth * 2);
@@ -1647,7 +1845,7 @@
     }
     ctx.closePath();
     ctx.fill();
-    ctx.fillStyle = '#7a7a86';
+    ctx.fillStyle = rainforest ? '#3e2a14' : '#7a7a86';
     ctx.beginPath();
     ctx.arc(cx, cy, s.r * 0.35, 0, Math.PI * 2);
     ctx.fill();
@@ -1670,6 +1868,21 @@
     ctx.moveTo(x + b.w / 2, 0);
     ctx.lineTo(x + b.w / 2, y);
     ctx.stroke();
+  }
+
+  function drawMosquitoSwarm(m) {
+    var cx = m._x !== undefined ? m._x : m.x;
+    var cy = m._y !== undefined ? m._y : m.y;
+    var dotCount = 9;
+    for (var i = 0; i < dotCount; i++) {
+      var jx = Math.sin(frameCount * (0.18 + i * 0.013) + i * 2.1) * m.r * 0.6;
+      var jy = Math.cos(frameCount * (0.21 + i * 0.011) + i * 1.7) * m.r * 0.5;
+      var dotR = 1.1 + (i % 3) * 0.5;
+      ctx.fillStyle = i % 2 === 0 ? 'rgba(18,18,20,0.85)' : 'rgba(40,40,44,0.7)';
+      ctx.beginPath();
+      ctx.arc(cx + jx, cy + jy, dotR, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   function drawPendulum(p) {
@@ -1712,8 +1925,9 @@
       ctx.fill();
     }
 
+    var podTheme = level.theme === 'rainforest';
     var spikeCount = 8;
-    ctx.fillStyle = '#c9c9d4';
+    ctx.fillStyle = podTheme ? '#8a6a3a' : '#c9c9d4';
     for (var i2 = 0; i2 < spikeCount; i2++) {
       var ang = (Math.PI * 2 * i2) / spikeCount;
       var innerX = bx + Math.cos(ang) * p.r * 0.6;
@@ -1729,7 +1943,7 @@
       ctx.closePath();
       ctx.fill();
     }
-    ctx.fillStyle = '#8a1a2a';
+    ctx.fillStyle = podTheme ? '#5a3a1a' : '#8a1a2a';
     ctx.beginPath();
     ctx.arc(bx, by, p.r * 0.7, 0, Math.PI * 2);
     ctx.fill();
@@ -1806,9 +2020,10 @@
   }
 
   function drawWater(w) {
-    ctx.fillStyle = '#1a4a6e';
+    var swamp = level.theme === 'rainforest';
+    ctx.fillStyle = swamp ? '#3a3a1c' : '#1a4a6e';
     ctx.fillRect(w.x, w.y, w.w, w.h);
-    ctx.strokeStyle = 'rgba(140,210,240,0.6)';
+    ctx.strokeStyle = swamp ? 'rgba(150,170,90,0.5)' : 'rgba(140,210,240,0.6)';
     ctx.lineWidth = 2;
     for (var i = 0; i < 3; i++) {
       var wy = w.y + 6 + i * 8 + Math.sin(frameCount * 0.06 + i) * 2;
@@ -1818,6 +2033,19 @@
         if (wx === w.x) ctx.moveTo(wx, yy); else ctx.lineTo(wx, yy);
       }
       ctx.stroke();
+    }
+    if (swamp) {
+      ctx.fillStyle = 'rgba(70,90,40,0.55)';
+      var leafCount = Math.max(2, Math.floor(w.w / 55));
+      for (var lI = 0; lI < leafCount; lI++) {
+        var lseed = Math.sin(lI * 91.7 + w.x) * 43758.5453;
+        var lfrac = lseed - Math.floor(lseed);
+        var lx = w.x + 20 + lI * 55 + lfrac * 20;
+        var ly = w.y + 8 + Math.sin(frameCount * 0.03 + lI) * 3;
+        ctx.beginPath();
+        ctx.ellipse(lx, ly, 9, 4, 0.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
   }
 
@@ -1910,6 +2138,103 @@
     ctx.restore();
   }
 
+  function drawSwampBeast(f) {
+    if (!f.active) return;
+    var fx = f._x !== undefined ? f._x : f._jumpXStart;
+    var fy = f._y !== undefined ? f._y : f.waterY;
+    var dir = (f._jumpXEnd >= f._jumpXStart) ? 1 : -1;
+    ctx.save();
+    ctx.translate(fx, fy);
+    ctx.scale(dir, 1);
+    var stretch = Math.sin(f.phase * Math.PI);
+
+    ctx.fillStyle = '#3e5a30';
+    ctx.beginPath();
+    ctx.ellipse(0, 2, f.r * 1.5, f.r * (0.75 + stretch * 0.2), 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#2c4322';
+    for (var w = -1; w <= 1; w++) {
+      ctx.beginPath();
+      ctx.ellipse(w * f.r * 0.6, -f.r * 0.35, f.r * 0.32, f.r * 0.2, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    var mouthGap = f.r * (0.28 + stretch * 0.45);
+    var mouthX = f.r * 1.5;
+    var jawX = f.r * 0.3;
+    ctx.fillStyle = '#1f150f';
+    ctx.beginPath();
+    ctx.moveTo(jawX, -f.r * 0.4);
+    ctx.lineTo(mouthX, -mouthGap);
+    ctx.lineTo(mouthX, mouthGap);
+    ctx.lineTo(jawX, f.r * 0.4);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = '#e8e2c8';
+    var teethCount = 5;
+    for (var i = 0; i < teethCount; i++) {
+      var t = i / (teethCount - 1);
+      var tx = jawX + t * (mouthX - jawX) * 0.9;
+      var upperY = -f.r * 0.4 + t * (-mouthGap + f.r * 0.4);
+      var lowerY = f.r * 0.4 + t * (mouthGap - f.r * 0.4);
+      ctx.beginPath();
+      ctx.moveTo(tx - 1.8, upperY);
+      ctx.lineTo(tx + 1.8, upperY);
+      ctx.lineTo(tx, upperY + 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(tx - 1.8, lowerY);
+      ctx.lineTo(tx + 1.8, lowerY);
+      ctx.lineTo(tx, lowerY - 4);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    ctx.fillStyle = '#c8e060';
+    ctx.beginPath();
+    ctx.arc(f.r * 0.15, -f.r * 0.55, 2.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(f.r * 0.55, -f.r * 0.58, 2.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#14100c';
+    ctx.beginPath();
+    ctx.arc(f.r * 0.15, -f.r * 0.55, 1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(f.r * 0.55, -f.r * 0.58, 1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawCrocEyes(f) {
+    var fx = f.x !== undefined ? f.x : (f.rangeMin + f.rangeMax) / 2;
+    var wobble = Math.sin(frameCount * 0.08) * 1.2;
+    ctx.save();
+    ctx.translate(fx, f.waterY + wobble);
+    ctx.fillStyle = 'rgba(40,50,20,0.5)';
+    ctx.beginPath();
+    ctx.ellipse(0, 2, 16, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#2a3318';
+    ctx.beginPath();
+    ctx.ellipse(-6, 0, 3.2, 2.2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(6, 0, 3.2, 2.2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#c8e060';
+    ctx.beginPath();
+    ctx.arc(-6, -0.5, 1.1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(6, -0.5, 1.1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
   var TORCH_POSITIONS = [{ x: 70, y: 28 }, { x: 300, y: 28 }, { x: 530, y: 28 }];
 
   function drawDungeonBackground() {
@@ -1976,6 +2301,122 @@
     ctx.fill();
   }
 
+  var FIREFLY_POSITIONS = TORCH_POSITIONS;
+
+  function pseudoRand(seed) {
+    var v = Math.sin(seed * 12.9898) * 43758.5453;
+    return v - Math.floor(v);
+  }
+
+  function drawGnarledBranch(x, y, angle, length, depth, seed, baseAlpha) {
+    if (depth <= 0 || length < 5) return;
+    var sway = Math.sin(frameCount * 0.006 + seed) * 0.015;
+    var a = angle + sway;
+    var midLen = length * 0.5;
+    var midKink = (pseudoRand(seed * 3.1) - 0.5) * length * 0.55;
+    var midX = x + Math.cos(a) * midLen - Math.sin(a) * midKink;
+    var midY = y + Math.sin(a) * midLen + Math.cos(a) * midKink;
+    var endX = x + Math.cos(a) * length;
+    var endY = y + Math.sin(a) * length;
+
+    var baseWidth = Math.max(2.5, depth * 4.4);
+    var tipWidth = Math.max(1.6, depth * 2.1);
+    var steps = 5;
+    var leftPts = [], rightPts = [];
+    for (var si = 0; si <= steps; si++) {
+      var t = si / steps;
+      var omt = 1 - t;
+      var px = omt * omt * x + 2 * omt * t * midX + t * t * endX;
+      var py = omt * omt * y + 2 * omt * t * midY + t * t * endY;
+      var tx = 2 * omt * (midX - x) + 2 * t * (endX - midX);
+      var ty = 2 * omt * (midY - y) + 2 * t * (endY - midY);
+      var tl = Math.sqrt(tx * tx + ty * ty) || 1;
+      var nx = -ty / tl, ny = tx / tl;
+      var w = (baseWidth * (1 - t) + tipWidth * t) * 0.5;
+      var bumpL = (pseudoRand(seed * 7.7 + si * 3.3) - 0.5) * w * 0.7;
+      var bumpR = (pseudoRand(seed * 5.3 + si * 2.1 + 9) - 0.5) * w * 0.7;
+      leftPts.push({ x: px + nx * (w + bumpL), y: py + ny * (w + bumpL) });
+      rightPts.push({ x: px - nx * (w + bumpR), y: py - ny * (w + bumpR) });
+    }
+    ctx.fillStyle = 'rgba(4,7,5,' + baseAlpha + ')';
+    ctx.beginPath();
+    ctx.moveTo(leftPts[0].x, leftPts[0].y);
+    for (var li = 1; li < leftPts.length; li++) ctx.lineTo(leftPts[li].x, leftPts[li].y);
+    for (var ri = rightPts.length - 1; ri >= 0; ri--) ctx.lineTo(rightPts[ri].x, rightPts[ri].y);
+    ctx.closePath();
+    ctx.fill();
+
+    if (depth === 1) return;
+    for (var i = 0; i < 2; i++) {
+      var spread = 0.35 + pseudoRand(seed + i * 5 + 1) * 0.75;
+      var childAngle = a + (i === 0 ? -spread : spread);
+      var childLen = length * (0.6 + pseudoRand(seed + i * 9 + 3) * 0.18);
+      drawGnarledBranch(endX, endY, childAngle, childLen, depth - 1, seed * 1.7 + i * 13.1 + 2, baseAlpha);
+    }
+  }
+
+  function drawRainforestBackground() {
+    var grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, '#4a5c56');
+    grad.addColorStop(0.4, '#33443d');
+    grad.addColorStop(0.75, '#1c2b24');
+    grad.addColorStop(1, '#0d1712');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = 'rgba(60,80,72,0.18)';
+    for (var mi = 0; mi < 3; mi++) {
+      var my = H * 0.3 + mi * 40 + Math.sin(frameCount * 0.004 + mi) * 6;
+      ctx.beginPath();
+      ctx.ellipse(W * 0.5, my, W * 0.7, 22, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.lineCap = 'round';
+    var farCount = 6;
+    for (var f = 0; f < farCount; f++) {
+      var fseed = f * 5.31 + 1.2;
+      var fx = (f * 73 + pseudoRand(fseed) * 40) % (W + 60) - 30;
+      drawGnarledBranch(fx, H + 6, -Math.PI / 2 + (pseudoRand(fseed + 1) - 0.5) * 0.5, 70 + pseudoRand(fseed + 2) * 30, 3, fseed, 0.35);
+    }
+
+    drawGnarledBranch(120, H + 10, -Math.PI / 2 + 0.08, 150, 5, 8.4, 0.85);
+    drawGnarledBranch(430, H + 10, -Math.PI / 2 - 0.1, 170, 5, 19.7, 0.92);
+    drawGnarledBranch(300, H + 14, -Math.PI / 2, 190, 5, 31.5, 0.97);
+
+    var mist = ctx.createLinearGradient(0, H * 0.62, 0, H);
+    mist.addColorStop(0, 'rgba(20,28,24,0)');
+    mist.addColorStop(1, 'rgba(20,28,24,0.6)');
+    ctx.fillStyle = mist;
+    ctx.fillRect(0, H * 0.62, W, H * 0.38);
+
+    var vgrad = ctx.createLinearGradient(0, 0, 0, H);
+    vgrad.addColorStop(0, 'rgba(0,0,0,0.35)');
+    vgrad.addColorStop(0.3, 'rgba(0,0,0,0.08)');
+    vgrad.addColorStop(0.75, 'rgba(0,0,0,0.15)');
+    vgrad.addColorStop(1, 'rgba(0,0,0,0.5)');
+    ctx.fillStyle = vgrad;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  function drawFirefly(fx, fy) {
+    var flick = 0.5 + 0.35 * Math.sin(frameCount * 0.08 + fx) + 0.15 * Math.sin(frameCount * 0.21 + fx * 1.7);
+    var driftX = fx + Math.sin(frameCount * 0.015 + fx * 0.05) * 18;
+    var driftY = fy + 30 + Math.cos(frameCount * 0.012 + fx * 0.04) * 22;
+    var glowR = 16 + flick * 6;
+    var glow = ctx.createRadialGradient(driftX, driftY, 1, driftX, driftY, glowR);
+    glow.addColorStop(0, 'rgba(220,255,140,' + (0.55 * flick) + ')');
+    glow.addColorStop(1, 'rgba(220,255,140,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(driftX, driftY, glowR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,220,' + (0.7 + flick * 0.3) + ')';
+    ctx.beginPath();
+    ctx.arc(driftX, driftY, 1.6, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
   function drawFinishEdge() {
     var pulse = 0.5 + 0.5 * Math.sin(frameCount * 0.08);
     var grad = ctx.createLinearGradient(W - 26, 0, W, 0);
@@ -2001,6 +2442,45 @@
   function drawPlatform(p) {
     if (p._seed === undefined) p._seed = Math.random();
     var seed = p._seed;
+
+    if (level.theme === 'rainforest') {
+      var logR = 74 + seed * 20, logG = 58 + seed * 22, logB = 36 + seed * 12;
+      ctx.fillStyle = 'rgb(' + Math.round(logR) + ',' + Math.round(logG) + ',' + Math.round(logB) + ')';
+      ctx.fillRect(p.x, p.y, p.w, p.h);
+
+      ctx.fillStyle = 'rgba(200,255,160,0.14)';
+      ctx.fillRect(p.x, p.y, p.w, 4);
+
+      ctx.fillStyle = 'rgba(0,0,0,0.32)';
+      ctx.fillRect(p.x, p.y + p.h - 5, p.w, 5);
+
+      ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+      ctx.lineWidth = 1;
+      var ringCount = 2 + Math.floor(seed * 3);
+      for (var g = 0; g < ringCount; g++) {
+        var gx = p.x + ((g * 47 + seed * 811) % Math.max(1, p.w - 6)) + 3;
+        ctx.beginPath();
+        ctx.moveTo(gx, p.y + 3);
+        ctx.lineTo(gx, p.y + p.h - 3);
+        ctx.stroke();
+      }
+
+      var mossCount2 = 2 + (Math.floor(seed * 400) % 3);
+      for (var m2 = 0; m2 < mossCount2; m2++) {
+        var mx2 = p.x + 9 + ((m2 * 37 + seed * 271) % Math.max(1, p.w - 18));
+        drawMossTuft(mx2, p.y);
+      }
+      if (seed < 0.4) {
+        ctx.strokeStyle = '#3c5a2a';
+        ctx.lineWidth = 2;
+        var vx0 = p.x + p.w * (0.2 + seed * 0.6);
+        ctx.beginPath();
+        ctx.moveTo(vx0, p.y + p.h);
+        ctx.quadraticCurveTo(vx0 + 4, p.y + p.h + 10, vx0 - 2, p.y + p.h + 20);
+        ctx.stroke();
+      }
+      return;
+    }
 
     var baseR = 88 + seed * 22, baseG = 72 + seed * 16, baseB = 54 + seed * 10;
     ctx.fillStyle = 'rgb(' + Math.round(baseR) + ',' + Math.round(baseG) + ',' + Math.round(baseB) + ')';
@@ -2032,8 +2512,13 @@
   function draw() {
     ctx.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
 
-    drawDungeonBackground();
-    TORCH_POSITIONS.forEach(function(t) { drawTorch(t.x, t.y); });
+    if (level.theme === 'rainforest') {
+      drawRainforestBackground();
+      FIREFLY_POSITIONS.forEach(function(t) { drawFirefly(t.x, t.y); });
+    } else {
+      drawDungeonBackground();
+      TORCH_POSITIONS.forEach(function(t) { drawTorch(t.x, t.y); });
+    }
     drawFinishEdge();
 
     level.water.forEach(drawWater);
@@ -2045,9 +2530,15 @@
     level.spikes.forEach(drawSpikeShape);
     level.saws.forEach(drawSaw);
     level.blades.forEach(drawBlade);
+    level.mosquitoSwarms.forEach(drawMosquitoSwarm);
     level.pendulums.forEach(drawPendulum);
-    level.fishSpawners.forEach(drawFish);
-    level.fishSpawners.forEach(function(f) { if (f.cruise) drawFin(f); });
+    if (level.theme === 'rainforest') {
+      level.fishSpawners.forEach(drawSwampBeast);
+      level.fishSpawners.forEach(function(f) { if (f.cruise) drawCrocEyes(f); });
+    } else {
+      level.fishSpawners.forEach(drawFish);
+      level.fishSpawners.forEach(function(f) { if (f.cruise) drawFin(f); });
+    }
 
     if (player.alive) {
       drawDog(Math.round(player.x), Math.round(player.y), player.w, player.h, player.facing);
