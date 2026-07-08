@@ -642,7 +642,7 @@
     accumulator += delta;
 
     while (accumulator >= FIXED_DT) {
-      frameCount += 1;
+      if (player.alive && !transitioning && !allDone) frameCount += 1;
       update();
       accumulator -= FIXED_DT;
     }
