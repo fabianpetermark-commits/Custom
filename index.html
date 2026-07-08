@@ -94,6 +94,68 @@
   }
   .blink { animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
+  .menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+    width: 240px;
+  }
+  .menu-item {
+    padding: 8px 22px;
+    border: 2px solid #f0f0f5;
+    color: #f0f0f5;
+    cursor: pointer;
+    background: rgba(0,0,0,0.2);
+  }
+  .menu-item.selected, .menu-item:hover {
+    border-color: #ff2e5b;
+    color: #ff2e5b;
+  }
+  .menu-item.disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .menu-item.disabled.selected, .menu-item.disabled:hover {
+    border-color: #f0f0f5;
+    color: #f0f0f5;
+  }
+  .menu-msg {
+    font-size: 12px;
+    color: #6ce0ff;
+    min-height: 14px;
+  }
+  .menu-msg.error { color: #ff5c7a; }
+  .menu-name-input {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 15px;
+    background: #1a1a22;
+    color: #f0f0f5;
+    border: 2px solid #f0f0f5;
+    padding: 6px 10px;
+    text-align: center;
+    width: 220px;
+    letter-spacing: 1px;
+  }
+  .menu-name-input:focus { outline: none; border-color: #ff2e5b; }
+  .rank-table {
+    margin-top: 10px;
+    font-size: 11px;
+    max-height: 44vh;
+    overflow-y: auto;
+    width: 90%;
+    max-width: 480px;
+  }
+  .rank-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 3px 6px;
+    border-bottom: 1px solid #33333d;
+    white-space: nowrap;
+  }
+  .rank-row.header { color: #ffe066; border-bottom: 1px solid #77778a; }
+  .rank-row .rname { flex: 1 1 auto; text-align: left; overflow: hidden; text-overflow: ellipsis; }
   .hint {
     text-align: center;
     color: #77778a;
@@ -237,6 +299,7 @@
     background: radial-gradient(circle at 35% 30%, rgba(255,92,122,0.6), rgba(163,24,58,0.6));
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -247,6 +310,7 @@
     <span class="deaths" id="deaths">HALALOK: 0</span>
     <span class="time" id="timer">IDO: 0.0s</span>
     <span class="music-toggle" id="musicToggle">ZENE: BE</span>
+    <span class="music-toggle" id="pauseToggle">MENU</span>
   </div>
   <div class="screen-wrap">
     <canvas id="game" width="1920" height="1088"></canvas>
@@ -575,6 +639,32 @@
   var levelIndex, level, player, keys, particles, bloodStains, pops, chunks, running, transitioning, allDone;
   var frameCount, startTime, elapsed, deaths, loopId;
 
+  var gameState = 'menu';
+  var pausedGame = false;
+  var menuIndex = 0;
+  var playerIdentity = null;
+  var supabaseClient = null;
+
+  var SUPABASE_URL = 'https://rrqrmbiclapopgrcypye.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_hbjYoyagZNpg7tt90PlC0w_i-7TT1IR';
+  if (window.supabase && window.supabase.createClient) {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+
+  function loadPlayerIdentity() {
+    try {
+      var raw = localStorage.getItem('splatRunPlayer');
+      if (raw) playerIdentity = JSON.parse(raw);
+    } catch (e) { playerIdentity = null; }
+  }
+  loadPlayerIdentity();
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   function pad1(n) { return n.toFixed(1); }
 
   function loadLevel(idx) {
@@ -615,6 +705,8 @@
   var FIXED_DT = 1000 / 60;
 
   function startRun() {
+    gameState = 'playing';
+    pausedGame = false;
     deaths = 0;
     elapsed = 0;
     transitioning = false;
@@ -622,6 +714,19 @@
     loadLevel(0);
     beginLoop();
     startMusic();
+  }
+
+  function openPauseMenu() {
+    if (gameState !== 'playing') return;
+    pausedGame = true;
+    cancelAnimationFrame(loopId);
+    showMenu();
+  }
+
+  function resumeGame() {
+    pausedGame = false;
+    gameState = 'playing';
+    beginLoop();
   }
 
   function beginLoop() {
@@ -1077,14 +1182,19 @@
     if (levelIndex >= LEVELS.length - 1) {
       allDone = true;
       running = false;
+      gameState = 'victory';
       cancelAnimationFrame(loopId);
       overlay.innerHTML = '<div class="overlay-title">GYOZELEM!</div>' +
         '<div>OSSZ IDO: ' + pad1(elapsed) + 's &nbsp; HALALOK: ' + deaths + '</div>' +
-        '<div class="blink">UJRAINDITAS: NYOMJ EGY GOMBOT</div>';
+        '<div class="blink">UJRAINDITAS: NYOMJ EGY GOMBOT</div>' +
+        '<div class="menu-list"><div class="menu-item" id="victoryMenuBtn">FOMENU</div></div>';
       overlay.classList.remove('hidden');
+      var vbtn = document.getElementById('victoryMenuBtn');
+      if (vbtn) vbtn.addEventListener('click', function() { pausedGame = false; showMenu(); });
       return;
     }
     running = false;
+    gameState = 'levelComplete';
     cancelAnimationFrame(loopId);
     overlay.innerHTML = '<div class="overlay-title">PALYA TELJESITVE</div>' +
       '<div>' + level.name + ' KESZ &nbsp; HALALOK: ' + deaths + '</div>' +
@@ -1098,8 +1208,200 @@
       return;
     }
     transitioning = false;
+    gameState = 'playing';
     loadLevel(levelIndex + 1);
     beginLoop();
+  }
+
+  function menuItemList() {
+    var items = pausedGame ? [{ action: 'resume', label: 'FOLYTATAS' }] : [];
+    return items.concat([
+      { action: 'new', label: 'UJ JATEK' },
+      { action: 'load', label: 'JATEK BETOLTESE' },
+      { action: 'save', label: 'JATEK MENTESE' },
+      { action: 'rank', label: 'RANGSOR' }
+    ]);
+  }
+
+  function showMenu(msg, msgIsError) {
+    running = false;
+    transitioning = false;
+    gameState = 'menu';
+    menuIndex = 0;
+    cancelAnimationFrame(loopId);
+    if (!pausedGame) loadLevel(levelIndex || 0);
+    renderMenu(msg, msgIsError);
+    overlay.classList.remove('hidden');
+  }
+
+  function renderMenu(msg, msgIsError) {
+    var items = menuItemList();
+    if (menuIndex >= items.length) menuIndex = 0;
+    var itemsHtml = items.map(function(item, i) {
+      var cls = 'menu-item' + (i === menuIndex ? ' selected' : '');
+      return '<div class="' + cls + '" data-action="' + item.action + '">' + item.label + '</div>';
+    }).join('');
+    overlay.innerHTML =
+      '<div class="overlay-title">SPLAT RUN</div>' +
+      (playerIdentity ? '<div>JATEKOS: ' + escapeHtml(playerIdentity.name) + '</div>' : '<div>NINCS MEG NEV BEALLITVA</div>') +
+      '<div class="menu-list">' + itemsHtml + '</div>' +
+      '<div class="menu-msg' + (msgIsError ? ' error' : '') + '">' + (msg ? escapeHtml(msg) : '') + '</div>';
+    Array.prototype.forEach.call(overlay.querySelectorAll('.menu-item'), function(el, i) {
+      el.addEventListener('click', function() {
+        menuIndex = i;
+        handleMenuAction(items[i].action);
+      });
+    });
+  }
+
+  function handleMenuKeydown(e) {
+    if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
+    var key = e.key.toLowerCase();
+    var items = menuItemList();
+    if (key === 'arrowup' || key === 'w') {
+      menuIndex = (menuIndex - 1 + items.length) % items.length;
+      renderMenu();
+      e.preventDefault();
+    } else if (key === 'arrowdown' || key === 's') {
+      menuIndex = (menuIndex + 1) % items.length;
+      renderMenu();
+      e.preventDefault();
+    } else if (key === 'enter' || key === ' ') {
+      handleMenuAction(items[menuIndex].action);
+      e.preventDefault();
+    }
+  }
+
+  function handleMenuAction(action) {
+    if (action === 'resume') resumeGame();
+    else if (action === 'new') startNewGame();
+    else if (action === 'load') loadGame();
+    else if (action === 'save') saveGame();
+    else if (action === 'rank') showRanking();
+  }
+
+  function startNewGame() {
+    if (!playerIdentity) {
+      showNamePrompt();
+      return;
+    }
+    startRun();
+  }
+
+  function showNamePrompt(errorMsg) {
+    gameState = 'nameEntry';
+    overlay.innerHTML =
+      '<div class="overlay-title">SPLAT RUN</div>' +
+      '<div>ADD MEG A NEVED</div>' +
+      '<input type="text" class="menu-name-input" id="nameInput" maxlength="20" autocomplete="off">' +
+      '<div class="menu-list">' +
+        '<div class="menu-item selected" id="nameSubmit">KEZDES</div>' +
+        '<div class="menu-item" id="nameCancel">VISSZA</div>' +
+      '</div>' +
+      '<div class="menu-msg error">' + (errorMsg ? escapeHtml(errorMsg) : '') + '</div>';
+    overlay.classList.remove('hidden');
+    var input = document.getElementById('nameInput');
+    input.focus();
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); submitName(); }
+      e.stopPropagation();
+    });
+    input.addEventListener('keyup', function(e) { e.stopPropagation(); });
+    document.getElementById('nameSubmit').addEventListener('click', submitName);
+    document.getElementById('nameCancel').addEventListener('click', function() { showMenu(); });
+  }
+
+  function submitName() {
+    var input = document.getElementById('nameInput');
+    var name = input ? input.value.trim() : '';
+    if (!name) { showNamePrompt('Adj meg egy nevet!'); return; }
+    if (!supabaseClient) { showNamePrompt('Nincs kapcsolat a szerverrel.'); return; }
+    var id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('id-' + Date.now() + '-' + Math.random().toString(16).slice(2));
+    supabaseClient.from('players').insert({ id: id, name: name }).then(function(res) {
+      if (res.error) {
+        if (res.error.code === '23505') {
+          showNamePrompt('Ez a nev mar foglalt, valassz mast!');
+        } else {
+          showNamePrompt('Hiba tortent, probald ujra!');
+        }
+        return;
+      }
+      playerIdentity = { id: id, name: name };
+      localStorage.setItem('splatRunPlayer', JSON.stringify(playerIdentity));
+      startRun();
+    }).catch(function() {
+      showNamePrompt('Nincs kapcsolat a szerverrel.');
+    });
+  }
+
+  function saveGame() {
+    if (!playerIdentity) { showNamePrompt(); return; }
+    if (!supabaseClient) { showMenu('Nincs kapcsolat a szerverrel.', true); return; }
+    supabaseClient.from('players').update({
+      level_index: levelIndex,
+      total_time: elapsed,
+      total_deaths: deaths,
+      updated_at: new Date().toISOString()
+    }).eq('id', playerIdentity.id).then(function(res) {
+      if (res.error) { showMenu('Mentesi hiba!', true); return; }
+      showMenu('JATEKALLAS MENTVE');
+    });
+  }
+
+  function loadGame() {
+    if (!playerIdentity) { showNamePrompt(); return; }
+    if (!supabaseClient) { showMenu('Nincs kapcsolat a szerverrel.', true); return; }
+    supabaseClient.from('players').select('level_index, total_time, total_deaths').eq('id', playerIdentity.id).single()
+      .then(function(res) {
+        if (res.error || !res.data) { showMenu('Nincs elmentett allas.', true); return; }
+        pausedGame = false;
+        gameState = 'playing';
+        deaths = res.data.total_deaths || 0;
+        elapsed = res.data.total_time || 0;
+        transitioning = false;
+        allDone = false;
+        loadLevel(res.data.level_index || 0);
+        beginLoop();
+        startMusic();
+      });
+  }
+
+  function showRanking() {
+    gameState = 'ranking';
+    overlay.innerHTML = '<div class="overlay-title">RANGSOR</div><div class="menu-msg">Betoltes...</div>';
+    overlay.classList.remove('hidden');
+    if (!supabaseClient) {
+      renderRankingList([], true);
+      return;
+    }
+    supabaseClient.from('players')
+      .select('name, level_index, total_time, total_deaths')
+      .order('level_index', { ascending: false })
+      .order('total_time', { ascending: true })
+      .then(function(res) {
+        renderRankingList(res.data || [], !!res.error);
+      });
+  }
+
+  function renderRankingList(list, hadError) {
+    var rowsHtml = list.map(function(p) {
+      return '<div class="rank-row">' +
+        '<span class="rname">' + escapeHtml(p.name) + '</span>' +
+        '<span>PALYA ' + (p.level_index + 1) + '/5</span>' +
+        '<span>IDO ' + pad1(p.total_time) + 's</span>' +
+        '<span>HALALOK ' + p.total_deaths + '</span>' +
+        '</div>';
+    }).join('');
+    overlay.innerHTML =
+      '<div class="overlay-title">RANGSOR</div>' +
+      '<div class="rank-table">' +
+        '<div class="rank-row header"><span class="rname">NEV</span><span>PALYA</span><span>IDO</span><span>HALALOK</span></div>' +
+        (rowsHtml || '<div class="menu-msg">Meg nincs jatekos a rangsorban.</div>') +
+      '</div>' +
+      (hadError ? '<div class="menu-msg error">Hiba a rangsor betoltesekor.</div>' : '') +
+      '<div class="menu-list"><div class="menu-item selected" id="rankBack">VISSZA</div></div>';
+    var btn = document.getElementById('rankBack');
+    if (btn) btn.addEventListener('click', function() { showMenu(); });
   }
 
   function drawDog(x, y, w, h, facing) {
@@ -1719,6 +2021,21 @@
   document.addEventListener('keydown', function(e) {
     var key = e.key.toLowerCase();
 
+    if (key === 'escape') {
+      if (gameState === 'playing') { openPauseMenu(); e.preventDefault(); return; }
+      if (gameState === 'menu' && pausedGame) { resumeGame(); e.preventDefault(); return; }
+    }
+
+    if (gameState === 'menu') { handleMenuKeydown(e); return; }
+    if (gameState === 'nameEntry') { return; }
+    if (gameState === 'ranking') {
+      if (key === 'enter' || key === ' ' || key === 'escape' || key === 'arrowup' || key === 'arrowdown') {
+        e.preventDefault();
+        showMenu();
+      }
+      return;
+    }
+
     if (!running && !transitioning) {
       startRun();
       return;
@@ -1769,6 +2086,7 @@
 
   document.getElementById('btnJump').addEventListener('touchstart', function(e) {
     e.preventDefault();
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking') return;
     if (!running && !transitioning) { startRun(); return; }
     if (!running && transitioning) { advanceAfterOverlay(); return; }
     if (player.onRope) { keys.up = true; setTimeout(function() { keys.up = false; }, 50); return; }
@@ -1783,6 +2101,7 @@
 
   document.getElementById('btnJump').addEventListener('mousedown', function(e) {
     e.preventDefault();
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking') return;
     if (!running && !transitioning) { startRun(); return; }
     if (!running && transitioning) { advanceAfterOverlay(); return; }
     if (player.onRope) { keys.up = true; setTimeout(function() { keys.up = false; }, 50); return; }
@@ -1795,12 +2114,17 @@
     keys.jumpHeld = false;
   });
 
+  document.getElementById('pauseToggle').addEventListener('click', function() {
+    if (gameState === 'playing') openPauseMenu();
+    else if (gameState === 'menu' && pausedGame) resumeGame();
+  });
+
   deaths = 0;
   elapsed = 0;
   running = false;
   transitioning = false;
   allDone = false;
-  loadLevel(0);
+  showMenu();
 })();
 </script>
 
