@@ -208,15 +208,28 @@
   html.standalone-app .touch-controls .dpad,
   html.standalone-app .touch-controls .jump-btn {
     pointer-events: auto;
-    opacity: 0.85;
+    opacity: 0.45;
+    transition: opacity 0.15s;
+  }
+  html.standalone-app .touch-controls .touch-btn:active,
+  html.standalone-app .touch-controls .jump-btn:active {
+    opacity: 0.75;
   }
   html.standalone-app .dpad {
-    grid-template-columns: repeat(3, clamp(56px, 15vw, 84px));
-    grid-template-rows: repeat(3, clamp(56px, 15vw, 84px));
+    grid-template-columns: repeat(3, clamp(38px, 10vh, 56px));
+    grid-template-rows: repeat(3, clamp(38px, 10vh, 56px));
+    gap: 6px;
+  }
+  html.standalone-app .touch-btn {
+    background: rgba(42,42,52,0.55);
+    border-color: rgba(69,69,79,0.55);
+    font-size: clamp(18px, 5vh, 26px);
   }
   html.standalone-app .jump-btn {
-    width: clamp(96px, 22vw, 140px);
-    height: clamp(96px, 22vw, 140px);
+    width: clamp(60px, 15vh, 92px);
+    height: clamp(60px, 15vh, 92px);
+    font-size: clamp(12px, 3.4vh, 16px);
+    background: radial-gradient(circle at 35% 30%, rgba(255,92,122,0.6), rgba(163,24,58,0.6));
   }
 </style>
 </head>
