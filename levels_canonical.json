@@ -5,7 +5,7 @@
    "h": 40,
    "w": 30,
    "x": 565,
-   "y": 150
+   "y": 200
   },
   "icicles": [],
   "ladders": [],
@@ -15,8 +15,8 @@
   "pendulums": [
    {
     "anchorX": 520,
-    "anchorY": 20,
-    "length": 140,
+    "anchorY": 0,
+    "length": 130,
     "maxAngle": 0.4,
     "minAngle": -0.4,
     "phase": 0,
@@ -44,7 +44,7 @@
     "h": 20,
     "w": 130,
     "x": 470,
-    "y": 190
+    "y": 240
    }
   ],
   "ropes": [],

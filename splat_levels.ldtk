@@ -2807,7 +2807,7 @@
        "__identifier": "Platform",
        "__grid": [
         47,
-        19
+        24
        ],
        "__pivot": [
         0,
@@ -2817,14 +2817,14 @@
        "__tile": null,
        "__smartColor": "#3EE08A",
        "__worldX": 470,
-       "__worldY": 190,
+       "__worldY": 240,
        "iid": "177b4efd-a6d5-4ca0-9d2c-c5a0d51a1f96",
        "width": 130,
        "height": 20,
        "defUid": 118,
        "px": [
         470,
-        190
+        240
        ],
        "fieldInstances": [
         {
@@ -3003,7 +3003,7 @@
        "__identifier": "Pendulum",
        "__grid": [
         52,
-        2
+        0
        ],
        "__pivot": [
         0,
@@ -3013,20 +3013,20 @@
        "__tile": null,
        "__smartColor": "#8A1A2A",
        "__worldX": 520,
-       "__worldY": 20,
+       "__worldY": 0,
        "iid": "13b31d5a-b7fc-4afa-b053-b96a1d7bb148",
        "width": 16,
        "height": 16,
        "defUid": 134,
        "px": [
         520,
-        20
+        0
        ],
        "fieldInstances": [
         {
          "__identifier": "length",
          "__type": "Float",
-         "__value": 140,
+         "__value": 130,
          "defUid": 128,
          "realEditorValues": []
         },
@@ -3146,7 +3146,7 @@
        "__identifier": "Goal",
        "__grid": [
         56,
-        15
+        20
        ],
        "__pivot": [
         0,
@@ -3156,14 +3156,14 @@
        "__tile": null,
        "__smartColor": "#FFE066",
        "__worldX": 565,
-       "__worldY": 150,
+       "__worldY": 200,
        "iid": "c79de9bc-8832-47b9-959c-3b637298bf23",
        "width": 30,
        "height": 40,
        "defUid": 169,
        "px": [
         565,
-        150
+        200
        ],
        "fieldInstances": []
       }

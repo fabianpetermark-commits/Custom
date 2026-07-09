@@ -566,7 +566,7 @@
         platforms: [
           { x: 0, y: 320, w: 160, h: 20, color: '#3ee08a' },
           { x: 210, y: 320, w: 150, h: 20, color: '#3ee08a' },
-          { x: 470, y: 190, w: 130, h: 20, color: '#3ee08a' }
+          { x: 470, y: 240, w: 130, h: 20, color: '#3ee08a' }
         ],
         spikes: [
           { x: 90, y: 308, w: 30, h: 12 }
@@ -578,7 +578,7 @@
         mosquitoSwarms: [],
         leeches: [],
         pendulums: [
-          { anchorX: 520, anchorY: 20, length: 140, minAngle: -0.4, maxAngle: 0.4, speed: 0.035, phase: 0, r: 13 }
+          { anchorX: 520, anchorY: 0, length: 130, minAngle: -0.4, maxAngle: 0.4, speed: 0.035, phase: 0, r: 13 }
         ],
         ladders: [],
         walls: [],
@@ -591,7 +591,7 @@
         icicles: [],
         springs: [],
         fishSpawners: [],
-        goal: { x: 565, y: 150, w: 30, h: 40 }
+        goal: { x: 565, y: 200, w: 30, h: 40 }
       },
       {
         name: 'FURESZEK',
@@ -1093,7 +1093,7 @@
         start: { x: 20, y: 274 },
         platforms: [
           { x: 0, y: 300, w: 100, h: 20, color: '#8a99aa' },
-          { x: 140, y: 300, w: 90, h: 36, color: '#9fd4ee', ice: true, move: { axis: 'x', min: 140, max: 230, speed: 0.025, phase: 0 } },
+          { x: 140, y: 300, w: 90, h: 36, color: '#9fd4ee', move: { axis: 'x', min: 140, max: 230, speed: 0.025, phase: 0 }, ice: true },
           { x: 310, y: 300, w: 120, h: 40, color: '#9fd4ee', ice: true },
           { x: 470, y: 220, w: 130, h: 16, color: '#9fd4ee', ice: true },
           { x: 460, y: 100, w: 80, h: 16, color: '#8a99aa' }
