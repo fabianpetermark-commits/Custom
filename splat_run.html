@@ -1543,6 +1543,10 @@
           pt.x = pt.followRect.x + pt.offsetX;
           pt.y = pt.followRect.y + pt.offsetY;
         }
+        pt.life -= 1;
+        if (pt.life <= 0) {
+          particles.splice(j, 1);
+        }
         continue;
       }
     }
@@ -2862,7 +2866,7 @@
     }
 
     particles.forEach(function(pt) {
-      var alpha = pt.landed ? 0.75 : Math.max(0, pt.life / 50);
+      var alpha = pt.landed ? Math.max(0, Math.min(0.75, 0.75 * pt.life / 120)) : Math.max(0, pt.life / 50);
       ctx.fillStyle = 'rgba(220,20,40,' + alpha + ')';
       ctx.beginPath();
       if (pt.landed) {
