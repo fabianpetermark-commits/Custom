@@ -12,18 +12,7 @@
   "leeches": [],
   "mosquitoSwarms": [],
   "name": "BEVEZETES",
-  "pendulums": [
-   {
-    "anchorX": 520,
-    "anchorY": 0,
-    "length": 130,
-    "maxAngle": 0.4,
-    "minAngle": -0.4,
-    "phase": 0,
-    "r": 13,
-    "speed": 0.035
-   }
-  ],
+  "pendulums": [],
   "platforms": [
    {
     "color": "#3ee08a",
@@ -160,7 +149,7 @@
     "h": 16,
     "w": 120,
     "x": 280,
-    "y": 30
+    "y": 60
    },
    {
     "color": "#6ce0ff",
@@ -173,16 +162,6 @@
   "ropes": [],
   "saws": [
    {
-    "axis": "y",
-    "cx": 170,
-    "cy": 0,
-    "max": 280,
-    "min": 160,
-    "phase": 0,
-    "r": 12,
-    "speed": 0.05
-   },
-   {
     "axis": "x",
     "cx": 0,
     "cy": 190,
@@ -191,16 +170,6 @@
     "phase": 0,
     "r": 11,
     "speed": 0.06
-   },
-   {
-    "axis": "y",
-    "cx": 310,
-    "cy": 0,
-    "max": 160,
-    "min": 40,
-    "phase": 0.5,
-    "r": 12,
-    "speed": 0.055
    },
    {
     "axis": "x",
@@ -230,16 +199,16 @@
   "theme": "dungeon",
   "walls": [
    {
-    "h": 130,
+    "h": 94,
     "w": 15,
     "x": 280,
-    "y": 40
+    "y": 76
    },
    {
-    "h": 130,
+    "h": 94,
     "w": 15,
     "x": 340,
-    "y": 40
+    "y": 76
    }
   ],
   "water": []

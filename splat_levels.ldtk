@@ -3000,74 +3000,6 @@
        ]
       },
       {
-       "__identifier": "Pendulum",
-       "__grid": [
-        52,
-        0
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#8A1A2A",
-       "__worldX": 520,
-       "__worldY": 0,
-       "iid": "13b31d5a-b7fc-4afa-b053-b96a1d7bb148",
-       "width": 16,
-       "height": 16,
-       "defUid": 134,
-       "px": [
-        520,
-        0
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "length",
-         "__type": "Float",
-         "__value": 130,
-         "defUid": 128,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "minAngle",
-         "__type": "Float",
-         "__value": -0.4,
-         "defUid": 129,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "maxAngle",
-         "__type": "Float",
-         "__value": 0.4,
-         "defUid": 130,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speed",
-         "__type": "Float",
-         "__value": 0.035,
-         "defUid": 131,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 132,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "r",
-         "__type": "Float",
-         "__value": 13,
-         "defUid": 133,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
        "__identifier": "Water",
        "__grid": [
         16,
@@ -3854,7 +3786,7 @@
        "__identifier": "Platform",
        "__grid": [
         28,
-        3
+        6
        ],
        "__pivot": [
         0,
@@ -3864,14 +3796,14 @@
        "__tile": null,
        "__smartColor": "#3EE08A",
        "__worldX": 900,
-       "__worldY": 30,
+       "__worldY": 60,
        "iid": "583c566c-d203-467e-8116-f59a0a62e6ba",
        "width": 120,
        "height": 16,
        "defUid": 118,
        "px": [
         280,
-        30
+        60
        ],
        "fieldInstances": [
         {
@@ -4084,74 +4016,6 @@
       {
        "__identifier": "Saw",
        "__grid": [
-        17,
-        0
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#C9C9D4",
-       "__worldX": 790,
-       "__worldY": 0,
-       "iid": "e29a9e49-9d4d-4487-afe8-a7d3883c51d2",
-       "width": 24,
-       "height": 24,
-       "defUid": 127,
-       "px": [
-        170,
-        0
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "r",
-         "__type": "Float",
-         "__value": 12,
-         "defUid": 121,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "axis",
-         "__type": "LocalEnum.SawAxis",
-         "__value": "y",
-         "defUid": 122,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "min",
-         "__type": "Float",
-         "__value": 160,
-         "defUid": 123,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "max",
-         "__type": "Float",
-         "__value": 280,
-         "defUid": 124,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speed",
-         "__type": "Float",
-         "__value": 0.05,
-         "defUid": 125,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 126,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Saw",
-       "__grid": [
         0,
         19
        ],
@@ -4212,74 +4076,6 @@
          "__identifier": "phase",
          "__type": "Float",
          "__value": 0,
-         "defUid": 126,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Saw",
-       "__grid": [
-        31,
-        0
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#C9C9D4",
-       "__worldX": 930,
-       "__worldY": 0,
-       "iid": "5d6c1afa-2886-43a1-a982-0920fd2660ee",
-       "width": 24,
-       "height": 24,
-       "defUid": 127,
-       "px": [
-        310,
-        0
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "r",
-         "__type": "Float",
-         "__value": 12,
-         "defUid": 121,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "axis",
-         "__type": "LocalEnum.SawAxis",
-         "__value": "y",
-         "defUid": 122,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "min",
-         "__type": "Float",
-         "__value": 40,
-         "defUid": 123,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "max",
-         "__type": "Float",
-         "__value": 160,
-         "defUid": 124,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speed",
-         "__type": "Float",
-         "__value": 0.055,
-         "defUid": 125,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phase",
-         "__type": "Float",
-         "__value": 0.5,
          "defUid": 126,
          "realEditorValues": []
         }
@@ -4382,7 +4178,7 @@
        "__identifier": "Wall",
        "__grid": [
         28,
-        4
+        7
        ],
        "__pivot": [
         0,
@@ -4392,14 +4188,14 @@
        "__tile": null,
        "__smartColor": "#8C7D5F",
        "__worldX": 900,
-       "__worldY": 40,
+       "__worldY": 76,
        "iid": "505c0d1d-761d-4fc5-ae86-9b27dc3e395a",
        "width": 15,
-       "height": 130,
+       "height": 94,
        "defUid": 145,
        "px": [
         280,
-        40
+        76
        ],
        "fieldInstances": []
       },
@@ -4407,7 +4203,7 @@
        "__identifier": "Wall",
        "__grid": [
         34,
-        4
+        7
        ],
        "__pivot": [
         0,
@@ -4417,14 +4213,14 @@
        "__tile": null,
        "__smartColor": "#8C7D5F",
        "__worldX": 960,
-       "__worldY": 40,
+       "__worldY": 76,
        "iid": "5f03ae8c-e2ec-4e45-b986-8f8864e8ffc4",
        "width": 15,
-       "height": 130,
+       "height": 94,
        "defUid": 145,
        "px": [
         340,
-        40
+        76
        ],
        "fieldInstances": []
       },
