@@ -224,6 +224,31 @@
     box-shadow: 0 2px 0 #5c0e22, inset 0 0 0 2px rgba(255,255,255,0.15);
     transform: translateY(4px);
   }
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .dash-btn {
+    width: clamp(90px, 24vw, 110px);
+    height: clamp(90px, 24vw, 110px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #5cc8ff, #1a6fa3);
+    box-shadow: 0 6px 0 #0e3d5c, inset 0 0 0 2px rgba(255,255,255,0.15);
+    color: #ffffff;
+    font-size: clamp(14px, 4.5vw, 18px);
+    font-weight: bold;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .dash-btn:active {
+    box-shadow: 0 2px 0 #0e3d5c, inset 0 0 0 2px rgba(255,255,255,0.15);
+    transform: translateY(4px);
+  }
   @media (pointer: coarse) {
     .touch-controls { display: flex; }
     .hint { display: none; }
@@ -285,13 +310,15 @@
     z-index: 5;
   }
   html.standalone-app .touch-controls .dpad,
-  html.standalone-app .touch-controls .jump-btn {
+  html.standalone-app .touch-controls .jump-btn,
+  html.standalone-app .touch-controls .dash-btn {
     pointer-events: auto;
     opacity: 0.45;
     transition: opacity 0.15s;
   }
   html.standalone-app .touch-controls .touch-btn:active,
-  html.standalone-app .touch-controls .jump-btn:active {
+  html.standalone-app .touch-controls .jump-btn:active,
+  html.standalone-app .touch-controls .dash-btn:active {
     opacity: 0.75;
   }
   html.standalone-app .dpad {
@@ -309,6 +336,15 @@
     height: clamp(60px, 15vh, 92px);
     font-size: clamp(12px, 3.4vh, 16px);
     background: radial-gradient(circle at 35% 30%, rgba(255,92,122,0.6), rgba(163,24,58,0.6));
+  }
+  html.standalone-app .dash-btn {
+    width: clamp(40px, 11vh, 62px);
+    height: clamp(40px, 11vh, 62px);
+    font-size: clamp(9px, 2.6vh, 12px);
+    background: radial-gradient(circle at 35% 30%, rgba(92,200,255,0.6), rgba(26,111,163,0.6));
+  }
+  html.standalone-app .action-buttons {
+    gap: 8px;
   }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -328,11 +364,11 @@
     <canvas id="game" width="1920" height="1088"></canvas>
     <div class="overlay-text" id="overlay">
       <div class="overlay-title">SPLAT RUN</div>
-      <div>LETRA: FEL/LE &nbsp; KOTEL: ERINTSD MEG &nbsp; SZOKOZ: UGRAS</div>
+      <div>LETRA: FEL/LE &nbsp; KOTEL: ERINTSD MEG &nbsp; SZOKOZ: UGRAS &nbsp; SHIFT: DASH</div>
       <div class="blink">NYOMJ EGY GOMBOT A KEZDESHEZ</div>
     </div>
   </div>
-  <div class="hint">NYIL / WASD MOZGAS ES MASZAS &mdash; SZOKOZ: UGRAS (LEVEGOBEN MEG EGYSZER: DUPLA UGRAS)</div>
+  <div class="hint">NYIL / WASD MOZGAS ES MASZAS &mdash; SZOKOZ: UGRAS (LEVEGOBEN MEG EGYSZER: DUPLA UGRAS) &mdash; SHIFT: DASH &mdash; FALNAL: IRANY-GOMB TARTASA CSUSZASHOZ, UGRAS A FALTOL ELLOKESHEZ</div>
   <div class="touch-controls">
     <div class="dpad">
       <div class="touch-btn empty"></div>
@@ -345,7 +381,10 @@
       <div class="touch-btn" id="btnDown">&#9660;</div>
       <div class="touch-btn empty"></div>
     </div>
-    <div class="jump-btn" id="btnJump">UGRAS</div>
+    <div class="action-buttons">
+      <div class="dash-btn" id="btnDash">DASH</div>
+      <div class="jump-btn" id="btnJump">UGRAS</div>
+    </div>
   </div>
 </div>
 
@@ -372,6 +411,8 @@
   var ROPE_GRAB_RADIUS = 22;
   var MAX_ROPE_ANGLE = 1.25;
   var MAX_ROPE_ANGVEL = 0.05;
+  var DASH_SPEED = 6.0;
+  var DASH_DURATION = 10;
 
   function osc(min, max, speed, phase, frame) {
     return min + (max - min) * (0.5 + 0.5 * Math.sin(frame * speed + phase));
@@ -514,8 +555,8 @@
   function buildLevels() {
     var lvl2Ground = { x: 0, y: 300, w: 120, h: 40, color: '#3ee08a', move: { axis: 'y', min: 270, max: 330, speed: 0.025, phase: 1.5708 } };
     var lvl4Island = { x: 220, y: 300, w: 100, h: 44, color: '#3ee08a', move: { axis: 'x', min: 180, max: 280, speed: 0.02, phase: 0 } };
-    var lvl7Branch = { x: 250, y: 230, w: 90, h: 18, color: '#3ee08a', move: { axis: 'x', min: 190, max: 300, speed: 0.025, phase: 0 } };
-    var lvl8Log = { x: 230, y: 300, w: 90, h: 36, color: '#3ee08a', move: { axis: 'y', min: 265, max: 305, speed: 0.03, phase: 0.8 } };
+    var lvl7Branch = { x: 250, y: 230, w: 90, h: 18, color: '#3ee08a', move: { axis: 'x', min: 190, max: 280, speed: 0.025, phase: 0 }, tilt: { maxAngle: 0.12, speed: 0.03 } };
+    var lvl8Log = { x: 230, y: 300, w: 90, h: 36, color: '#3ee08a', move: { axis: 'y', min: 250, max: 320, speed: 0.03, phase: 0.8 } };
     var lvl10Log = { x: 200, y: 300, w: 90, h: 36, color: '#3ee08a', move: { axis: 'y', min: 255, max: 305, speed: 0.035, phase: 0.4 } };
 
     return [
@@ -534,9 +575,12 @@
         blades: [],
         mosquitoSwarms: [],
         pendulums: [
-          { anchorX: 255, anchorY: 40, length: 170, minAngle: -0.7, maxAngle: 0.7, speed: 0.035, phase: 0, r: 13 }
+          { anchorX: 255, anchorY: 40, length: 170, minAngle: -0.7, maxAngle: 0.7, speed: 0.035, phase: 2.4, r: 13 }
         ],
         ladders: [],
+        walls: [],
+        slopes: [],
+        leeches: [],
         ropes: [],
         water: [
           { x: 90, y: 310, w: 60, h: 30 },
@@ -563,13 +607,16 @@
           { x: 95, y: 288, w: 16, h: 12, follow: { platform: lvl2Ground, offsetX: 95, offsetY: -12 } }
         ],
         saws: [
-          { cx: 220, cy: 232, r: 13, axis: 'y', min: 208, max: 248, speed: 0.06, phase: 0 },
+          { cx: 235, cy: 232, r: 13, axis: 'y', min: 218, max: 248, speed: 0.06, phase: 0 },
           { cx: 520, cy: 112, r: 13, axis: 'x', min: 475, max: 587, speed: 0.05, phase: 0 }
         ],
         blades: [],
         mosquitoSwarms: [],
         pendulums: [],
         ladders: [{ x: 410, y: 140, w: 16, h: 80 }],
+        walls: [{ x: 445, y: 60, w: 15, h: 50 }],
+        slopes: [],
+        leeches: [],
         ropes: [],
         water: [],
         fishSpawners: [],
@@ -592,9 +639,12 @@
         blades: [],
         mosquitoSwarms: [],
         pendulums: [
-          { anchorX: 290, anchorY: 30, length: 150, minAngle: -0.85, maxAngle: 0.85, speed: 0.035, phase: 0, r: 14 }
+          { anchorX: 230, anchorY: 30, length: 150, minAngle: -0.85, maxAngle: 0.85, speed: 0.035, phase: 0, r: 14 }
         ],
         ladders: [{ x: 280, y: 60, w: 20, h: 240 }],
+        walls: [{ x: 345, y: 150, w: 15, h: 150 }],
+        slopes: [],
+        leeches: [],
         ropes: [],
         water: [{ x: 380, y: 310, w: 220, h: 30 }],
         fishSpawners: [
@@ -609,7 +659,9 @@
         platforms: [
           { x: 0, y: 300, w: 140, h: 40, color: '#3ee08a' },
           lvl4Island,
-          { x: 440, y: 300, w: 160, h: 40, color: '#f7c948' }
+          { x: 440, y: 300, w: 160, h: 40, color: '#f7c948' },
+          { x: 300, y: 220, w: 20, h: 16, color: '#6ce0ff' },
+          { x: 375, y: 220, w: 20, h: 16, color: '#6ce0ff' }
         ],
         spikes: [
           { x: 258, y: 288, w: 24, h: 12, follow: { platform: lvl4Island, offsetX: 38, offsetY: -12 } }
@@ -621,6 +673,9 @@
         mosquitoSwarms: [],
         pendulums: [],
         ladders: [],
+        walls: [],
+        slopes: [],
+        leeches: [],
         ropes: [
           { anchorX: 290, anchorY: 25, length: 165, vineSkin: true, angle: 0, angVel: 0 }
         ],
@@ -641,18 +696,25 @@
           { x: 480, y: 240, w: 120, h: 60, color: '#6ce0ff' }
         ],
         spikes: [
-          { x: 220, y: 288, w: 40, h: 12 }
+          { x: 220, y: 288, w: 40, h: 12 },
+          { x: 300, y: 88, w: 60, h: 12 }
         ],
         saws: [
           { cx: 540, cy: 200, r: 13, axis: 'x', min: 500, max: 580, speed: 0.05, phase: 0 },
-          { cx: 460, cy: 0, r: 12, axis: 'y', min: 14, max: 260, speed: 0.045, phase: 0.5 }
+          { cx: 460, cy: 0, r: 12, axis: 'y', min: 14, max: 130, speed: 0.045, phase: 0.5 }
         ],
         blades: [],
         mosquitoSwarms: [],
         pendulums: [
           { anchorX: 270, anchorY: 90, length: 130, minAngle: -0.8, maxAngle: 0.8, speed: 0.04, phase: 1, r: 13 }
         ],
-        ladders: [{ x: 260, y: 120, w: 20, h: 180 }],
+        ladders: [{ x: 260, y: 180, w: 20, h: 120 }],
+        walls: [
+          { x: 250, y: 100, w: 15, h: 90 },
+          { x: 310, y: 100, w: 15, h: 90 }
+        ],
+        slopes: [],
+        leeches: [],
         ropes: [],
         water: [{ x: 100, y: 310, w: 120, h: 30 }],
         fishSpawners: [
@@ -666,12 +728,12 @@
         start: { x: 20, y: 274 },
         platforms: [
           { x: 0, y: 300, w: 100, h: 40, color: '#3ee08a' },
-          { x: 170, y: 300, w: 90, h: 40, color: '#3ee08a' },
+          { x: 170, y: 300, w: 90, h: 40, color: '#3ee08a', sink: { restY: 300, maxY: 316, speed: 0.6, active: false } },
           { x: 330, y: 300, w: 90, h: 40, color: '#3ee08a' },
           { x: 490, y: 300, w: 110, h: 40, color: '#f7c948' }
         ],
         spikes: [
-          { x: 195, y: 288, w: 30, h: 12 }
+          { x: 345, y: 288, w: 30, h: 12 }
         ],
         saws: [
           { cx: 330, cy: 280, r: 13, axis: 'y', min: 258, max: 300, speed: 0.05, phase: 0 }
@@ -682,6 +744,11 @@
         ],
         pendulums: [],
         ladders: [],
+        walls: [],
+        slopes: [
+          { x: 250, y: 280, w: 20, h: 20, direction: 'up' }
+        ],
+        leeches: [],
         ropes: [],
         water: [
           { x: 100, y: 310, w: 70, h: 30 },
@@ -700,22 +767,25 @@
         platforms: [
           { x: 0, y: 300, w: 110, h: 40, color: '#3ee08a' },
           lvl7Branch,
-          { x: 360, y: 170, w: 90, h: 20, color: '#f7c948' },
+          { x: 375, y: 170, w: 90, h: 20, color: '#f7c948' },
           { x: 500, y: 100, w: 100, h: 20, color: '#6ce0ff' }
         ],
         spikes: [
           { x: 220, y: 218, w: 20, h: 12, follow: { platform: lvl7Branch, offsetX: 35, offsetY: -12 } }
         ],
         saws: [
-          { cx: 440, cy: 130, r: 13, axis: 'y', min: 100, max: 170, speed: 0.05, phase: 0 }
+          { cx: 460, cy: 130, r: 13, axis: 'y', min: 100, max: 170, speed: 0.05, phase: 0 }
         ],
         blades: [],
         mosquitoSwarms: [
           { x: 150, y: 230, r: 15, ampX: 10, ampY: 14, speedX: 0.05, speedY: 0.06, phaseX: 0.5, phaseY: 1.8 },
-          { x: 430, y: 150, r: 16, ampX: 14, ampY: 8, speedX: 0.06, speedY: 0.045, phaseX: 2, phaseY: 0.3 }
+          { x: 400, y: 150, r: 16, ampX: 14, ampY: 8, speedX: 0.06, speedY: 0.045, phaseX: 2, phaseY: 0.3 }
         ],
         pendulums: [],
         ladders: [],
+        walls: [],
+        slopes: [],
+        leeches: [],
         ropes: [],
         water: [{ x: 110, y: 310, w: 490, h: 30 }],
         fishSpawners: [
@@ -731,6 +801,7 @@
           { x: 0, y: 300, w: 90, h: 40, color: '#3ee08a' },
           lvl8Log,
           { x: 420, y: 240, w: 80, h: 20, color: '#f7c948' },
+          { x: 480, y: 210, w: 40, h: 16, color: '#3ee08a' },
           { x: 540, y: 180, w: 60, h: 20, color: '#6ce0ff' }
         ],
         spikes: [
@@ -748,6 +819,13 @@
           { anchorX: 160, anchorY: 30, length: 150, minAngle: -0.75, maxAngle: 0.75, speed: 0.035, phase: 0, r: 13 }
         ],
         ladders: [],
+        walls: [],
+        slopes: [
+          { x: 400, y: 240, w: 20, h: 20, direction: 'up' }
+        ],
+        leeches: [
+          { x: 405, y: 224, w: 16, h: 16 }
+        ],
         ropes: [],
         water: [{ x: 90, y: 310, w: 510, h: 30 }],
         fishSpawners: [
@@ -776,9 +854,13 @@
           { anchorX: 500, anchorY: 0, length: 70, minAngle: -0.6, maxAngle: 0.6, speed: 0.05, phase: 0, r: 12 }
         ],
         ladders: [
-          { x: 50, y: 110, w: 18, h: 190 },
-          { x: 430, y: 20, w: 18, h: 90 }
+          { x: 50, y: 110, w: 18, h: 190 }
         ],
+        walls: [
+          { x: 430, y: 20, w: 15, h: 90 }
+        ],
+        slopes: [],
+        leeches: [],
         ropes: [
           { anchorX: 255, anchorY: 20, length: 110, vineSkin: true, angle: 0, angVel: 0 }
         ],
@@ -794,6 +876,7 @@
           { x: 0, y: 300, w: 90, h: 40, color: '#3ee08a' },
           lvl10Log,
           { x: 360, y: 190, w: 90, h: 20, color: '#f7c948' },
+          { x: 430, y: 150, w: 20, h: 16, color: '#6ce0ff' },
           { x: 500, y: 90, w: 100, h: 60, color: '#6ce0ff' }
         ],
         spikes: [
@@ -801,7 +884,7 @@
           { x: 370, y: 178, w: 30, h: 12 }
         ],
         saws: [
-          { cx: 520, cy: 60, r: 12, axis: 'y', min: 20, max: 130, speed: 0.045, phase: 0.3 }
+          { cx: 520, cy: 60, r: 12, axis: 'y', min: 20, max: 95, speed: 0.045, phase: 0.3 }
         ],
         blades: [],
         mosquitoSwarms: [
@@ -811,6 +894,11 @@
           { anchorX: 150, anchorY: 30, length: 140, minAngle: -0.8, maxAngle: 0.8, speed: 0.04, phase: 0.5, r: 13 }
         ],
         ladders: [],
+        walls: [],
+        slopes: [
+          { x: 340, y: 190, w: 20, h: 20, direction: 'up' }
+        ],
+        leeches: [],
         ropes: [
           { anchorX: 475, anchorY: 20, length: 110, vineSkin: true, angle: 0, angVel: 0 }
         ],
@@ -865,7 +953,7 @@
     level = LEVELS[idx];
     levelEl.textContent = 'PALYA ' + (idx + 1) + '/' + LEVELS.length;
     frameCount = 0;
-    level._solidRects = level.platforms.concat(level.spikes).concat(level.ladders);
+    level._solidRects = level.platforms.concat(level.spikes).concat(level.ladders).concat(level.walls);
     updateMovingPlatforms();
     syncFollowSpikes();
     resetPlayer();
@@ -888,7 +976,10 @@
       vx: 0, vy: 0, onGround: false, alive: true,
       onLadder: false, onRope: null, ridingPlatform: null,
       isJumping: false, jumpTime: 0, jumpsUsed: 0,
-      facing: 1
+      facing: 1,
+      onWall: null, wallSide: 0, wallJumpLockUntil: 0, wallKickFrames: 0,
+      dashUsed: false, dashFrames: 0, dashDir: 1,
+      slowUntilFrame: 0
     };
   }
 
@@ -1036,6 +1127,18 @@
     });
   }
 
+  function updateSinkingPlatforms() {
+    level.platforms.forEach(function(p) {
+      if (!p.sink) return;
+      var occupied = player.onGround && player.ridingPlatform === p;
+      var targetY = occupied ? p.sink.maxY : p.sink.restY;
+      var oldY = p.y;
+      if (p.y < targetY) p.y = Math.min(targetY, p.y + p.sink.speed);
+      else if (p.y > targetY) p.y = Math.max(targetY, p.y - p.sink.speed);
+      p._deltaY = (p._deltaY || 0) + (p.y - oldY);
+    });
+  }
+
   function updateFishSpawners() {
     level.fishSpawners.forEach(function(f) {
       if (f.cruise) return;
@@ -1098,9 +1201,47 @@
           player.isJumping = false;
           player.jumpTime = 0;
           player.jumpsUsed = 0;
+          player.dashUsed = false;
         } else if (player.vy < 0 && player.y - player.vy >= p.y + p.h - 1) {
           player.y = p.y + p.h;
           player.vy = 0;
+        }
+      }
+    });
+  }
+
+  function slopeSurfaceY(s, px) {
+    var t = Math.max(0, Math.min(1, (px - s.x) / s.w));
+    return s.direction === 'up' ? (s.y + s.h) - t * s.h : s.y + t * s.h;
+  }
+
+  function slopeCollision() {
+    level.slopes.forEach(function(s) {
+      var px = player.x + player.w / 2;
+      if (px >= s.x && px <= s.x + s.w && player.vy >= 0) {
+        var surfY = slopeSurfaceY(s, px) - player.h;
+        if (player.y >= surfY - 6 && player.y <= surfY + player.vy + 1) {
+          player.y = surfY;
+          player.vy = 0;
+          player.onGround = true;
+          player.jumpsUsed = 0;
+          player.dashUsed = false;
+          player.isJumping = false;
+          player.jumpTime = 0;
+        }
+      }
+    });
+  }
+
+  function wallCollision() {
+    level.walls.forEach(function(w) {
+      if (rectsOverlap(player, w)) {
+        var playerCenter = player.x + player.w / 2;
+        var wallCenter = w.x + w.w / 2;
+        if (playerCenter < wallCenter) {
+          player.x = w.x - player.w + 1;
+        } else {
+          player.x = w.x + w.w - 1;
         }
       }
     });
@@ -1124,6 +1265,17 @@
 
   function handleJumpPress() {
     if (player.onRope) return;
+    if (player.onWall && !player.onGround) {
+      player.vy = -5.5;
+      player.vx = player.wallSide * -3.6;
+      player.isJumping = true;
+      player.jumpTime = 0;
+      player.jumpsUsed = 1;
+      player.onWall = null;
+      player.wallJumpLockUntil = frameCount + 12;
+      player.wallKickFrames = 8;
+      return;
+    }
     if (player.jumpsUsed === 0) {
       startJump();
     } else if (player.jumpsUsed === 1) {
@@ -1131,9 +1283,30 @@
     }
   }
 
+  function handleDashPress() {
+    if (player.onRope || player.onLadder || player.dashUsed) return;
+    player.dashUsed = true;
+    player.dashFrames = DASH_DURATION;
+    player.dashDir = player.facing;
+  }
+
   function ladderOverlap() {
     for (var i = 0; i < level.ladders.length; i++) {
       if (rectsOverlap(player, level.ladders[i])) return level.ladders[i];
+    }
+    return null;
+  }
+
+  function wallOverlap() {
+    for (var i = 0; i < level.walls.length; i++) {
+      if (rectsOverlap(player, level.walls[i])) return level.walls[i];
+    }
+    return null;
+  }
+
+  function leechOverlap() {
+    for (var i = 0; i < level.leeches.length; i++) {
+      if (rectsOverlap(player, level.leeches[i])) return level.leeches[i];
     }
     return null;
   }
@@ -1163,6 +1336,7 @@
     if (!player.alive || transitioning || allDone) return;
 
     updateMovingPlatforms();
+    updateSinkingPlatforms();
     updateFishSpawners();
 
     var hazardRects = currentHazardRects();
@@ -1192,6 +1366,7 @@
         player.vx = vx;
         player.vy = vy - 2;
         player.jumpsUsed = 0;
+        player.dashUsed = false;
         r.angle = 0;
         r.angVel = 0;
       } else {
@@ -1208,6 +1383,7 @@
         player.onLadder = true;
         player.vy = 0;
         player.jumpsUsed = 0;
+        player.dashUsed = false;
       }
 
       if (player.onLadder) {
@@ -1223,8 +1399,15 @@
       }
 
       if (!player.onLadder) {
-        if (keys.left) { player.vx = -MOVE_SPEED; player.facing = -1; }
-        else if (keys.right) { player.vx = MOVE_SPEED; player.facing = 1; }
+        var effMoveSpeed = frameCount < player.slowUntilFrame ? MOVE_SPEED * 0.5 : MOVE_SPEED;
+        if (player.wallKickFrames > 0) {
+          player.wallKickFrames -= 1;
+        } else if (player.dashFrames > 0) {
+          player.vx = DASH_SPEED * player.dashDir;
+          player.vy = 0;
+          player.dashFrames -= 1;
+        } else if (keys.left) { player.vx = -effMoveSpeed; player.facing = -1; }
+        else if (keys.right) { player.vx = effMoveSpeed; player.facing = 1; }
         else player.vx = 0;
 
         if (player.isJumping) {
@@ -1236,8 +1419,10 @@
           }
         }
 
-        player.vy += GRAVITY;
-        if (player.vy > 12) player.vy = 12;
+        if (player.dashFrames <= 0) {
+          player.vy += GRAVITY;
+          if (player.vy > 12) player.vy = 12;
+        }
 
         if (player.onGround && player.ridingPlatform) {
           player.x += player.ridingPlatform._deltaX || 0;
@@ -1247,6 +1432,19 @@
         player.x += player.vx;
         player.y += player.vy;
         platformCollision();
+        slopeCollision();
+        wallCollision();
+
+        var wallZone = (!player.onGround && frameCount > (player.wallJumpLockUntil || 0)) ? wallOverlap() : null;
+        player.onWall = null;
+        if (wallZone && player.vy > 0) {
+          var wallOnRight = wallZone.x >= player.x + player.w / 2;
+          if ((wallOnRight && keys.right) || (!wallOnRight && keys.left)) {
+            player.onWall = wallZone;
+            player.wallSide = wallOnRight ? 1 : -1;
+            if (player.vy > 1.2) player.vy = 1.2;
+          }
+        }
       }
 
       if (player.x < 0) player.x = 0;
@@ -1259,6 +1457,8 @@
         }
       }
     }
+
+    if (leechOverlap()) { player.slowUntilFrame = frameCount + 90; }
 
     if (player.y > H) { killPlayer(); return; }
     if (checkHazards(hazardRects)) { killPlayer(); return; }
@@ -1688,90 +1888,130 @@
     ctx.scale(facing, 1);
     ctx.translate(-cx, 0);
 
+    // ---- TAIL (tollas, felfele-hatra kunkorodo) ----
     ctx.fillStyle = black;
     ctx.beginPath();
-    ctx.moveTo(x - 1, y + h * 0.5);
-    ctx.quadraticCurveTo(x - 7, y + h * 0.32, x - 3, y + h * 0.1);
-    ctx.quadraticCurveTo(x - 1, y + h * 0.3, x + 3, y + h * 0.48);
+    ctx.moveTo(x - 1, y + h * 0.46);
+    ctx.quadraticCurveTo(x - 10, y + h * 0.30, x - 9, y + h * 0.08);
+    ctx.quadraticCurveTo(x - 12, y - h * 0.02, x - 6, y + h * 0.02);
+    ctx.quadraticCurveTo(x - 5, y + h * 0.22, x + 2, y + h * 0.42);
     ctx.closePath();
     ctx.fill();
-
-    ctx.fillStyle = tan;
-    ctx.fillRect(x + 3, y + h - 6, 4, 6);
-    ctx.fillRect(x + w - 7, y + h - 6, 4, 6);
-    ctx.fillStyle = white;
-    ctx.fillRect(x + 3, y + h - 2, 4, 2);
-    ctx.fillRect(x + w - 7, y + h - 2, 4, 2);
-
-    ctx.fillStyle = black;
-    ctx.beginPath();
-    ctx.ellipse(x + w * 0.5, y + h * 0.58, w * 0.52, h * 0.34, 0, 0, Math.PI * 2);
-    ctx.fill();
-
     ctx.fillStyle = tan;
     ctx.beginPath();
-    ctx.ellipse(x + w * 0.3, y + h * 0.62, w * 0.16, h * 0.22, 0, 0, Math.PI * 2);
+    ctx.moveTo(x - 8, y + h * 0.14);
+    ctx.quadraticCurveTo(x - 10, y + h * 0.04, x - 6, y + h * 0.04);
+    ctx.quadraticCurveTo(x - 6, y + h * 0.1, x - 8, y + h * 0.14);
     ctx.fill();
 
+    // ---- HATSO LABAK ----
+    ctx.fillStyle = tan;
+    ctx.fillRect(x + w * 0.14, y + h * 0.74, w * 0.16, h * 0.22);
     ctx.fillStyle = white;
-    ctx.beginPath();
-    ctx.ellipse(x + w * 0.46, y + h * 0.72, w * 0.3, h * 0.28, 0, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.fillRect(x + w * 0.14, y + h * 0.90, w * 0.16, h * 0.08);
 
+    // ---- TEST (nyujtottabb, futosabb sziluett) ----
+    ctx.fillStyle = black;
+    ctx.beginPath();
+    ctx.ellipse(x + w * 0.46, y + h * 0.60, w * 0.56, h * 0.27, 0, 0, Math.PI * 2);
+    ctx.fill();
     ctx.fillStyle = tan;
     ctx.beginPath();
-    ctx.arc(x + w * 0.62, y + h * 0.26, w * 0.42, 0, Math.PI * 2);
+    ctx.ellipse(x + w * 0.38, y + h * 0.5, w * 0.32, h * 0.13, -0.15, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = black;
-    ctx.beginPath();
-    ctx.ellipse(x + w * 0.55, y + h * 0.12, w * 0.34, h * 0.16, 0, 0, Math.PI * 2);
-    ctx.fill();
+    // ---- ELSO LABAK ----
+    ctx.fillStyle = tan;
+    ctx.fillRect(x + w * 0.66, y + h * 0.76, w * 0.16, h * 0.22);
+    ctx.fillStyle = white;
+    ctx.fillRect(x + w * 0.66, y + h * 0.92, w * 0.16, h * 0.06);
 
+    // ---- MELLKAS-GALLAR (feher "ruff") ----
     ctx.fillStyle = white;
     ctx.beginPath();
-    ctx.ellipse(x + w * 0.78, y + h * 0.3, w * 0.2, h * 0.15, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = black;
-    ctx.beginPath();
-    ctx.moveTo(x + w * 0.4, y + h * 0.06);
-    ctx.lineTo(x + w * 0.26, y - h * 0.08);
-    ctx.lineTo(x + w * 0.54, y + h * 0.13);
-    ctx.closePath();
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(x + w * 0.82, y + h * 0.06);
-    ctx.lineTo(x + w * 0.98, y - h * 0.05);
-    ctx.lineTo(x + w * 0.7, y + h * 0.14);
+    ctx.moveTo(x + w * 0.42, y + h * 0.42);
+    ctx.quadraticCurveTo(x + w * 0.30, y + h * 0.5, x + w * 0.34, y + h * 0.66);
+    ctx.quadraticCurveTo(x + w * 0.4, y + h * 0.80, x + w * 0.5, y + h * 0.78);
+    ctx.quadraticCurveTo(x + w * 0.58, y + h * 0.66, x + w * 0.56, y + h * 0.5);
+    ctx.quadraticCurveTo(x + w * 0.52, y + h * 0.4, x + w * 0.42, y + h * 0.42);
     ctx.closePath();
     ctx.fill();
 
+    // ---- FEJ ----
+    var headCx = x + w * 0.66, headCy = y + h * 0.18, headR = w * 0.30;
     ctx.fillStyle = tan;
     ctx.beginPath();
-    ctx.moveTo(x + w * 0.42, y + h * 0.1);
-    ctx.lineTo(x + w * 0.33, y);
-    ctx.lineTo(x + w * 0.5, y + h * 0.14);
-    ctx.closePath();
+    ctx.arc(headCx, headCy, headR, 0, Math.PI * 2);
     ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(x + w * 0.8, y + h * 0.1);
-    ctx.lineTo(x + w * 0.92, y + h * 0.02);
-    ctx.lineTo(x + w * 0.72, y + h * 0.15);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.fillStyle = white;
-    ctx.beginPath();
-    ctx.ellipse(x + w * 0.9, y + h * 0.32, w * 0.16, h * 0.11, 0, 0, Math.PI * 2);
-    ctx.fill();
-
     ctx.fillStyle = black;
     ctx.beginPath();
-    ctx.arc(x + w * 1.02, y + h * 0.3, 1.6, 0, Math.PI * 2);
+    ctx.ellipse(headCx - headR * 0.25, headCy - headR * 0.45, headR * 0.85, headR * 0.55, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // ---- POFA (elorenyulo, jellegzetes sheltie orr) ----
+    ctx.fillStyle = tan;
+    ctx.beginPath();
+    ctx.moveTo(headCx + headR * 0.5, headCy - headR * 0.12);
+    ctx.lineTo(x + w * 1.14, headCy + headR * 0.18);
+    ctx.lineTo(headCx + headR * 0.35, headCy + headR * 0.78);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = white;
+    ctx.beginPath();
+    ctx.moveTo(headCx + headR * 0.55, headCy - headR * 0.06);
+    ctx.lineTo(x + w * 1.1, headCy + headR * 0.15);
+    ctx.lineTo(headCx + headR * 0.5, headCy + headR * 0.28);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = black;
+    ctx.beginPath();
+    ctx.ellipse(x + w * 1.12, headCy + headR * 0.2, 1.7, 1.4, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // ---- FULEK (hegyes, csucsuk elorehajlik) ----
+    function ear(baseX, baseY, tipX, tipY, foldX, foldY) {
+      ctx.fillStyle = black;
+      ctx.beginPath();
+      ctx.moveTo(baseX, baseY);
+      ctx.lineTo(tipX, tipY);
+      ctx.lineTo(foldX, foldY);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ear(headCx - headR * 0.55, headCy - headR * 0.55,
+        headCx - headR * 0.95, headCy - headR * 1.55,
+        headCx - headR * 0.1, headCy - headR * 0.75);
+    ear(headCx + headR * 0.35, headCy - headR * 0.7,
+        headCx + headR * 0.55, headCy - headR * 1.7,
+        headCx + headR * 0.95, headCy - headR * 0.55);
+    ctx.fillStyle = tan;
+    ctx.beginPath();
+    ctx.moveTo(headCx - headR * 0.5, headCy - headR * 0.65);
+    ctx.lineTo(headCx - headR * 0.72, headCy - headR * 1.15);
+    ctx.lineTo(headCx - headR * 0.2, headCy - headR * 0.8);
+    ctx.closePath();
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(x + w * 0.68, y + h * 0.22, 1.4, 0, Math.PI * 2);
+    ctx.moveTo(headCx + headR * 0.42, headCy - headR * 0.85);
+    ctx.lineTo(headCx + headR * 0.58, headCy - headR * 1.3);
+    ctx.lineTo(headCx + headR * 0.82, headCy - headR * 0.7);
+    ctx.closePath();
+    ctx.fill();
+
+    // ---- FEHER ARC-FOLT ----
+    ctx.fillStyle = white;
+    ctx.beginPath();
+    ctx.ellipse(headCx + headR * 0.15, headCy + headR * 0.45, headR * 0.5, headR * 0.4, 0.3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // ---- SZEM ----
+    ctx.fillStyle = black;
+    ctx.beginPath();
+    ctx.ellipse(headCx + headR * 0.28, headCy + headR * 0.02, 1.8, 2.0, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = white;
+    ctx.beginPath();
+    ctx.arc(headCx + headR * 0.32, headCy - headR * 0.05, 0.6, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.restore();
@@ -1965,6 +2205,36 @@
       ctx.lineTo(l.x + l.w - 2, yy);
       ctx.stroke();
     }
+  }
+
+  function drawWall(w) {
+    var grad = ctx.createLinearGradient(w.x, 0, w.x + w.w, 0);
+    grad.addColorStop(0, 'rgba(90,80,60,0.55)');
+    grad.addColorStop(0.5, 'rgba(140,125,95,0.7)');
+    grad.addColorStop(1, 'rgba(90,80,60,0.55)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(w.x, w.y, w.w, w.h);
+    ctx.strokeStyle = 'rgba(40,35,25,0.6)';
+    ctx.lineWidth = 1;
+    for (var yy = w.y + 8; yy < w.y + w.h; yy += 16) {
+      ctx.beginPath();
+      ctx.moveTo(w.x + 2, yy);
+      ctx.lineTo(w.x + w.w - 2, yy - 4);
+      ctx.stroke();
+    }
+  }
+
+  function drawLeech(le) {
+    var cx = le.x + le.w / 2, cy = le.y + le.h / 2;
+    var pulse = 0.5 + 0.5 * Math.sin(frameCount * 0.08);
+    ctx.fillStyle = 'rgba(60,20,60,' + (0.6 + pulse * 0.2) + ')';
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, le.w / 2, le.h / 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(180,40,90,0.8)';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 2.2, 0, Math.PI * 2);
+    ctx.fill();
   }
 
   function drawRope(r) {
@@ -2439,6 +2709,17 @@
     }
   }
 
+  function drawTiltingBranch(p) {
+    var angle = Math.sin(frameCount * p.tilt.speed) * p.tilt.maxAngle;
+    var cx = p.x + p.w / 2, cy = p.y + p.h / 2;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+    ctx.translate(-cx, -cy);
+    drawPlatform(p);
+    ctx.restore();
+  }
+
   function drawPlatform(p) {
     if (p._seed === undefined) p._seed = Math.random();
     var seed = p._seed;
@@ -2524,13 +2805,15 @@
     level.water.forEach(drawWater);
     level.ropes.forEach(drawRope);
 
-    level.platforms.forEach(drawPlatform);
+    level.platforms.forEach(function(p) { if (p.tilt) drawTiltingBranch(p); else drawPlatform(p); });
 
+    level.walls.forEach(drawWall);
     level.ladders.forEach(drawLadder);
     level.spikes.forEach(drawSpikeShape);
     level.saws.forEach(drawSaw);
     level.blades.forEach(drawBlade);
     level.mosquitoSwarms.forEach(drawMosquitoSwarm);
+    level.leeches.forEach(drawLeech);
     level.pendulums.forEach(drawPendulum);
     if (level.theme === 'rainforest') {
       level.fishSpawners.forEach(drawSwampBeast);
@@ -2628,6 +2911,10 @@
       keys.jumpHeld = true;
       e.preventDefault();
     }
+    if (key === 'shift') {
+      if (!e.repeat) handleDashPress();
+      e.preventDefault();
+    }
     if (key.indexOf('arrow') === 0) e.preventDefault();
   });
 
@@ -2685,6 +2972,20 @@
   document.getElementById('pauseToggle').addEventListener('click', function() {
     if (gameState === 'playing') openPauseMenu();
     else if (gameState === 'menu' && pausedGame) resumeGame();
+  });
+
+  document.getElementById('btnDash').addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install') return;
+    if (!running) return;
+    handleDashPress();
+  }, { passive: false });
+
+  document.getElementById('btnDash').addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install') return;
+    if (!running) return;
+    handleDashPress();
   });
 
   deaths = 0;
