@@ -553,74 +553,103 @@
   });
 
   function buildLevels() {
-    var lvl2Ground = { x: 0, y: 300, w: 120, h: 40, color: '#3ee08a', move: { axis: 'y', min: 270, max: 330, speed: 0.025, phase: 1.5708 } };
-    var lvl4Island = { x: 220, y: 300, w: 100, h: 44, color: '#3ee08a', move: { axis: 'x', min: 180, max: 280, speed: 0.02, phase: 0 } };
-    var lvl7Branch = { x: 250, y: 230, w: 90, h: 18, color: '#3ee08a', move: { axis: 'x', min: 190, max: 280, speed: 0.025, phase: 0 }, tilt: { maxAngle: 0.12, speed: 0.03 } };
-    var lvl8Log = { x: 230, y: 300, w: 90, h: 36, color: '#3ee08a', move: { axis: 'y', min: 250, max: 320, speed: 0.03, phase: 0.8 } };
-    var lvl10Log = { x: 200, y: 300, w: 90, h: 36, color: '#3ee08a', move: { axis: 'y', min: 255, max: 305, speed: 0.035, phase: 0.4 } };
-
+    // === LDTK GENERATED LEVELS START (forras: splat_levels.ldtk - ne szerkeszd kezzel) ===
+    var sharedP0 = { x: 220, y: 300, w: 100, h: 44, color: '#3ee08a', move: { axis: 'x', min: 180, max: 280, speed: 0.02, phase: 0 } };
+    var sharedP1 = { x: 250, y: 230, w: 90, h: 18, color: '#3ee08a', move: { axis: 'x', min: 190, max: 280, speed: 0.025, phase: 0 }, tilt: { maxAngle: 0.12, speed: 0.03 } };
+    var sharedP2 = { x: 230, y: 300, w: 90, h: 36, color: '#3ee08a', move: { axis: 'y', min: 250, max: 320, speed: 0.03, phase: 0.8 } };
+    var sharedP3 = { x: 200, y: 300, w: 90, h: 36, color: '#3ee08a', move: { axis: 'y', min: 255, max: 305, speed: 0.035, phase: 0.4 } };
     return [
       {
         name: 'BEVEZETES',
         theme: 'dungeon',
-        start: { x: 20, y: 274 },
+        start: { x: 20, y: 294 },
         platforms: [
-          { x: 0, y: 300, w: 90, h: 40, color: '#3ee08a' },
-          { x: 150, y: 300, w: 70, h: 40, color: '#3ee08a' },
-          { x: 290, y: 300, w: 110, h: 40, color: '#3ee08a' },
-          { x: 470, y: 300, w: 130, h: 40, color: '#f7c948' }
+          { x: 0, y: 320, w: 90, h: 20, color: '#3ee08a' },
+          { x: 90, y: 260, w: 20, h: 80, color: '#3ee08a' },
+          { x: 470, y: 320, w: 130, h: 20, color: '#3ee08a' },
+          { x: 90, y: 240, w: 100, h: 20, color: '#3ee08a' },
+          { x: 0, y: 150, w: 120, h: 10, color: '#3ee08a' },
+          { x: 0, y: 0, w: 120, h: 150, color: '#3ee08a' },
+          { x: 210, y: 80, w: 80, h: 10, color: '#3ee08a' },
+          { x: 160, y: 190, w: 30, h: 10, color: '#3ee08a' },
+          { x: 270, y: 190, w: 90, h: 20, color: '#3ee08a' },
+          { x: 160, y: 140, w: 30, h: 10, color: '#3ee08a' },
+          { x: 160, y: 90, w: 30, h: 10, color: '#3ee08a' },
+          { x: 280, y: 310, w: 190, h: 30, color: '#3ee08a' },
+          { x: 470, y: 130, w: 90, h: 20, color: '#3ee08a' },
+          { x: 520, y: 210, w: 90, h: 20, color: '#3ee08a' }
         ],
-        spikes: [{ x: 320, y: 288, w: 50, h: 12 }],
-        saws: [],
+        spikes: [
+          { x: 470, y: 308, w: 30, h: 12 },
+          { x: 140, y: 230, w: 30, h: 12 },
+          { x: 210, y: 70, w: 30, h: 12 },
+          { x: 320, y: 180, w: 40, h: 12 }
+        ],
+        saws: [
+          { cx: 340, cy: 10, r: 13, axis: 'y', min: 0, max: 100, speed: 0.05, phase: 0 }
+        ],
         blades: [],
         mosquitoSwarms: [],
+        leeches: [],
         pendulums: [
-          { anchorX: 255, anchorY: 40, length: 170, minAngle: -0.7, maxAngle: 0.7, speed: 0.035, phase: 2.4, r: 13 }
+          { anchorX: 485, anchorY: 0, length: 130, minAngle: -0.7, maxAngle: 0.7, speed: 0.035, phase: 0, r: 13 }
         ],
         ladders: [],
-        walls: [],
+        walls: [
+          { x: 190, y: 60, w: 20, h: 200 },
+          { x: 360, y: 0, w: 10, h: 210 },
+          { x: 460, y: 220, w: 10, h: 90 },
+          { x: 460, y: 130, w: 10, h: 90 }
+        ],
         slopes: [],
-        leeches: [],
         ropes: [],
         water: [
-          { x: 90, y: 310, w: 60, h: 30 },
-          { x: 220, y: 310, w: 70, h: 30 },
-          { x: 400, y: 310, w: 70, h: 30 }
+          { x: 110, y: 320, w: 360, h: 20 }
         ],
         fishSpawners: [
-          { spots: [120, 255, 435], waterY: 310, r: 12, jumpHeight: 105, jumpDuration: 46, timer: 60, cooldownMin: 75, cooldownMax: 105, active: false, phase: 0 }
+          { waterY: 320, r: 12, cruise: true, x: 190, rangeMin: 0, rangeMax: 300, speed: 0.02, phase: 0 }
         ],
-        goal: { x: 560, y: 260, w: 30, h: 40 }
+        goal: { x: 570, y: 280, w: 30, h: 40 }
       },
       {
         name: 'FURESZEK',
         theme: 'dungeon',
-        start: { x: 20, y: 304, followPlatform: lvl2Ground },
+        start: { x: 20, y: 294 },
         platforms: [
-          lvl2Ground,
-          { x: 220, y: 260, w: 80, h: 20, color: '#3ee08a' },
-          { x: 360, y: 220, w: 80, h: 20, color: '#f7c948' },
-          { x: 460, y: 140, w: 140, h: 20, color: '#6ce0ff' }
+          { x: 0, y: 320, w: 90, h: 20, color: '#3ee08a' },
+          { x: 140, y: 300, w: 60, h: 20, color: '#3ee08a' },
+          { x: 140, y: 150, w: 60, h: 16, color: '#3ee08a' },
+          { x: 220, y: 270, w: 30, h: 10, color: '#3ee08a' },
+          { x: 220, y: 210, w: 30, h: 10, color: '#3ee08a' },
+          { x: 220, y: 150, w: 30, h: 10, color: '#3ee08a' },
+          { x: 280, y: 30, w: 120, h: 16, color: '#f7c948' },
+          { x: 460, y: 100, w: 140, h: 20, color: '#6ce0ff' }
         ],
         spikes: [
-          { x: 360, y: 208, w: 40, h: 12 },
-          { x: 95, y: 288, w: 16, h: 12, follow: { platform: lvl2Ground, offsetX: 95, offsetY: -12 } }
+          { x: 150, y: 138, w: 20, h: 12 }
         ],
         saws: [
-          { cx: 235, cy: 232, r: 13, axis: 'y', min: 218, max: 248, speed: 0.06, phase: 0 },
-          { cx: 520, cy: 112, r: 13, axis: 'x', min: 475, max: 587, speed: 0.05, phase: 0 }
+          { cx: 170, cy: 0, axis: 'y', r: 12, min: 160, max: 280, speed: 0.05, phase: 0 },
+          { cx: 0, cy: 190, axis: 'x', r: 11, min: 225, max: 265, speed: 0.06, phase: 0 },
+          { cx: 310, cy: 0, axis: 'y', r: 12, min: 40, max: 160, speed: 0.055, phase: 0.5 },
+          { cx: 0, cy: 70, axis: 'x', r: 13, min: 460, max: 560, speed: 0.05, phase: 0 }
         ],
         blades: [],
         mosquitoSwarms: [],
-        pendulums: [],
-        ladders: [{ x: 410, y: 140, w: 16, h: 80 }],
-        walls: [{ x: 445, y: 60, w: 15, h: 50 }],
-        slopes: [],
         leeches: [],
+        pendulums: [],
+        ladders: [
+          { x: 160, y: 150, w: 18, h: 150 }
+        ],
+        walls: [
+          { x: 280, y: 40, w: 15, h: 130 },
+          { x: 340, y: 40, w: 15, h: 130 }
+        ],
+        slopes: [],
         ropes: [],
         water: [],
         fishSpawners: [],
-        goal: { x: 540, y: 100, w: 30, h: 40 }
+        goal: { x: 540, y: 60, w: 30, h: 40 }
       },
       {
         name: 'TORONY',
@@ -638,15 +667,21 @@
         ],
         blades: [],
         mosquitoSwarms: [],
+        leeches: [],
         pendulums: [
           { anchorX: 230, anchorY: 30, length: 150, minAngle: -0.85, maxAngle: 0.85, speed: 0.035, phase: 0, r: 14 }
         ],
-        ladders: [{ x: 280, y: 60, w: 20, h: 240 }],
-        walls: [{ x: 345, y: 150, w: 15, h: 150 }],
+        ladders: [
+          { x: 280, y: 60, w: 20, h: 240 }
+        ],
+        walls: [
+          { x: 345, y: 150, w: 15, h: 150 }
+        ],
         slopes: [],
-        leeches: [],
         ropes: [],
-        water: [{ x: 380, y: 310, w: 220, h: 30 }],
+        water: [
+          { x: 380, y: 310, w: 220, h: 30 }
+        ],
         fishSpawners: [
           { cruise: true, x: 480, rangeMin: 395, rangeMax: 585, waterY: 312, r: 11, speed: 0.02, phase: 0 }
         ],
@@ -658,28 +693,30 @@
         start: { x: 20, y: 274 },
         platforms: [
           { x: 0, y: 300, w: 140, h: 40, color: '#3ee08a' },
-          lvl4Island,
+          sharedP0,
           { x: 440, y: 300, w: 160, h: 40, color: '#f7c948' },
           { x: 300, y: 220, w: 20, h: 16, color: '#6ce0ff' },
           { x: 375, y: 220, w: 20, h: 16, color: '#6ce0ff' }
         ],
         spikes: [
-          { x: 258, y: 288, w: 24, h: 12, follow: { platform: lvl4Island, offsetX: 38, offsetY: -12 } }
+          { x: 258, y: 288, w: 24, h: 12, follow: { platform: sharedP0, offsetX: 38, offsetY: -12 } }
         ],
         saws: [
           { cx: 390, cy: 0, r: 13, axis: 'y', min: 170, max: 280, speed: 0.045, phase: 0 }
         ],
         blades: [],
         mosquitoSwarms: [],
+        leeches: [],
         pendulums: [],
         ladders: [],
         walls: [],
         slopes: [],
-        leeches: [],
         ropes: [
           { anchorX: 290, anchorY: 25, length: 165, vineSkin: true, angle: 0, angVel: 0 }
         ],
-        water: [{ x: 140, y: 310, w: 300, h: 30 }],
+        water: [
+          { x: 140, y: 310, w: 300, h: 30 }
+        ],
         fishSpawners: [
           { rangeMin: 410, rangeMax: 410, waterY: 310, r: 12, jumpHeight: 75, jumpDuration: 40, timer: 90, cooldownMin: 90, cooldownMax: 210, active: false, phase: 0 }
         ],
@@ -705,18 +742,22 @@
         ],
         blades: [],
         mosquitoSwarms: [],
+        leeches: [],
         pendulums: [
           { anchorX: 270, anchorY: 90, length: 130, minAngle: -0.8, maxAngle: 0.8, speed: 0.04, phase: 1, r: 13 }
         ],
-        ladders: [{ x: 260, y: 180, w: 20, h: 120 }],
+        ladders: [
+          { x: 260, y: 180, w: 20, h: 120 }
+        ],
         walls: [
           { x: 250, y: 100, w: 15, h: 90 },
           { x: 310, y: 100, w: 15, h: 90 }
         ],
         slopes: [],
-        leeches: [],
         ropes: [],
-        water: [{ x: 100, y: 310, w: 120, h: 30 }],
+        water: [
+          { x: 100, y: 310, w: 120, h: 30 }
+        ],
         fishSpawners: [
           { rangeMin: 120, rangeMax: 200, waterY: 310, r: 11, jumpHeight: 65, jumpDuration: 36, timer: 70, cooldownMin: 80, cooldownMax: 190, active: false, phase: 0 }
         ],
@@ -742,13 +783,13 @@
         mosquitoSwarms: [
           { x: 250, y: 230, r: 16, ampX: 12, ampY: 8, speedX: 0.045, speedY: 0.07, phaseX: 0, phaseY: 2 }
         ],
+        leeches: [],
         pendulums: [],
         ladders: [],
         walls: [],
         slopes: [
           { x: 250, y: 280, w: 20, h: 20, direction: 'up' }
         ],
-        leeches: [],
         ropes: [],
         water: [
           { x: 100, y: 310, w: 70, h: 30 },
@@ -766,12 +807,12 @@
         start: { x: 20, y: 274 },
         platforms: [
           { x: 0, y: 300, w: 110, h: 40, color: '#3ee08a' },
-          lvl7Branch,
+          sharedP1,
           { x: 375, y: 170, w: 90, h: 20, color: '#f7c948' },
           { x: 500, y: 100, w: 100, h: 20, color: '#6ce0ff' }
         ],
         spikes: [
-          { x: 220, y: 218, w: 20, h: 12, follow: { platform: lvl7Branch, offsetX: 35, offsetY: -12 } }
+          { x: 220, y: 218, w: 20, h: 12, follow: { platform: sharedP1, offsetX: 35, offsetY: -12 } }
         ],
         saws: [
           { cx: 460, cy: 130, r: 13, axis: 'y', min: 100, max: 170, speed: 0.05, phase: 0 }
@@ -781,13 +822,15 @@
           { x: 150, y: 230, r: 15, ampX: 10, ampY: 14, speedX: 0.05, speedY: 0.06, phaseX: 0.5, phaseY: 1.8 },
           { x: 400, y: 150, r: 16, ampX: 14, ampY: 8, speedX: 0.06, speedY: 0.045, phaseX: 2, phaseY: 0.3 }
         ],
+        leeches: [],
         pendulums: [],
         ladders: [],
         walls: [],
         slopes: [],
-        leeches: [],
         ropes: [],
-        water: [{ x: 110, y: 310, w: 490, h: 30 }],
+        water: [
+          { x: 110, y: 310, w: 490, h: 30 }
+        ],
         fishSpawners: [
           { cruise: true, x: 300, rangeMin: 150, rangeMax: 550, waterY: 312, r: 11, speed: 0.018, phase: 0 }
         ],
@@ -799,13 +842,13 @@
         start: { x: 20, y: 274 },
         platforms: [
           { x: 0, y: 300, w: 90, h: 40, color: '#3ee08a' },
-          lvl8Log,
+          sharedP2,
           { x: 420, y: 240, w: 80, h: 20, color: '#f7c948' },
           { x: 480, y: 210, w: 40, h: 16, color: '#3ee08a' },
           { x: 540, y: 180, w: 60, h: 20, color: '#6ce0ff' }
         ],
         spikes: [
-          { x: 258, y: 288, w: 24, h: 12, follow: { platform: lvl8Log, offsetX: 33, offsetY: -12 } },
+          { x: 258, y: 288, w: 24, h: 12, follow: { platform: sharedP2, offsetX: 33, offsetY: -12 } },
           { x: 430, y: 228, w: 30, h: 12 }
         ],
         saws: [
@@ -815,6 +858,9 @@
         mosquitoSwarms: [
           { x: 275, y: 230, r: 16, ampX: 8, ampY: 10, speedX: 0.06, speedY: 0.05, phaseX: 1, phaseY: 0.4 }
         ],
+        leeches: [
+          { x: 405, y: 224, w: 16, h: 16 }
+        ],
         pendulums: [
           { anchorX: 160, anchorY: 30, length: 150, minAngle: -0.75, maxAngle: 0.75, speed: 0.035, phase: 0, r: 13 }
         ],
@@ -823,11 +869,10 @@
         slopes: [
           { x: 400, y: 240, w: 20, h: 20, direction: 'up' }
         ],
-        leeches: [
-          { x: 405, y: 224, w: 16, h: 16 }
-        ],
         ropes: [],
-        water: [{ x: 90, y: 310, w: 510, h: 30 }],
+        water: [
+          { x: 90, y: 310, w: 510, h: 30 }
+        ],
         fishSpawners: [
           { cruise: true, x: 300, rangeMin: 100, rangeMax: 520, waterY: 312, r: 12, speed: 0.022, phase: 0 },
           { spots: [240, 460], waterY: 310, r: 12, jumpHeight: 95, jumpDuration: 44, timer: 65, cooldownMin: 70, cooldownMax: 110, active: false, phase: 0 }
@@ -850,6 +895,7 @@
         mosquitoSwarms: [
           { x: 70, y: 150, r: 14, ampX: 10, ampY: 16, speedX: 0.05, speedY: 0.06, phaseX: 0, phaseY: 1 }
         ],
+        leeches: [],
         pendulums: [
           { anchorX: 500, anchorY: 0, length: 70, minAngle: -0.6, maxAngle: 0.6, speed: 0.05, phase: 0, r: 12 }
         ],
@@ -860,11 +906,12 @@
           { x: 430, y: 20, w: 15, h: 90 }
         ],
         slopes: [],
-        leeches: [],
         ropes: [
           { anchorX: 255, anchorY: 20, length: 110, vineSkin: true, angle: 0, angVel: 0 }
         ],
-        water: [{ x: 140, y: 310, w: 460, h: 30 }],
+        water: [
+          { x: 140, y: 310, w: 460, h: 30 }
+        ],
         fishSpawners: [],
         goal: { x: 540, y: -20, w: 30, h: 40 }
       },
@@ -874,13 +921,13 @@
         start: { x: 20, y: 274 },
         platforms: [
           { x: 0, y: 300, w: 90, h: 40, color: '#3ee08a' },
-          lvl10Log,
+          sharedP3,
           { x: 360, y: 190, w: 90, h: 20, color: '#f7c948' },
           { x: 430, y: 150, w: 20, h: 16, color: '#6ce0ff' },
           { x: 500, y: 90, w: 100, h: 60, color: '#6ce0ff' }
         ],
         spikes: [
-          { x: 258, y: 288, w: 24, h: 12, follow: { platform: lvl10Log, offsetX: 33, offsetY: -12 } },
+          { x: 258, y: 288, w: 24, h: 12, follow: { platform: sharedP3, offsetX: 33, offsetY: -12 } },
           { x: 370, y: 178, w: 30, h: 12 }
         ],
         saws: [
@@ -890,6 +937,7 @@
         mosquitoSwarms: [
           { x: 400, y: 150, r: 16, ampX: 12, ampY: 10, speedX: 0.055, speedY: 0.05, phaseX: 1.2, phaseY: 0.7 }
         ],
+        leeches: [],
         pendulums: [
           { anchorX: 150, anchorY: 30, length: 140, minAngle: -0.8, maxAngle: 0.8, speed: 0.04, phase: 0.5, r: 13 }
         ],
@@ -898,11 +946,12 @@
         slopes: [
           { x: 340, y: 190, w: 20, h: 20, direction: 'up' }
         ],
-        leeches: [],
         ropes: [
           { anchorX: 475, anchorY: 20, length: 110, vineSkin: true, angle: 0, angVel: 0 }
         ],
-        water: [{ x: 90, y: 310, w: 510, h: 30 }],
+        water: [
+          { x: 90, y: 310, w: 510, h: 30 }
+        ],
         fishSpawners: [
           { spots: [135, 290], waterY: 310, r: 12, jumpHeight: 95, jumpDuration: 44, timer: 60, cooldownMin: 70, cooldownMax: 100, active: false, phase: 0 },
           { cruise: true, x: 480, rangeMin: 400, rangeMax: 560, waterY: 312, r: 11, speed: 0.02, phase: 0 }
@@ -910,6 +959,7 @@
         goal: { x: 560, y: 50, w: 30, h: 40 }
       }
     ];
+    // === LDTK GENERATED LEVELS END ===
   }
 
   var LEVELS = buildLevels();
@@ -1191,23 +1241,27 @@
   function platformCollision() {
     player.onGround = false;
     player.ridingPlatform = null;
+    var landed = null, landedTop = Infinity;
     level.platforms.forEach(function(p) {
-      if (rectsOverlap(player, p)) {
-        if (player.vy >= 0 && player.y + player.h - player.vy <= p.y + 1) {
-          player.y = p.y - player.h;
-          player.vy = 0;
-          player.onGround = true;
-          player.ridingPlatform = p;
-          player.isJumping = false;
-          player.jumpTime = 0;
-          player.jumpsUsed = 0;
-          player.dashUsed = false;
-        } else if (player.vy < 0 && player.y - player.vy >= p.y + p.h - 1) {
-          player.y = p.y + p.h;
-          player.vy = 0;
-        }
+      if (player.vy < 0) return;
+      var xOverlap = player.x + player.w > p.x && player.x < p.x + p.w;
+      if (!xOverlap) return;
+      var prevBottom = player.y + player.h - player.vy;
+      var newBottom = player.y + player.h;
+      if (prevBottom <= p.y + 1 && newBottom >= p.y - 1 && p.y < landedTop) {
+        landed = p; landedTop = p.y;
       }
     });
+    if (landed) {
+      player.y = landed.y - player.h;
+      player.vy = 0;
+      player.onGround = true;
+      player.ridingPlatform = landed;
+      player.isJumping = false;
+      player.jumpTime = 0;
+      player.jumpsUsed = 0;
+      player.dashUsed = false;
+    }
   }
 
   function slopeSurfaceY(s, px) {

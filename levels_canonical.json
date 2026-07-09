@@ -1,0 +1,1413 @@
+[
+ {
+  "fishSpawners": [
+   {
+    "cruise": true,
+    "r": 12,
+    "rangeMax": 300,
+    "rangeMin": 0,
+    "speed": 0.02,
+    "waterY": 320,
+    "x": 190
+   }
+  ],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 570,
+   "y": 280
+  },
+  "ladders": [],
+  "leeches": [],
+  "mosquitoSwarms": [],
+  "name": "BEVEZETES",
+  "pendulums": [
+   {
+    "anchorX": 485,
+    "anchorY": 0,
+    "length": 130,
+    "maxAngle": 0.7,
+    "minAngle": -0.7,
+    "phase": 0,
+    "r": 13,
+    "speed": 0.035
+   }
+  ],
+  "platforms": [
+   {
+    "color": "#3ee08a",
+    "h": 20,
+    "w": 90,
+    "x": 0,
+    "y": 320
+   },
+   {
+    "color": "#3ee08a",
+    "h": 80,
+    "w": 20,
+    "x": 90,
+    "y": 260
+   },
+   {
+    "color": "#3ee08a",
+    "h": 20,
+    "w": 130,
+    "x": 470,
+    "y": 320
+   },
+   {
+    "color": "#3ee08a",
+    "h": 20,
+    "w": 100,
+    "x": 90,
+    "y": 240
+   },
+   {
+    "color": "#3ee08a",
+    "h": 10,
+    "w": 120,
+    "x": 0,
+    "y": 150
+   },
+   {
+    "color": "#3ee08a",
+    "h": 150,
+    "w": 120,
+    "x": 0,
+    "y": 0
+   },
+   {
+    "color": "#3ee08a",
+    "h": 10,
+    "w": 80,
+    "x": 210,
+    "y": 80
+   },
+   {
+    "color": "#3ee08a",
+    "h": 10,
+    "w": 30,
+    "x": 160,
+    "y": 190
+   },
+   {
+    "color": "#3ee08a",
+    "h": 20,
+    "w": 90,
+    "x": 270,
+    "y": 190
+   },
+   {
+    "color": "#3ee08a",
+    "h": 10,
+    "w": 30,
+    "x": 160,
+    "y": 140
+   },
+   {
+    "color": "#3ee08a",
+    "h": 10,
+    "w": 30,
+    "x": 160,
+    "y": 90
+   },
+   {
+    "color": "#3ee08a",
+    "h": 30,
+    "w": 190,
+    "x": 280,
+    "y": 310
+   },
+   {
+    "color": "#3ee08a",
+    "h": 20,
+    "w": 90,
+    "x": 470,
+    "y": 130
+   },
+   {
+    "color": "#3ee08a",
+    "h": 20,
+    "w": 90,
+    "x": 520,
+    "y": 210
+   }
+  ],
+  "ropes": [],
+  "saws": [
+   {
+    "axis": "y",
+    "cx": 340,
+    "cy": 10,
+    "max": 100,
+    "min": 0,
+    "phase": 0,
+    "r": 13,
+    "speed": 0.05
+   }
+  ],
+  "slopes": [],
+  "spikes": [
+   {
+    "h": 12,
+    "w": 30,
+    "x": 470,
+    "y": 308
+   },
+   {
+    "h": 12,
+    "w": 30,
+    "x": 140,
+    "y": 230
+   },
+   {
+    "h": 12,
+    "w": 30,
+    "x": 210,
+    "y": 70
+   },
+   {
+    "h": 12,
+    "w": 40,
+    "x": 320,
+    "y": 180
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 294
+  },
+  "theme": "dungeon",
+  "walls": [
+   {
+    "h": 200,
+    "w": 20,
+    "x": 190,
+    "y": 60
+   },
+   {
+    "h": 210,
+    "w": 10,
+    "x": 360,
+    "y": 0
+   },
+   {
+    "h": 90,
+    "w": 10,
+    "x": 460,
+    "y": 220
+   },
+   {
+    "h": 90,
+    "w": 10,
+    "x": 460,
+    "y": 130
+   }
+  ],
+  "water": [
+   {
+    "h": 20,
+    "w": 360,
+    "x": 110,
+    "y": 320
+   }
+  ]
+ },
+ {
+  "fishSpawners": [],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 540,
+   "y": 60
+  },
+  "ladders": [
+   {
+    "h": 150,
+    "w": 18,
+    "x": 160,
+    "y": 150
+   }
+  ],
+  "leeches": [],
+  "mosquitoSwarms": [],
+  "name": "FURESZEK",
+  "pendulums": [],
+  "platforms": [
+   {
+    "color": "#3ee08a",
+    "h": 20,
+    "w": 90,
+    "x": 0,
+    "y": 320
+   },
+   {
+    "color": "#3ee08a",
+    "h": 20,
+    "w": 60,
+    "x": 140,
+    "y": 300
+   },
+   {
+    "color": "#3ee08a",
+    "h": 16,
+    "w": 60,
+    "x": 140,
+    "y": 150
+   },
+   {
+    "color": "#3ee08a",
+    "h": 10,
+    "w": 30,
+    "x": 220,
+    "y": 270
+   },
+   {
+    "color": "#3ee08a",
+    "h": 10,
+    "w": 30,
+    "x": 220,
+    "y": 210
+   },
+   {
+    "color": "#3ee08a",
+    "h": 10,
+    "w": 30,
+    "x": 220,
+    "y": 150
+   },
+   {
+    "color": "#f7c948",
+    "h": 16,
+    "w": 120,
+    "x": 280,
+    "y": 30
+   },
+   {
+    "color": "#6ce0ff",
+    "h": 20,
+    "w": 140,
+    "x": 460,
+    "y": 100
+   }
+  ],
+  "ropes": [],
+  "saws": [
+   {
+    "axis": "y",
+    "cx": 170,
+    "cy": 0,
+    "max": 280,
+    "min": 160,
+    "phase": 0,
+    "r": 12,
+    "speed": 0.05
+   },
+   {
+    "axis": "x",
+    "cx": 0,
+    "cy": 190,
+    "max": 265,
+    "min": 225,
+    "phase": 0,
+    "r": 11,
+    "speed": 0.06
+   },
+   {
+    "axis": "y",
+    "cx": 310,
+    "cy": 0,
+    "max": 160,
+    "min": 40,
+    "phase": 0.5,
+    "r": 12,
+    "speed": 0.055
+   },
+   {
+    "axis": "x",
+    "cx": 0,
+    "cy": 70,
+    "max": 560,
+    "min": 460,
+    "phase": 0,
+    "r": 13,
+    "speed": 0.05
+   }
+  ],
+  "slopes": [],
+  "spikes": [
+   {
+    "h": 12,
+    "w": 20,
+    "x": 150,
+    "y": 138
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 294
+  },
+  "theme": "dungeon",
+  "walls": [
+   {
+    "h": 130,
+    "w": 15,
+    "x": 280,
+    "y": 40
+   },
+   {
+    "h": 130,
+    "w": 15,
+    "x": 340,
+    "y": 40
+   }
+  ],
+  "water": []
+ },
+ {
+  "fishSpawners": [
+   {
+    "cruise": true,
+    "r": 11,
+    "rangeMax": 585,
+    "rangeMin": 395,
+    "speed": 0.02,
+    "waterY": 312,
+    "x": 480
+   }
+  ],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 450,
+   "y": 90
+  },
+  "ladders": [
+   {
+    "h": 240,
+    "w": 20,
+    "x": 280,
+    "y": 60
+   }
+  ],
+  "leeches": [],
+  "mosquitoSwarms": [],
+  "name": "TORONY",
+  "pendulums": [
+   {
+    "anchorX": 230,
+    "anchorY": 30,
+    "length": 150,
+    "maxAngle": 0.85,
+    "minAngle": -0.85,
+    "phase": 0,
+    "r": 14,
+    "speed": 0.035
+   }
+  ],
+  "platforms": [
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "w": 380,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#6ce0ff",
+    "h": 20,
+    "w": 140,
+    "x": 460,
+    "y": 130
+   }
+  ],
+  "ropes": [],
+  "saws": [
+   {
+    "axis": "x",
+    "cx": 150,
+    "cy": 288,
+    "max": 210,
+    "min": 100,
+    "phase": 1,
+    "r": 13,
+    "speed": 0.045
+   }
+  ],
+  "slopes": [],
+  "spikes": [
+   {
+    "h": 12,
+    "w": 40,
+    "x": 465,
+    "y": 118
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "dungeon",
+  "walls": [
+   {
+    "h": 150,
+    "w": 15,
+    "x": 345,
+    "y": 150
+   }
+  ],
+  "water": [
+   {
+    "h": 30,
+    "w": 220,
+    "x": 380,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [
+   {
+    "cooldownMax": 210,
+    "cooldownMin": 90,
+    "cruise": false,
+    "jumpDuration": 40,
+    "jumpHeight": 75,
+    "r": 12,
+    "rangeMax": 410,
+    "rangeMin": 410,
+    "timer": 90,
+    "waterY": 310
+   }
+  ],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 260
+  },
+  "ladders": [],
+  "leeches": [],
+  "mosquitoSwarms": [],
+  "name": "KOTELHINTA",
+  "pendulums": [],
+  "platforms": [
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "w": 140,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#3ee08a",
+    "h": 44,
+    "move": {
+     "axis": "x",
+     "max": 280,
+     "min": 180,
+     "phase": 0,
+     "speed": 0.02
+    },
+    "w": 100,
+    "x": 220,
+    "y": 300
+   },
+   {
+    "color": "#f7c948",
+    "h": 40,
+    "w": 160,
+    "x": 440,
+    "y": 300
+   },
+   {
+    "color": "#6ce0ff",
+    "h": 16,
+    "w": 20,
+    "x": 300,
+    "y": 220
+   },
+   {
+    "color": "#6ce0ff",
+    "h": 16,
+    "w": 20,
+    "x": 375,
+    "y": 220
+   }
+  ],
+  "ropes": [
+   {
+    "anchorX": 290,
+    "anchorY": 25,
+    "length": 165,
+    "vineSkin": true
+   }
+  ],
+  "saws": [
+   {
+    "axis": "y",
+    "cx": 390,
+    "cy": 0,
+    "max": 280,
+    "min": 170,
+    "phase": 0,
+    "r": 13,
+    "speed": 0.045
+   }
+  ],
+  "slopes": [],
+  "spikes": [
+   {
+    "followIndex": 1,
+    "h": 12,
+    "offsetX": 38,
+    "offsetY": -12,
+    "w": 24
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "dungeon",
+  "walls": [],
+  "water": [
+   {
+    "h": 30,
+    "w": 300,
+    "x": 140,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [
+   {
+    "cooldownMax": 190,
+    "cooldownMin": 80,
+    "cruise": false,
+    "jumpDuration": 36,
+    "jumpHeight": 65,
+    "r": 11,
+    "rangeMax": 200,
+    "rangeMin": 120,
+    "timer": 70,
+    "waterY": 310
+   }
+  ],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 200
+  },
+  "ladders": [
+   {
+    "h": 120,
+    "w": 20,
+    "x": 260,
+    "y": 180
+   }
+  ],
+  "leeches": [],
+  "mosquitoSwarms": [],
+  "name": "FINALE",
+  "pendulums": [
+   {
+    "anchorX": 270,
+    "anchorY": 90,
+    "length": 130,
+    "maxAngle": 0.8,
+    "minAngle": -0.8,
+    "phase": 1,
+    "r": 13,
+    "speed": 0.04
+   }
+  ],
+  "platforms": [
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "w": 100,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "w": 100,
+    "x": 220,
+    "y": 300
+   },
+   {
+    "color": "#f7c948",
+    "h": 20,
+    "w": 140,
+    "x": 300,
+    "y": 100
+   },
+   {
+    "color": "#6ce0ff",
+    "h": 60,
+    "w": 120,
+    "x": 480,
+    "y": 240
+   }
+  ],
+  "ropes": [],
+  "saws": [
+   {
+    "axis": "x",
+    "cx": 540,
+    "cy": 200,
+    "max": 580,
+    "min": 500,
+    "phase": 0,
+    "r": 13,
+    "speed": 0.05
+   },
+   {
+    "axis": "y",
+    "cx": 460,
+    "cy": 0,
+    "max": 130,
+    "min": 14,
+    "phase": 0.5,
+    "r": 12,
+    "speed": 0.045
+   }
+  ],
+  "slopes": [],
+  "spikes": [
+   {
+    "h": 12,
+    "w": 40,
+    "x": 220,
+    "y": 288
+   },
+   {
+    "h": 12,
+    "w": 60,
+    "x": 300,
+    "y": 88
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "dungeon",
+  "walls": [
+   {
+    "h": 90,
+    "w": 15,
+    "x": 250,
+    "y": 100
+   },
+   {
+    "h": 90,
+    "w": 15,
+    "x": 310,
+    "y": 100
+   }
+  ],
+  "water": [
+   {
+    "h": 30,
+    "w": 120,
+    "x": 100,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [
+   {
+    "cooldownMax": 100,
+    "cooldownMin": 70,
+    "cruise": false,
+    "jumpDuration": 42,
+    "jumpHeight": 90,
+    "r": 12,
+    "spots": [
+     135,
+     295,
+     455
+    ],
+    "timer": 60,
+    "waterY": 310
+   }
+  ],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 260
+  },
+  "ladders": [],
+  "leeches": [],
+  "mosquitoSwarms": [
+   {
+    "ampX": 12,
+    "ampY": 8,
+    "phaseX": 0,
+    "phaseY": 2,
+    "r": 16,
+    "speedX": 0.045,
+    "speedY": 0.07,
+    "x": 250,
+    "y": 230
+   }
+  ],
+  "name": "INGOVANY",
+  "pendulums": [],
+  "platforms": [
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "w": 100,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "sink": {
+     "maxY": 316,
+     "restY": 300,
+     "speed": 0.6
+    },
+    "w": 90,
+    "x": 170,
+    "y": 300
+   },
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "w": 90,
+    "x": 330,
+    "y": 300
+   },
+   {
+    "color": "#f7c948",
+    "h": 40,
+    "w": 110,
+    "x": 490,
+    "y": 300
+   }
+  ],
+  "ropes": [],
+  "saws": [
+   {
+    "axis": "y",
+    "cx": 330,
+    "cy": 280,
+    "max": 300,
+    "min": 258,
+    "phase": 0,
+    "r": 13,
+    "speed": 0.05
+   }
+  ],
+  "slopes": [
+   {
+    "direction": "up",
+    "h": 20,
+    "w": 20,
+    "x": 250,
+    "y": 280
+   }
+  ],
+  "spikes": [
+   {
+    "h": 12,
+    "w": 30,
+    "x": 345,
+    "y": 288
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "rainforest",
+  "walls": [],
+  "water": [
+   {
+    "h": 30,
+    "w": 70,
+    "x": 100,
+    "y": 310
+   },
+   {
+    "h": 30,
+    "w": 70,
+    "x": 260,
+    "y": 310
+   },
+   {
+    "h": 30,
+    "w": 70,
+    "x": 420,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [
+   {
+    "cruise": true,
+    "r": 11,
+    "rangeMax": 550,
+    "rangeMin": 150,
+    "speed": 0.018,
+    "waterY": 312,
+    "x": 300
+   }
+  ],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 60
+  },
+  "ladders": [],
+  "leeches": [],
+  "mosquitoSwarms": [
+   {
+    "ampX": 10,
+    "ampY": 14,
+    "phaseX": 0.5,
+    "phaseY": 1.8,
+    "r": 15,
+    "speedX": 0.05,
+    "speedY": 0.06,
+    "x": 150,
+    "y": 230
+   },
+   {
+    "ampX": 14,
+    "ampY": 8,
+    "phaseX": 2,
+    "phaseY": 0.3,
+    "r": 16,
+    "speedX": 0.06,
+    "speedY": 0.045,
+    "x": 400,
+    "y": 150
+   }
+  ],
+  "name": "LOMBKORONA",
+  "pendulums": [],
+  "platforms": [
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "w": 110,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#3ee08a",
+    "h": 18,
+    "move": {
+     "axis": "x",
+     "max": 280,
+     "min": 190,
+     "phase": 0,
+     "speed": 0.025
+    },
+    "tilt": {
+     "maxAngle": 0.12,
+     "speed": 0.03
+    },
+    "w": 90,
+    "x": 250,
+    "y": 230
+   },
+   {
+    "color": "#f7c948",
+    "h": 20,
+    "w": 90,
+    "x": 375,
+    "y": 170
+   },
+   {
+    "color": "#6ce0ff",
+    "h": 20,
+    "w": 100,
+    "x": 500,
+    "y": 100
+   }
+  ],
+  "ropes": [],
+  "saws": [
+   {
+    "axis": "y",
+    "cx": 460,
+    "cy": 130,
+    "max": 170,
+    "min": 100,
+    "phase": 0,
+    "r": 13,
+    "speed": 0.05
+   }
+  ],
+  "slopes": [],
+  "spikes": [
+   {
+    "followIndex": 1,
+    "h": 12,
+    "offsetX": 35,
+    "offsetY": -12,
+    "w": 20
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "rainforest",
+  "walls": [],
+  "water": [
+   {
+    "h": 30,
+    "w": 490,
+    "x": 110,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [
+   {
+    "cruise": true,
+    "r": 12,
+    "rangeMax": 520,
+    "rangeMin": 100,
+    "speed": 0.022,
+    "waterY": 312,
+    "x": 300
+   },
+   {
+    "cooldownMax": 110,
+    "cooldownMin": 70,
+    "cruise": false,
+    "jumpDuration": 44,
+    "jumpHeight": 95,
+    "r": 12,
+    "spots": [
+     240,
+     460
+    ],
+    "timer": 65,
+    "waterY": 310
+   }
+  ],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 140
+  },
+  "ladders": [],
+  "leeches": [
+   {
+    "h": 16,
+    "w": 16,
+    "x": 405,
+    "y": 224
+   }
+  ],
+  "mosquitoSwarms": [
+   {
+    "ampX": 8,
+    "ampY": 10,
+    "phaseX": 1,
+    "phaseY": 0.4,
+    "r": 16,
+    "speedX": 0.06,
+    "speedY": 0.05,
+    "x": 275,
+    "y": 230
+   }
+  ],
+  "name": "PIOCAS MOCSAR",
+  "pendulums": [
+   {
+    "anchorX": 160,
+    "anchorY": 30,
+    "length": 150,
+    "maxAngle": 0.75,
+    "minAngle": -0.75,
+    "phase": 0,
+    "r": 13,
+    "speed": 0.035
+   }
+  ],
+  "platforms": [
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "w": 90,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#3ee08a",
+    "h": 36,
+    "move": {
+     "axis": "y",
+     "max": 320,
+     "min": 250,
+     "phase": 0.8,
+     "speed": 0.03
+    },
+    "w": 90,
+    "x": 230,
+    "y": 300
+   },
+   {
+    "color": "#f7c948",
+    "h": 20,
+    "w": 80,
+    "x": 420,
+    "y": 240
+   },
+   {
+    "color": "#3ee08a",
+    "h": 16,
+    "w": 40,
+    "x": 480,
+    "y": 210
+   },
+   {
+    "color": "#6ce0ff",
+    "h": 20,
+    "w": 60,
+    "x": 540,
+    "y": 180
+   }
+  ],
+  "ropes": [],
+  "saws": [
+   {
+    "axis": "x",
+    "cx": 500,
+    "cy": 170,
+    "max": 540,
+    "min": 460,
+    "phase": 0,
+    "r": 13,
+    "speed": 0.05
+   }
+  ],
+  "slopes": [
+   {
+    "direction": "up",
+    "h": 20,
+    "w": 20,
+    "x": 400,
+    "y": 240
+   }
+  ],
+  "spikes": [
+   {
+    "followIndex": 1,
+    "h": 12,
+    "offsetX": 33,
+    "offsetY": -12,
+    "w": 24
+   },
+   {
+    "h": 12,
+    "w": 30,
+    "x": 430,
+    "y": 228
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "rainforest",
+  "walls": [],
+  "water": [
+   {
+    "h": 30,
+    "w": 510,
+    "x": 90,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 540,
+   "y": -20
+  },
+  "ladders": [
+   {
+    "h": 190,
+    "w": 18,
+    "x": 50,
+    "y": 110
+   }
+  ],
+  "leeches": [],
+  "mosquitoSwarms": [
+   {
+    "ampX": 10,
+    "ampY": 16,
+    "phaseX": 0,
+    "phaseY": 1,
+    "r": 14,
+    "speedX": 0.05,
+    "speedY": 0.06,
+    "x": 70,
+    "y": 150
+   }
+  ],
+  "name": "ODU",
+  "pendulums": [
+   {
+    "anchorX": 500,
+    "anchorY": 0,
+    "length": 70,
+    "maxAngle": 0.6,
+    "minAngle": -0.6,
+    "phase": 0,
+    "r": 12,
+    "speed": 0.05
+   }
+  ],
+  "platforms": [
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "w": 140,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#3ee08a",
+    "h": 20,
+    "w": 130,
+    "x": 0,
+    "y": 110
+   },
+   {
+    "color": "#f7c948",
+    "h": 20,
+    "w": 100,
+    "x": 380,
+    "y": 110
+   },
+   {
+    "color": "#6ce0ff",
+    "h": 20,
+    "w": 220,
+    "x": 380,
+    "y": 20
+   }
+  ],
+  "ropes": [
+   {
+    "anchorX": 255,
+    "anchorY": 20,
+    "length": 110,
+    "vineSkin": true
+   }
+  ],
+  "saws": [],
+  "slopes": [],
+  "spikes": [],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "rainforest",
+  "walls": [
+   {
+    "h": 90,
+    "w": 15,
+    "x": 430,
+    "y": 20
+   }
+  ],
+  "water": [
+   {
+    "h": 30,
+    "w": 460,
+    "x": 140,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [
+   {
+    "cooldownMax": 100,
+    "cooldownMin": 70,
+    "cruise": false,
+    "jumpDuration": 44,
+    "jumpHeight": 95,
+    "r": 12,
+    "spots": [
+     135,
+     290
+    ],
+    "timer": 60,
+    "waterY": 310
+   },
+   {
+    "cruise": true,
+    "r": 11,
+    "rangeMax": 560,
+    "rangeMin": 400,
+    "speed": 0.02,
+    "waterY": 312,
+    "x": 480
+   }
+  ],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 50
+  },
+  "ladders": [],
+  "leeches": [],
+  "mosquitoSwarms": [
+   {
+    "ampX": 12,
+    "ampY": 10,
+    "phaseX": 1.2,
+    "phaseY": 0.7,
+    "r": 16,
+    "speedX": 0.055,
+    "speedY": 0.05,
+    "x": 400,
+    "y": 150
+   }
+  ],
+  "name": "VADON FINALE",
+  "pendulums": [
+   {
+    "anchorX": 150,
+    "anchorY": 30,
+    "length": 140,
+    "maxAngle": 0.8,
+    "minAngle": -0.8,
+    "phase": 0.5,
+    "r": 13,
+    "speed": 0.04
+   }
+  ],
+  "platforms": [
+   {
+    "color": "#3ee08a",
+    "h": 40,
+    "w": 90,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#3ee08a",
+    "h": 36,
+    "move": {
+     "axis": "y",
+     "max": 305,
+     "min": 255,
+     "phase": 0.4,
+     "speed": 0.035
+    },
+    "w": 90,
+    "x": 200,
+    "y": 300
+   },
+   {
+    "color": "#f7c948",
+    "h": 20,
+    "w": 90,
+    "x": 360,
+    "y": 190
+   },
+   {
+    "color": "#6ce0ff",
+    "h": 16,
+    "w": 20,
+    "x": 430,
+    "y": 150
+   },
+   {
+    "color": "#6ce0ff",
+    "h": 60,
+    "w": 100,
+    "x": 500,
+    "y": 90
+   }
+  ],
+  "ropes": [
+   {
+    "anchorX": 475,
+    "anchorY": 20,
+    "length": 110,
+    "vineSkin": true
+   }
+  ],
+  "saws": [
+   {
+    "axis": "y",
+    "cx": 520,
+    "cy": 60,
+    "max": 95,
+    "min": 20,
+    "phase": 0.3,
+    "r": 12,
+    "speed": 0.045
+   }
+  ],
+  "slopes": [
+   {
+    "direction": "up",
+    "h": 20,
+    "w": 20,
+    "x": 340,
+    "y": 190
+   }
+  ],
+  "spikes": [
+   {
+    "followIndex": 1,
+    "h": 12,
+    "offsetX": 33,
+    "offsetY": -12,
+    "w": 24
+   },
+   {
+    "h": 12,
+    "w": 30,
+    "x": 370,
+    "y": 178
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "rainforest",
+  "walls": [],
+  "water": [
+   {
+    "h": 30,
+    "w": 510,
+    "x": 90,
+    "y": 310
+   }
+  ]
+ }
+]
