@@ -2044,55 +2044,59 @@
     ctx.restore();
   }
 
-  function drawSpikeShape(s) {
-    var count = Math.max(1, Math.round(s.w / 14));
-    var segW = s.w / count;
+  function drawSpikeStar(cx, cy, R) {
     var rainforest = level.theme === 'rainforest';
+    var petal = rainforest ? '#e8e2cc' : '#f4f1e6';
+    var petalEdge = rainforest ? '#b8b092' : '#c9c2ab';
+    var core = '#c81e2e';
+    var coreEdge = '#8a1420';
 
-    ctx.fillStyle = rainforest ? 'rgba(20,60,15,0.35)' : 'rgba(120,10,20,0.35)';
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
     ctx.beginPath();
-    ctx.ellipse(s.x + s.w / 2, s.y + s.h + 2, s.w * 0.55, 5, 0, 0, Math.PI * 2);
+    ctx.ellipse(cx, cy + R * 0.9, R * 0.9, R * 0.28, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    for (var i = 0; i < count; i++) {
-      var sx = s.x + i * segW;
-      var tipX = sx + segW / 2;
-      ctx.fillStyle = rainforest ? '#4a5a2e' : '#4a4744';
+    for (var k = 0; k < 8; k++) {
+      var ang = k * Math.PI / 4;
+      var len = (k % 2 === 0) ? R : R * 0.82;
+      var halfW = R * 0.22;
+      var tx = cx + Math.cos(ang) * len;
+      var ty = cy + Math.sin(ang) * len;
+      var px = Math.cos(ang + Math.PI / 2) * halfW;
+      var py = Math.sin(ang + Math.PI / 2) * halfW;
+      ctx.fillStyle = petal;
       ctx.beginPath();
-      ctx.moveTo(sx, s.y + s.h);
-      ctx.lineTo(tipX, s.y);
-      ctx.lineTo(sx + segW, s.y + s.h);
+      ctx.moveTo(cx + px, cy + py);
+      ctx.quadraticCurveTo(cx + px * 0.4 + (tx - cx) * 0.55, cy + py * 0.4 + (ty - cy) * 0.55, tx, ty);
+      ctx.quadraticCurveTo(cx - px * 0.4 + (tx - cx) * 0.55, cy - py * 0.4 + (ty - cy) * 0.55, cx - px, cy - py);
       ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = rainforest ? '#26330f' : '#201e1d';
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = petalEdge;
+      ctx.lineWidth = 1;
       ctx.stroke();
-
-      ctx.fillStyle = rainforest ? '#7a4a1e' : '#9c1524';
-      ctx.beginPath();
-      ctx.moveTo(tipX - 1.5, s.y);
-      ctx.lineTo(tipX + 1.5, s.y);
-      ctx.lineTo(tipX + 2.5, s.y + s.h * 0.55);
-      ctx.lineTo(tipX, s.y + s.h * 0.7);
-      ctx.lineTo(tipX - 2.5, s.y + s.h * 0.55);
-      ctx.closePath();
-      ctx.fill();
     }
 
-    ctx.strokeStyle = '#3c5a2a';
-    ctx.lineWidth = 2;
+    ctx.fillStyle = core;
     ctx.beginPath();
-    ctx.moveTo(s.x - 2, s.y + s.h * 0.75);
-    for (var vx = s.x; vx <= s.x + s.w; vx += segW) {
-      ctx.quadraticCurveTo(vx + segW * 0.25, s.y + s.h * 0.45, vx + segW * 0.5, s.y + s.h * 0.8);
-    }
+    ctx.arc(cx, cy, R * 0.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = coreEdge;
+    ctx.lineWidth = 1.5;
     ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.beginPath();
+    ctx.arc(cx - R * 0.14, cy - R * 0.14, R * 0.14, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
-    ctx.fillStyle = '#4a7a34';
-    for (var lx = s.x + segW * 0.3; lx < s.x + s.w; lx += segW) {
-      ctx.beginPath();
-      ctx.ellipse(lx, s.y + s.h * 0.6, 3.5, 2, 0.6, 0, Math.PI * 2);
-      ctx.fill();
+  function drawSpikeShape(s) {
+    var count = Math.max(1, Math.round(s.w / 26));
+    var segW = s.w / count;
+    var R = Math.min(13, segW * 0.48);
+    for (var i = 0; i < count; i++) {
+      var cx = s.x + i * segW + segW / 2;
+      var cy = s.y + s.h - R;
+      drawSpikeStar(cx, cy, R);
     }
   }
 
