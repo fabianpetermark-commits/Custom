@@ -713,12 +713,11 @@
         platforms: [
           { x: 0, y: 300, w: 100, h: 40, color: '#3ee08a' },
           { x: 220, y: 300, w: 100, h: 40, color: '#3ee08a' },
-          { x: 300, y: 100, w: 140, h: 20, color: '#f7c948' },
-          { x: 480, y: 240, w: 120, h: 60, color: '#6ce0ff' }
+          { x: 480, y: 240, w: 120, h: 60, color: '#6ce0ff' },
+          { x: 340, y: 260, w: 80, h: 20, color: '#f7c948', move: { axis: 'x', min: 340, max: 420, speed: 0.028, phase: 0 } }
         ],
         spikes: [
-          { x: 280, y: 288, w: 40, h: 12 },
-          { x: 300, y: 88, w: 60, h: 12 }
+          { x: 280, y: 288, w: 40, h: 12 }
         ],
         saws: [
           { cx: 540, cy: 200, r: 13, axis: 'x', min: 500, max: 580, speed: 0.05, phase: 0 },
@@ -728,19 +727,15 @@
         mosquitoSwarms: [],
         leeches: [],
         pendulums: [
-          { anchorX: 270, anchorY: 90, length: 130, minAngle: -0.8, maxAngle: 0.8, speed: 0.04, phase: 1, r: 13 }
+          { anchorX: 420, anchorY: 0, length: 170, minAngle: -0.5, maxAngle: 0.5, speed: 0.035, phase: 0, r: 13 }
         ],
-        ladders: [
-          { x: 260, y: 180, w: 20, h: 120 }
-        ],
-        walls: [
-          { x: 250, y: 100, w: 15, h: 90 },
-          { x: 310, y: 100, w: 15, h: 90 }
-        ],
+        ladders: [],
+        walls: [],
         slopes: [],
         ropes: [],
         water: [
-          { x: 100, y: 310, w: 120, h: 30 }
+          { x: 100, y: 310, w: 120, h: 30 },
+          { x: 320, y: 310, w: 160, h: 30 }
         ],
         icicles: [],
         springs: [],
