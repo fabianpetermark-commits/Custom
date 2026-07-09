@@ -2464,8 +2464,8 @@
        "__smartColor": "#3EE08A",
        "__worldX": 0,
        "__worldY": 320,
-       "iid": "cb0f82fd-641d-4355-a8f1-418f81689f5a",
-       "width": 90,
+       "iid": "f28b1cdc-b205-4511-9358-473e48d05043",
+       "width": 160,
        "height": 20,
        "defUid": 117,
        "px": [
@@ -2546,10 +2546,43 @@
        ]
       },
       {
-       "__identifier": "Platform",
+       "__identifier": "Start",
+       "__grid": [
+        2,
+        29
+       ],
+       "__pivot": [
+        0,
+        0
+       ],
+       "__tags": [],
+       "__tile": null,
+       "__smartColor": "#3EE08A",
+       "__worldX": 20,
+       "__worldY": 294,
+       "iid": "83452940-55dd-47ce-8e97-1579a23f328d",
+       "width": 18,
+       "height": 26,
+       "defUid": 164,
+       "px": [
+        20,
+        294
+       ],
+       "fieldInstances": [
+        {
+         "__identifier": "followRef",
+         "__type": "EntityRef",
+         "__value": null,
+         "defUid": 163,
+         "realEditorValues": []
+        }
+       ]
+      },
+      {
+       "__identifier": "Spike",
        "__grid": [
         9,
-        26
+        30
        ],
        "__pivot": [
         0,
@@ -2559,92 +2592,29 @@
        "__tile": null,
        "__smartColor": "#3EE08A",
        "__worldX": 90,
-       "__worldY": 260,
-       "iid": "62b78fd3-0363-4206-9452-33ebf818f1e3",
-       "width": 20,
-       "height": 80,
-       "defUid": 117,
+       "__worldY": 308,
+       "iid": "2baaef56-870a-4e4a-a6b2-a0bae08c30c3",
+       "width": 30,
+       "height": 12,
+       "defUid": 119,
        "px": [
         90,
-        260
+        308
        ],
        "fieldInstances": [
         {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
+         "__identifier": "followRef",
+         "__type": "EntityRef",
+         "__value": null,
+         "defUid": 118,
          "realEditorValues": []
         }
        ]
       },
       {
-       "__identifier": "Platform",
+       "__identifier": "Water",
        "__grid": [
-        47,
+        16,
         32
        ],
        "__pivot": [
@@ -2654,14 +2624,39 @@
        "__tags": [],
        "__tile": null,
        "__smartColor": "#3EE08A",
-       "__worldX": 470,
+       "__worldX": 160,
        "__worldY": 320,
-       "iid": "4aff358a-9756-40d5-a4eb-31d308a774a2",
-       "width": 130,
+       "iid": "7c054da7-740f-4bf9-b408-67d468d82740",
+       "width": 50,
+       "height": 20,
+       "defUid": 150,
+       "px": [
+        160,
+        320
+       ],
+       "fieldInstances": []
+      },
+      {
+       "__identifier": "Platform",
+       "__grid": [
+        21,
+        32
+       ],
+       "__pivot": [
+        0,
+        0
+       ],
+       "__tags": [],
+       "__tile": null,
+       "__smartColor": "#3EE08A",
+       "__worldX": 210,
+       "__worldY": 320,
+       "iid": "f98486dc-7360-4651-8b43-e875f1d838da",
+       "width": 150,
        "height": 20,
        "defUid": 117,
        "px": [
-        470,
+        210,
         320
        ],
        "fieldInstances": [
@@ -2738,1065 +2733,9 @@
        ]
       },
       {
-       "__identifier": "Platform",
+       "__identifier": "Saw",
        "__grid": [
-        9,
-        24
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 90,
-       "__worldY": 240,
-       "iid": "22c23556-ea40-4f8b-a849-8abacb102edf",
-       "width": 100,
-       "height": 20,
-       "defUid": 117,
-       "px": [
-        90,
-        240
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Platform",
-       "__grid": [
-        0,
-        15
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 0,
-       "__worldY": 150,
-       "iid": "f3addb8d-ba0e-4148-a275-d059605b2210",
-       "width": 120,
-       "height": 10,
-       "defUid": 117,
-       "px": [
-        0,
-        150
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Platform",
-       "__grid": [
-        0,
-        0
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 0,
-       "__worldY": 0,
-       "iid": "e10f1025-badc-4c8f-81c3-61a24143f2c7",
-       "width": 120,
-       "height": 150,
-       "defUid": 117,
-       "px": [
-        0,
-        0
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Platform",
-       "__grid": [
-        21,
-        8
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 210,
-       "__worldY": 80,
-       "iid": "140d5f7c-800e-408d-a7ba-e158a411731c",
-       "width": 80,
-       "height": 10,
-       "defUid": 117,
-       "px": [
-        210,
-        80
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Platform",
-       "__grid": [
-        16,
-        19
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 160,
-       "__worldY": 190,
-       "iid": "cf72c072-f082-42f1-a1d0-731bc07be9b2",
-       "width": 30,
-       "height": 10,
-       "defUid": 117,
-       "px": [
-        160,
-        190
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Platform",
-       "__grid": [
-        27,
-        19
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 270,
-       "__worldY": 190,
-       "iid": "e07c81d0-c23c-478a-83ad-15be64f07c9f",
-       "width": 90,
-       "height": 20,
-       "defUid": 117,
-       "px": [
-        270,
-        190
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Platform",
-       "__grid": [
-        16,
-        14
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 160,
-       "__worldY": 140,
-       "iid": "ed6f37d1-1da3-412c-92f0-86ab7f93c3c1",
-       "width": 30,
-       "height": 10,
-       "defUid": 117,
-       "px": [
-        160,
-        140
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Platform",
-       "__grid": [
-        16,
-        9
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 160,
-       "__worldY": 90,
-       "iid": "592c07df-ee9c-4824-ad3e-59655debcabd",
-       "width": 30,
-       "height": 10,
-       "defUid": 117,
-       "px": [
-        160,
-        90
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Platform",
-       "__grid": [
-        28,
-        31
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 280,
-       "__worldY": 310,
-       "iid": "9fb1f703-f353-43a4-94aa-f3b27d2f4ff9",
-       "width": 190,
-       "height": 30,
-       "defUid": 117,
-       "px": [
-        280,
-        310
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Platform",
-       "__grid": [
-        47,
-        13
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 470,
-       "__worldY": 130,
-       "iid": "1c5d647e-3c74-4cd5-9be7-32a67708ef1f",
-       "width": 90,
-       "height": 20,
-       "defUid": 117,
-       "px": [
-        470,
-        130
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Platform",
-       "__grid": [
-        52,
-        21
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#3EE08A",
-       "__worldX": 520,
-       "__worldY": 210,
-       "iid": "ec3f4ebf-6f19-41be-8d9c-bb3f0d8194c2",
-       "width": 90,
-       "height": 20,
-       "defUid": 117,
-       "px": [
-        520,
-        210
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "color",
-         "__type": "String",
-         "__value": "#3ee08a",
-         "defUid": 107,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveAxis",
-         "__type": "LocalEnum.MoveAxis",
-         "__value": "none",
-         "defUid": 108,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 109,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 110,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "moveSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 111,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "movePhase",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 112,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkMaxY",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 113,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "sinkSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 114,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltMaxAngle",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 115,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "tiltSpeed",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 116,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Spike",
-       "__grid": [
-        47,
+        29,
         30
        ],
        "__pivot": [
@@ -3805,116 +2744,16 @@
        ],
        "__tags": [],
        "__tile": null,
-       "__smartColor": "#9C1524",
-       "__worldX": 470,
-       "__worldY": 308,
-       "iid": "913c26f6-6948-44b0-b47c-cc067259806c",
-       "width": 30,
-       "height": 12,
-       "defUid": 119,
-       "px": [
-        470,
-        308
-       ],
-       "fieldInstances": []
-      },
-      {
-       "__identifier": "Spike",
-       "__grid": [
-        14,
-        23
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#9C1524",
-       "__worldX": 140,
-       "__worldY": 230,
-       "iid": "6694d193-6110-46b0-80e8-83056b929830",
-       "width": 30,
-       "height": 12,
-       "defUid": 119,
-       "px": [
-        140,
-        230
-       ],
-       "fieldInstances": []
-      },
-      {
-       "__identifier": "Spike",
-       "__grid": [
-        21,
-        7
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#9C1524",
-       "__worldX": 210,
-       "__worldY": 70,
-       "iid": "56f17d14-37cf-40b6-9207-648e2f6e5cd0",
-       "width": 30,
-       "height": 12,
-       "defUid": 119,
-       "px": [
-        210,
-        70
-       ],
-       "fieldInstances": []
-      },
-      {
-       "__identifier": "Spike",
-       "__grid": [
-        32,
-        18
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#9C1524",
-       "__worldX": 320,
-       "__worldY": 180,
-       "iid": "8f7f1573-36ec-4536-9bd5-573e45d9dbbe",
-       "width": 40,
-       "height": 12,
-       "defUid": 119,
-       "px": [
-        320,
-        180
-       ],
-       "fieldInstances": []
-      },
-      {
-       "__identifier": "Saw",
-       "__grid": [
-        34,
-        1
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#C9C9D4",
-       "__worldX": 340,
-       "__worldY": 10,
-       "iid": "77b7f8b5-05a4-4749-8aad-22a0b55c9561",
+       "__smartColor": "#3EE08A",
+       "__worldX": 290,
+       "__worldY": 307,
+       "iid": "0207c541-426f-47b6-80ef-f33f5084c6ef",
        "width": 26,
        "height": 26,
        "defUid": 126,
        "px": [
-        340,
-        10
+        290,
+        307
        ],
        "fieldInstances": [
         {
@@ -3927,28 +2766,28 @@
         {
          "__identifier": "axis",
          "__type": "LocalEnum.SawAxis",
-         "__value": "y",
+         "__value": "x",
          "defUid": 121,
          "realEditorValues": []
         },
         {
          "__identifier": "min",
          "__type": "Float",
-         "__value": 0,
+         "__value": 250,
          "defUid": 122,
          "realEditorValues": []
         },
         {
          "__identifier": "max",
          "__type": "Float",
-         "__value": 100,
+         "__value": 330,
          "defUid": 123,
          "realEditorValues": []
         },
         {
          "__identifier": "speed",
          "__type": "Float",
-         "__value": 0.05,
+         "__value": 0.045,
          "defUid": 124,
          "realEditorValues": []
         },
@@ -3962,10 +2801,10 @@
        ]
       },
       {
-       "__identifier": "Pendulum",
+       "__identifier": "Water",
        "__grid": [
-        48,
-        0
+        36,
+        32
        ],
        "__pivot": [
         0,
@@ -3973,36 +2812,157 @@
        ],
        "__tags": [],
        "__tile": null,
-       "__smartColor": "#8A1A2A",
-       "__worldX": 485,
-       "__worldY": 0,
-       "iid": "8a31bb47-ae9f-4b2e-adb0-076aa89b20f6",
+       "__smartColor": "#3EE08A",
+       "__worldX": 360,
+       "__worldY": 320,
+       "iid": "b4b8c4a7-df3b-47c3-b1de-bfe9bb0e545d",
+       "width": 110,
+       "height": 20,
+       "defUid": 150,
+       "px": [
+        360,
+        320
+       ],
+       "fieldInstances": []
+      },
+      {
+       "__identifier": "Platform",
+       "__grid": [
+        47,
+        19
+       ],
+       "__pivot": [
+        0,
+        0
+       ],
+       "__tags": [],
+       "__tile": null,
+       "__smartColor": "#3EE08A",
+       "__worldX": 470,
+       "__worldY": 190,
+       "iid": "f06e1145-2166-44f2-8787-d3a199bfdedf",
+       "width": 130,
+       "height": 20,
+       "defUid": 117,
+       "px": [
+        470,
+        190
+       ],
+       "fieldInstances": [
+        {
+         "__identifier": "color",
+         "__type": "String",
+         "__value": "#3ee08a",
+         "defUid": 107,
+         "realEditorValues": []
+        },
+        {
+         "__identifier": "moveAxis",
+         "__type": "LocalEnum.MoveAxis",
+         "__value": "none",
+         "defUid": 108,
+         "realEditorValues": []
+        },
+        {
+         "__identifier": "moveMin",
+         "__type": "Float",
+         "__value": 0,
+         "defUid": 109,
+         "realEditorValues": []
+        },
+        {
+         "__identifier": "moveMax",
+         "__type": "Float",
+         "__value": 0,
+         "defUid": 110,
+         "realEditorValues": []
+        },
+        {
+         "__identifier": "moveSpeed",
+         "__type": "Float",
+         "__value": 0,
+         "defUid": 111,
+         "realEditorValues": []
+        },
+        {
+         "__identifier": "movePhase",
+         "__type": "Float",
+         "__value": 0,
+         "defUid": 112,
+         "realEditorValues": []
+        },
+        {
+         "__identifier": "sinkMaxY",
+         "__type": "Float",
+         "__value": 0,
+         "defUid": 113,
+         "realEditorValues": []
+        },
+        {
+         "__identifier": "sinkSpeed",
+         "__type": "Float",
+         "__value": 0,
+         "defUid": 114,
+         "realEditorValues": []
+        },
+        {
+         "__identifier": "tiltMaxAngle",
+         "__type": "Float",
+         "__value": 0,
+         "defUid": 115,
+         "realEditorValues": []
+        },
+        {
+         "__identifier": "tiltSpeed",
+         "__type": "Float",
+         "__value": 0,
+         "defUid": 116,
+         "realEditorValues": []
+        }
+       ]
+      },
+      {
+       "__identifier": "Pendulum",
+       "__grid": [
+        52,
+        2
+       ],
+       "__pivot": [
+        0,
+        0
+       ],
+       "__tags": [],
+       "__tile": null,
+       "__smartColor": "#3EE08A",
+       "__worldX": 520,
+       "__worldY": 20,
+       "iid": "03c7ff96-86cc-4a63-b0bf-923101f1e546",
        "width": 16,
        "height": 16,
        "defUid": 133,
        "px": [
-        485,
-        0
+        520,
+        20
        ],
        "fieldInstances": [
         {
          "__identifier": "length",
          "__type": "Float",
-         "__value": 130,
+         "__value": 140,
          "defUid": 127,
          "realEditorValues": []
         },
         {
          "__identifier": "minAngle",
          "__type": "Float",
-         "__value": -0.7,
+         "__value": -0.4,
          "defUid": 128,
          "realEditorValues": []
         },
         {
          "__identifier": "maxAngle",
          "__type": "Float",
-         "__value": 0.7,
+         "__value": 0.4,
          "defUid": 129,
          "realEditorValues": []
         },
@@ -4030,263 +2990,10 @@
        ]
       },
       {
-       "__identifier": "Wall",
-       "__grid": [
-        19,
-        6
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#8C7D5F",
-       "__worldX": 190,
-       "__worldY": 60,
-       "iid": "72e9494c-2fac-4caf-9f5b-6be4b34e2564",
-       "width": 20,
-       "height": 200,
-       "defUid": 144,
-       "px": [
-        190,
-        60
-       ],
-       "fieldInstances": []
-      },
-      {
-       "__identifier": "Wall",
-       "__grid": [
-        36,
-        0
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#8C7D5F",
-       "__worldX": 360,
-       "__worldY": 0,
-       "iid": "b41819bf-60e6-4009-875b-9d8e4961e0ff",
-       "width": 10,
-       "height": 210,
-       "defUid": 144,
-       "px": [
-        360,
-        0
-       ],
-       "fieldInstances": []
-      },
-      {
-       "__identifier": "Wall",
-       "__grid": [
-        46,
-        22
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#8C7D5F",
-       "__worldX": 460,
-       "__worldY": 220,
-       "iid": "b7da3f26-e306-4be4-be66-413f3aa00f7b",
-       "width": 10,
-       "height": 90,
-       "defUid": 144,
-       "px": [
-        460,
-        220
-       ],
-       "fieldInstances": []
-      },
-      {
-       "__identifier": "Wall",
-       "__grid": [
-        46,
-        13
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#8C7D5F",
-       "__worldX": 460,
-       "__worldY": 130,
-       "iid": "383fc5a9-1118-4138-bd29-9da85fbefbfc",
-       "width": 10,
-       "height": 90,
-       "defUid": 144,
-       "px": [
-        460,
-        130
-       ],
-       "fieldInstances": []
-      },
-      {
-       "__identifier": "Water",
-       "__grid": [
-        11,
-        32
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#1A4A6E",
-       "__worldX": 110,
-       "__worldY": 320,
-       "iid": "7356b0c6-0d88-4e5c-a7a6-1389f07fa2c1",
-       "width": 360,
-       "height": 20,
-       "defUid": 150,
-       "px": [
-        110,
-        320
-       ],
-       "fieldInstances": []
-      },
-      {
-       "__identifier": "FishSpawner",
-       "__grid": [
-        19,
-        32
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#4C92AC",
-       "__worldX": 190,
-       "__worldY": 320,
-       "iid": "9c474452-8655-4eea-a190-979a8319c0f8",
-       "width": 14,
-       "height": 14,
-       "defUid": 162,
-       "px": [
-        190,
-        320
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "variant",
-         "__type": "LocalEnum.FishVariant",
-         "__value": "cruise",
-         "defUid": 151,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "spots",
-         "__type": "Array<Float>",
-         "__value": [],
-         "defUid": 152,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "r",
-         "__type": "Float",
-         "__value": 12,
-         "defUid": 153,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "jumpHeight",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 154,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "jumpDuration",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 155,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "timer",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 156,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "cooldownMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 157,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "cooldownMax",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 158,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "rangeMin",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 159,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "rangeMax",
-         "__type": "Float",
-         "__value": 300,
-         "defUid": 160,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speed",
-         "__type": "Float",
-         "__value": 0.02,
-         "defUid": 161,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "Start",
-       "__grid": [
-        2,
-        29
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#F4F1E6",
-       "__worldX": 20,
-       "__worldY": 294,
-       "iid": "63daebc7-7a49-4733-bd68-a68a2023745c",
-       "width": 18,
-       "height": 26,
-       "defUid": 164,
-       "px": [
-        20,
-        294
-       ],
-       "fieldInstances": []
-      },
-      {
        "__identifier": "Goal",
        "__grid": [
-        57,
-        28
+        56,
+        15
        ],
        "__pivot": [
         0,
@@ -4294,16 +3001,16 @@
        ],
        "__tags": [],
        "__tile": null,
-       "__smartColor": "#FFE066",
-       "__worldX": 570,
-       "__worldY": 280,
-       "iid": "e7fac506-4bb3-431f-af8a-8971aea79a39",
+       "__smartColor": "#3EE08A",
+       "__worldX": 565,
+       "__worldY": 150,
+       "iid": "da7b805a-f8f0-4610-b1a5-58c51f749218",
        "width": 30,
        "height": 40,
        "defUid": 165,
        "px": [
-        570,
-        280
+        565,
+        150
        ],
        "fieldInstances": []
       }

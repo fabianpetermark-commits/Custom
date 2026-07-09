@@ -564,52 +564,32 @@
         theme: 'dungeon',
         start: { x: 20, y: 294 },
         platforms: [
-          { x: 0, y: 320, w: 90, h: 20, color: '#3ee08a' },
-          { x: 90, y: 260, w: 20, h: 80, color: '#3ee08a' },
-          { x: 470, y: 320, w: 130, h: 20, color: '#3ee08a' },
-          { x: 90, y: 240, w: 100, h: 20, color: '#3ee08a' },
-          { x: 0, y: 150, w: 120, h: 10, color: '#3ee08a' },
-          { x: 0, y: 0, w: 120, h: 150, color: '#3ee08a' },
-          { x: 210, y: 80, w: 80, h: 10, color: '#3ee08a' },
-          { x: 160, y: 190, w: 30, h: 10, color: '#3ee08a' },
-          { x: 270, y: 190, w: 90, h: 20, color: '#3ee08a' },
-          { x: 160, y: 140, w: 30, h: 10, color: '#3ee08a' },
-          { x: 160, y: 90, w: 30, h: 10, color: '#3ee08a' },
-          { x: 280, y: 310, w: 190, h: 30, color: '#3ee08a' },
-          { x: 470, y: 130, w: 90, h: 20, color: '#3ee08a' },
-          { x: 520, y: 210, w: 90, h: 20, color: '#3ee08a' }
+          { x: 0, y: 320, w: 160, h: 20, color: '#3ee08a' },
+          { x: 210, y: 320, w: 150, h: 20, color: '#3ee08a' },
+          { x: 470, y: 190, w: 130, h: 20, color: '#3ee08a' }
         ],
         spikes: [
-          { x: 470, y: 308, w: 30, h: 12 },
-          { x: 140, y: 230, w: 30, h: 12 },
-          { x: 210, y: 70, w: 30, h: 12 },
-          { x: 320, y: 180, w: 40, h: 12 }
+          { x: 90, y: 308, w: 30, h: 12 }
         ],
         saws: [
-          { cx: 340, cy: 10, r: 13, axis: 'y', min: 0, max: 100, speed: 0.05, phase: 0 }
+          { cx: 290, cy: 307, r: 13, axis: 'x', min: 250, max: 330, speed: 0.045, phase: 0 }
         ],
         blades: [],
         mosquitoSwarms: [],
         leeches: [],
         pendulums: [
-          { anchorX: 485, anchorY: 0, length: 130, minAngle: -0.7, maxAngle: 0.7, speed: 0.035, phase: 0, r: 13 }
+          { anchorX: 520, anchorY: 20, length: 140, minAngle: -0.4, maxAngle: 0.4, speed: 0.035, phase: 0, r: 13 }
         ],
         ladders: [],
-        walls: [
-          { x: 190, y: 60, w: 20, h: 200 },
-          { x: 360, y: 0, w: 10, h: 210 },
-          { x: 460, y: 220, w: 10, h: 90 },
-          { x: 460, y: 130, w: 10, h: 90 }
-        ],
+        walls: [],
         slopes: [],
         ropes: [],
         water: [
-          { x: 110, y: 320, w: 360, h: 20 }
+          { x: 160, y: 320, w: 50, h: 20 },
+          { x: 360, y: 320, w: 110, h: 20 }
         ],
-        fishSpawners: [
-          { waterY: 320, r: 12, cruise: true, x: 190, rangeMin: 0, rangeMax: 300, speed: 0.02, phase: 0 }
-        ],
-        goal: { x: 570, y: 280, w: 30, h: 40 }
+        fishSpawners: [],
+        goal: { x: 565, y: 150, w: 30, h: 40 }
       },
       {
         name: 'FURESZEK',
@@ -629,10 +609,10 @@
           { x: 150, y: 138, w: 20, h: 12 }
         ],
         saws: [
-          { cx: 170, cy: 0, axis: 'y', r: 12, min: 160, max: 280, speed: 0.05, phase: 0 },
-          { cx: 0, cy: 190, axis: 'x', r: 11, min: 225, max: 265, speed: 0.06, phase: 0 },
-          { cx: 310, cy: 0, axis: 'y', r: 12, min: 40, max: 160, speed: 0.055, phase: 0.5 },
-          { cx: 0, cy: 70, axis: 'x', r: 13, min: 460, max: 560, speed: 0.05, phase: 0 }
+          { cx: 170, cy: 0, r: 12, axis: 'y', min: 160, max: 280, speed: 0.05, phase: 0 },
+          { cx: 0, cy: 190, r: 11, axis: 'x', min: 225, max: 265, speed: 0.06, phase: 0 },
+          { cx: 310, cy: 0, r: 12, axis: 'y', min: 40, max: 160, speed: 0.055, phase: 0.5 },
+          { cx: 0, cy: 70, r: 13, axis: 'x', min: 460, max: 560, speed: 0.05, phase: 0 }
         ],
         blades: [],
         mosquitoSwarms: [],
@@ -683,7 +663,7 @@
           { x: 380, y: 310, w: 220, h: 30 }
         ],
         fishSpawners: [
-          { cruise: true, x: 480, rangeMin: 395, rangeMax: 585, waterY: 312, r: 11, speed: 0.02, phase: 0 }
+          { waterY: 312, r: 11, cruise: true, x: 480, rangeMin: 395, rangeMax: 585, speed: 0.02, phase: 0 }
         ],
         goal: { x: 450, y: 90, w: 30, h: 40 }
       },
@@ -718,7 +698,7 @@
           { x: 140, y: 310, w: 300, h: 30 }
         ],
         fishSpawners: [
-          { rangeMin: 410, rangeMax: 410, waterY: 310, r: 12, jumpHeight: 75, jumpDuration: 40, timer: 90, cooldownMin: 90, cooldownMax: 210, active: false, phase: 0 }
+          { waterY: 310, r: 12, rangeMin: 410, rangeMax: 410, jumpHeight: 75, jumpDuration: 40, timer: 90, cooldownMin: 90, cooldownMax: 210, active: false, phase: 0 }
         ],
         goal: { x: 560, y: 260, w: 30, h: 40 }
       },
@@ -759,7 +739,7 @@
           { x: 100, y: 310, w: 120, h: 30 }
         ],
         fishSpawners: [
-          { rangeMin: 120, rangeMax: 200, waterY: 310, r: 11, jumpHeight: 65, jumpDuration: 36, timer: 70, cooldownMin: 80, cooldownMax: 190, active: false, phase: 0 }
+          { waterY: 310, r: 11, rangeMin: 120, rangeMax: 200, jumpHeight: 65, jumpDuration: 36, timer: 70, cooldownMin: 80, cooldownMax: 190, active: false, phase: 0 }
         ],
         goal: { x: 560, y: 200, w: 30, h: 40 }
       },
@@ -797,7 +777,7 @@
           { x: 420, y: 310, w: 70, h: 30 }
         ],
         fishSpawners: [
-          { spots: [135, 295, 455], waterY: 310, r: 12, jumpHeight: 90, jumpDuration: 42, timer: 60, cooldownMin: 70, cooldownMax: 100, active: false, phase: 0 }
+          { waterY: 310, r: 12, spots: [135, 295, 455], jumpHeight: 90, jumpDuration: 42, timer: 60, cooldownMin: 70, cooldownMax: 100, active: false, phase: 0 }
         ],
         goal: { x: 560, y: 260, w: 30, h: 40 }
       },
@@ -812,7 +792,7 @@
           { x: 500, y: 100, w: 100, h: 20, color: '#6ce0ff' }
         ],
         spikes: [
-          { x: 220, y: 218, w: 20, h: 12, follow: { platform: sharedP1, offsetX: 35, offsetY: -12 } }
+          { x: 285, y: 218, w: 20, h: 12, follow: { platform: sharedP1, offsetX: 35, offsetY: -12 } }
         ],
         saws: [
           { cx: 460, cy: 130, r: 13, axis: 'y', min: 100, max: 170, speed: 0.05, phase: 0 }
@@ -832,7 +812,7 @@
           { x: 110, y: 310, w: 490, h: 30 }
         ],
         fishSpawners: [
-          { cruise: true, x: 300, rangeMin: 150, rangeMax: 550, waterY: 312, r: 11, speed: 0.018, phase: 0 }
+          { waterY: 312, r: 11, cruise: true, x: 300, rangeMin: 150, rangeMax: 550, speed: 0.018, phase: 0 }
         ],
         goal: { x: 560, y: 60, w: 30, h: 40 }
       },
@@ -848,7 +828,7 @@
           { x: 540, y: 180, w: 60, h: 20, color: '#6ce0ff' }
         ],
         spikes: [
-          { x: 258, y: 288, w: 24, h: 12, follow: { platform: sharedP2, offsetX: 33, offsetY: -12 } },
+          { x: 263, y: 288, w: 24, h: 12, follow: { platform: sharedP2, offsetX: 33, offsetY: -12 } },
           { x: 430, y: 228, w: 30, h: 12 }
         ],
         saws: [
@@ -874,8 +854,8 @@
           { x: 90, y: 310, w: 510, h: 30 }
         ],
         fishSpawners: [
-          { cruise: true, x: 300, rangeMin: 100, rangeMax: 520, waterY: 312, r: 12, speed: 0.022, phase: 0 },
-          { spots: [240, 460], waterY: 310, r: 12, jumpHeight: 95, jumpDuration: 44, timer: 65, cooldownMin: 70, cooldownMax: 110, active: false, phase: 0 }
+          { waterY: 312, r: 12, cruise: true, x: 300, rangeMin: 100, rangeMax: 520, speed: 0.022, phase: 0 },
+          { waterY: 310, r: 12, spots: [240, 460], jumpHeight: 95, jumpDuration: 44, timer: 65, cooldownMin: 70, cooldownMax: 110, active: false, phase: 0 }
         ],
         goal: { x: 560, y: 140, w: 30, h: 40 }
       },
@@ -927,7 +907,7 @@
           { x: 500, y: 90, w: 100, h: 60, color: '#6ce0ff' }
         ],
         spikes: [
-          { x: 258, y: 288, w: 24, h: 12, follow: { platform: sharedP3, offsetX: 33, offsetY: -12 } },
+          { x: 233, y: 288, w: 24, h: 12, follow: { platform: sharedP3, offsetX: 33, offsetY: -12 } },
           { x: 370, y: 178, w: 30, h: 12 }
         ],
         saws: [
@@ -953,8 +933,8 @@
           { x: 90, y: 310, w: 510, h: 30 }
         ],
         fishSpawners: [
-          { spots: [135, 290], waterY: 310, r: 12, jumpHeight: 95, jumpDuration: 44, timer: 60, cooldownMin: 70, cooldownMax: 100, active: false, phase: 0 },
-          { cruise: true, x: 480, rangeMin: 400, rangeMax: 560, waterY: 312, r: 11, speed: 0.02, phase: 0 }
+          { waterY: 310, r: 12, spots: [135, 290], jumpHeight: 95, jumpDuration: 44, timer: 60, cooldownMin: 70, cooldownMax: 100, active: false, phase: 0 },
+          { waterY: 312, r: 11, cruise: true, x: 480, rangeMin: 400, rangeMax: 560, speed: 0.02, phase: 0 }
         ],
         goal: { x: 560, y: 50, w: 30, h: 40 }
       }
