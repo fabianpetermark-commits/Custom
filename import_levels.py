@@ -146,8 +146,9 @@ def normalize_levels(levels):
                 nsp.append({k: _rnd(v) for k, v in s.items()})
         nl['spikes'] = nsp
         for key in ('saws', 'pendulums', 'mosquitoSwarms', 'leeches', 'ladders',
-                    'walls', 'slopes', 'water'):
-            nl[key] = [{k: _rnd(v) for k, v in e.items()} for e in lv.get(key, [])]
+                    'walls', 'slopes', 'water', 'icicles', 'springs'):
+            nl[key] = [{k: _rnd(v) for k, v in e.items() if not k.startswith('_')}
+                       for e in lv.get(key, [])]
         nrp = []
         for r in lv.get('ropes', []):
             nrp.append({'anchorX': _rnd(r['anchorX']), 'anchorY': _rnd(r['anchorY']),
@@ -210,7 +211,7 @@ ENTITY_SPECS = {
         ('color', 'string'), ('moveAxis', 'enum', 'MoveAxis'),
         ('moveMin', 'float'), ('moveMax', 'float'), ('moveSpeed', 'float'), ('movePhase', 'float'),
         ('sinkMaxY', 'float'), ('sinkSpeed', 'float'),
-        ('tiltMaxAngle', 'float'), ('tiltSpeed', 'float')]),
+        ('tiltMaxAngle', 'float'), ('tiltSpeed', 'float'), ('ice', 'bool')]),
     'Spike': (40, 12, True, '#9C1524', [('followRef', 'ref')]),
     'Saw': (26, 26, False, '#C9C9D4', [
         ('r', 'float'), ('axis', 'enum', 'SawAxis'),
@@ -232,6 +233,8 @@ ENTITY_SPECS = {
         ('r', 'float'), ('jumpHeight', 'float'), ('jumpDuration', 'float'),
         ('timer', 'float'), ('cooldownMin', 'float'), ('cooldownMax', 'float'),
         ('rangeMin', 'float'), ('rangeMax', 'float'), ('speed', 'float')]),
+    'Icicle': (12, 24, True, '#BEE0FF', []),
+    'Spring': (24, 12, True, '#C83240', [('power', 'float')]),
     'Start': (18, 26, False, '#F4F1E6', [('followRef', 'ref')]),
     'Goal': (30, 40, True, '#FFE066', []),
 }
@@ -241,7 +244,7 @@ ENUMS = {
     'SawAxis': ['x', 'y'],
     'SlopeDir': ['up', 'down'],
     'FishVariant': ['spots', 'range', 'cruise'],
-    'Theme': ['dungeon', 'rainforest'],
+    'Theme': ['dungeon', 'rainforest', 'ice'],
 }
 
 
@@ -360,7 +363,8 @@ def export_ldtk(levels):
         for p in lv.get('platforms', []):
             fields = {'color': p.get('color', '#3ee08a'), 'moveAxis': 'none',
                       'moveMin': 0, 'moveMax': 0, 'moveSpeed': 0, 'movePhase': 0,
-                      'sinkMaxY': 0, 'sinkSpeed': 0, 'tiltMaxAngle': 0, 'tiltSpeed': 0}
+                      'sinkMaxY': 0, 'sinkSpeed': 0, 'tiltMaxAngle': 0, 'tiltSpeed': 0,
+                      'ice': bool(p.get('ice'))}
             if p.get('move'):
                 mv = p['move']
                 fields.update({'moveAxis': mv['axis'], 'moveMin': mv['min'],
@@ -406,6 +410,10 @@ def export_ldtk(levels):
                 {'length': r['length'], 'vineSkin': bool(r.get('vineSkin'))})
         for w in lv.get('water', []):
             add('Water', w['x'], w['y'], w['w'], w['h'], {})
+        for ic in lv.get('icicles', []):
+            add('Icicle', ic['x'], ic['y'], ic['w'], ic['h'], {})
+        for sp in lv.get('springs', []):
+            add('Spring', sp['x'], sp['y'], sp['w'], sp['h'], {'power': sp.get('power', 11)})
         for f in lv.get('fishSpawners', []):
             if f.get('cruise'):
                 variant, ex = 'cruise', f.get('x', (f['rangeMin'] + f['rangeMax']) / 2)
@@ -505,7 +513,8 @@ def read_ldtk(path):
               'platforms': [], 'spikes': [], 'saws': [], 'blades': [],
               'mosquitoSwarms': [], 'leeches': [], 'pendulums': [],
               'ladders': [], 'walls': [], 'slopes': [], 'ropes': [],
-              'water': [], 'fishSpawners': [], 'start': None, 'goal': None}
+              'water': [], 'icicles': [], 'springs': [],
+              'fishSpawners': [], 'start': None, 'goal': None}
         plat_by_iid = {}
         for i in insts:
             if i['__identifier'] != 'Platform':
@@ -522,6 +531,8 @@ def read_ldtk(path):
                              'speed': f['sinkSpeed'], 'active': False}
             if f.get('tiltSpeed'):
                 p['tilt'] = {'maxAngle': f.get('tiltMaxAngle') or 0.1, 'speed': f['tiltSpeed']}
+            if f.get('ice'):
+                p['ice'] = True
             lv['platforms'].append(p)
             plat_by_iid[i['iid']] = p
         for i in insts:
@@ -574,6 +585,11 @@ def read_ldtk(path):
                                     'vineSkin': bool(f.get('vineSkin'))})
             elif ident == 'Water':
                 lv['water'].append({'x': x, 'y': y, 'w': w, 'h': h})
+            elif ident == 'Icicle':
+                lv['icicles'].append({'x': x, 'y': y, 'w': w, 'h': h})
+            elif ident == 'Spring':
+                lv['springs'].append({'x': x, 'y': y, 'w': w, 'h': h,
+                                      'power': f.get('power') or 11})
             elif ident == 'FishSpawner':
                 variant = f.get('variant') or 'range'
                 fs = {'waterY': y, 'r': f.get('r') or 12}
@@ -673,7 +689,7 @@ def generate_js(levels):
         lines.append('        start: { %s },' % st_inner)
         for key in ('platforms', 'spikes', 'saws', 'blades', 'mosquitoSwarms',
                     'leeches', 'pendulums', 'ladders', 'walls', 'slopes',
-                    'ropes', 'water', 'fishSpawners'):
+                    'ropes', 'water', 'icicles', 'springs', 'fishSpawners'):
             items = lv.get(key, [])
             if key == 'ropes':
                 items = [dict(r, angle=0, angVel=0) for r in items]

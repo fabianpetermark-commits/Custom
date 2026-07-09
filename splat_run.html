@@ -588,6 +588,8 @@
           { x: 160, y: 320, w: 50, h: 20 },
           { x: 360, y: 320, w: 110, h: 20 }
         ],
+        icicles: [],
+        springs: [],
         fishSpawners: [],
         goal: { x: 565, y: 150, w: 30, h: 40 }
       },
@@ -628,6 +630,8 @@
         slopes: [],
         ropes: [],
         water: [],
+        icicles: [],
+        springs: [],
         fishSpawners: [],
         goal: { x: 540, y: 60, w: 30, h: 40 }
       },
@@ -662,6 +666,8 @@
         water: [
           { x: 380, y: 310, w: 220, h: 30 }
         ],
+        icicles: [],
+        springs: [],
         fishSpawners: [
           { waterY: 312, r: 11, cruise: true, x: 480, rangeMin: 395, rangeMax: 585, speed: 0.02, phase: 0 }
         ],
@@ -697,6 +703,8 @@
         water: [
           { x: 140, y: 310, w: 300, h: 30 }
         ],
+        icicles: [],
+        springs: [],
         fishSpawners: [
           { waterY: 310, r: 12, rangeMin: 410, rangeMax: 410, jumpHeight: 75, jumpDuration: 40, timer: 90, cooldownMin: 90, cooldownMax: 210, active: false, phase: 0 }
         ],
@@ -738,6 +746,8 @@
         water: [
           { x: 100, y: 310, w: 120, h: 30 }
         ],
+        icicles: [],
+        springs: [],
         fishSpawners: [
           { waterY: 310, r: 11, rangeMin: 120, rangeMax: 200, jumpHeight: 65, jumpDuration: 36, timer: 70, cooldownMin: 80, cooldownMax: 190, active: false, phase: 0 }
         ],
@@ -774,6 +784,8 @@
           { x: 260, y: 310, w: 70, h: 30 },
           { x: 420, y: 310, w: 70, h: 30 }
         ],
+        icicles: [],
+        springs: [],
         fishSpawners: [
           { waterY: 310, r: 12, spots: [135, 295, 455], jumpHeight: 90, jumpDuration: 42, timer: 60, cooldownMin: 110, cooldownMax: 170, active: false, phase: 0 }
         ],
@@ -806,6 +818,8 @@
         water: [
           { x: 110, y: 310, w: 490, h: 30 }
         ],
+        icicles: [],
+        springs: [],
         fishSpawners: [
           { waterY: 312, r: 11, cruise: true, x: 300, rangeMin: 150, rangeMax: 550, speed: 0.018, phase: 0 }
         ],
@@ -846,6 +860,8 @@
         water: [
           { x: 90, y: 310, w: 510, h: 30 }
         ],
+        icicles: [],
+        springs: [],
         fishSpawners: [
           { waterY: 312, r: 12, cruise: true, x: 300, rangeMin: 100, rangeMax: 520, speed: 0.022, phase: 0 },
           { waterY: 310, r: 12, spots: [240, 460], jumpHeight: 95, jumpDuration: 44, timer: 65, cooldownMin: 100, cooldownMax: 160, active: false, phase: 0 }
@@ -883,6 +899,8 @@
         water: [
           { x: 140, y: 310, w: 460, h: 30 }
         ],
+        icicles: [],
+        springs: [],
         fishSpawners: [],
         goal: { x: 540, y: -20, w: 30, h: 40 }
       },
@@ -921,11 +939,193 @@
         water: [
           { x: 90, y: 310, w: 510, h: 30 }
         ],
+        icicles: [],
+        springs: [],
         fishSpawners: [
           { waterY: 310, r: 12, spots: [135, 290], jumpHeight: 95, jumpDuration: 44, timer: 60, cooldownMin: 90, cooldownMax: 150, active: false, phase: 0 },
           { waterY: 312, r: 11, cruise: true, x: 480, rangeMin: 400, rangeMax: 560, speed: 0.02, phase: 0 }
         ],
         goal: { x: 560, y: 50, w: 30, h: 40 }
+      },
+      {
+        name: 'HOMEZO',
+        theme: 'ice',
+        start: { x: 20, y: 274 },
+        platforms: [
+          { x: 0, y: 300, w: 140, h: 20, color: '#8a99aa' },
+          { x: 200, y: 300, w: 180, h: 20, color: '#9fd4ee', ice: true },
+          { x: 440, y: 300, w: 160, h: 20, color: '#8a99aa' },
+          { x: 250, y: 150, w: 80, h: 16, color: '#8a99aa' },
+          { x: 520, y: 190, w: 80, h: 16, color: '#9fd4ee', ice: true }
+        ],
+        spikes: [],
+        saws: [],
+        blades: [],
+        mosquitoSwarms: [],
+        leeches: [],
+        pendulums: [],
+        ladders: [],
+        walls: [],
+        slopes: [],
+        ropes: [],
+        water: [
+          { x: 140, y: 310, w: 60, h: 30 },
+          { x: 380, y: 310, w: 60, h: 30 }
+        ],
+        icicles: [
+          { x: 284, y: 166, w: 12, h: 24 }
+        ],
+        springs: [
+          { x: 500, y: 288, w: 24, h: 12, power: 12 }
+        ],
+        fishSpawners: [],
+        goal: { x: 560, y: 260, w: 30, h: 40 }
+      },
+      {
+        name: 'JEGPARKANY',
+        theme: 'ice',
+        start: { x: 20, y: 274 },
+        platforms: [
+          { x: 0, y: 300, w: 120, h: 20, color: '#8a99aa' },
+          { x: 170, y: 260, w: 90, h: 16, color: '#9fd4ee', ice: true },
+          { x: 310, y: 220, w: 90, h: 16, color: '#9fd4ee', ice: true },
+          { x: 450, y: 260, w: 90, h: 16, color: '#9fd4ee', ice: true },
+          { x: 550, y: 300, w: 50, h: 20, color: '#8a99aa' },
+          { x: 430, y: 120, w: 70, h: 16, color: '#8a99aa' }
+        ],
+        spikes: [
+          { x: 310, y: 208, w: 30, h: 12 }
+        ],
+        saws: [],
+        blades: [],
+        mosquitoSwarms: [],
+        leeches: [],
+        pendulums: [],
+        ladders: [],
+        walls: [],
+        slopes: [],
+        ropes: [],
+        water: [
+          { x: 120, y: 310, w: 430, h: 30 }
+        ],
+        icicles: [
+          { x: 458, y: 136, w: 12, h: 24 }
+        ],
+        springs: [],
+        fishSpawners: [],
+        goal: { x: 560, y: 260, w: 30, h: 40 }
+      },
+      {
+        name: 'JEGCSAP_FOLYOSO',
+        theme: 'ice',
+        start: { x: 20, y: 274 },
+        platforms: [
+          { x: 0, y: 300, w: 150, h: 20, color: '#8a99aa' },
+          { x: 210, y: 300, w: 150, h: 20, color: '#9fd4ee', ice: true },
+          { x: 420, y: 300, w: 180, h: 20, color: '#8a99aa' },
+          { x: 140, y: 150, w: 340, h: 16, color: '#8a99aa' }
+        ],
+        spikes: [
+          { x: 500, y: 288, w: 30, h: 12 }
+        ],
+        saws: [],
+        blades: [],
+        mosquitoSwarms: [],
+        leeches: [],
+        pendulums: [],
+        ladders: [],
+        walls: [],
+        slopes: [],
+        ropes: [],
+        water: [
+          { x: 150, y: 310, w: 60, h: 30 },
+          { x: 360, y: 310, w: 60, h: 30 }
+        ],
+        icicles: [
+          { x: 114, y: 166, w: 12, h: 24 },
+          { x: 244, y: 166, w: 12, h: 24 },
+          { x: 304, y: 166, w: 12, h: 24 },
+          { x: 434, y: 166, w: 12, h: 24 }
+        ],
+        springs: [],
+        fishSpawners: [],
+        goal: { x: 560, y: 260, w: 30, h: 40 }
+      },
+      {
+        name: 'FAGYOS_TORONY',
+        theme: 'ice',
+        start: { x: 20, y: 274 },
+        platforms: [
+          { x: 0, y: 300, w: 240, h: 20, color: '#8a99aa' },
+          { x: 60, y: 180, w: 120, h: 16, color: '#8a99aa' },
+          { x: 140, y: 80, w: 140, h: 16, color: '#9fd4ee', ice: true },
+          { x: 340, y: 80, w: 120, h: 16, color: '#9fd4ee', ice: true },
+          { x: 500, y: 200, w: 100, h: 16, color: '#8a99aa' }
+        ],
+        spikes: [],
+        saws: [],
+        blades: [],
+        mosquitoSwarms: [],
+        leeches: [],
+        pendulums: [
+          { anchorX: 400, anchorY: 0, length: 60, minAngle: -0.5, maxAngle: 0.5, speed: 0.04, phase: 0, r: 12 }
+        ],
+        ladders: [],
+        walls: [],
+        slopes: [],
+        ropes: [],
+        water: [
+          { x: 240, y: 310, w: 360, h: 30 }
+        ],
+        icicles: [
+          { x: 210, y: 96, w: 12, h: 24 }
+        ],
+        springs: [
+          { x: 180, y: 288, w: 24, h: 12, power: 12 },
+          { x: 80, y: 168, w: 24, h: 12, power: 12 }
+        ],
+        fishSpawners: [],
+        goal: { x: 560, y: 160, w: 30, h: 40 }
+      },
+      {
+        name: 'ZUZMARA_FINALE',
+        theme: 'ice',
+        start: { x: 20, y: 274 },
+        platforms: [
+          { x: 0, y: 300, w: 100, h: 20, color: '#8a99aa' },
+          { x: 140, y: 300, w: 90, h: 36, color: '#9fd4ee', ice: true, move: { axis: 'x', min: 140, max: 230, speed: 0.025, phase: 0 } },
+          { x: 310, y: 300, w: 120, h: 40, color: '#9fd4ee', ice: true },
+          { x: 470, y: 220, w: 130, h: 16, color: '#9fd4ee', ice: true },
+          { x: 460, y: 100, w: 80, h: 16, color: '#8a99aa' }
+        ],
+        spikes: [
+          { x: 365, y: 288, w: 30, h: 12 }
+        ],
+        saws: [
+          { cx: 560, cy: 0, r: 12, axis: 'y', min: 140, max: 260, speed: 0.05, phase: 0 }
+        ],
+        blades: [],
+        mosquitoSwarms: [],
+        leeches: [],
+        pendulums: [],
+        ladders: [],
+        walls: [],
+        slopes: [],
+        ropes: [],
+        water: [
+          { x: 100, y: 310, w: 500, h: 30 }
+        ],
+        icicles: [
+          { x: 480, y: 116, w: 12, h: 24 },
+          { x: 516, y: 116, w: 12, h: 24 }
+        ],
+        springs: [
+          { x: 318, y: 288, w: 24, h: 12, power: 12 }
+        ],
+        fishSpawners: [
+          { waterY: 310, r: 12, spots: [120, 270], jumpHeight: 85, jumpDuration: 42, timer: 70, cooldownMin: 90, cooldownMax: 150, active: false, phase: 0 }
+        ],
+        goal: { x: 560, y: 180, w: 30, h: 40 }
       }
     ];
     // === LDTK GENERATED LEVELS END ===
@@ -972,7 +1172,11 @@
     level = LEVELS[idx];
     levelEl.textContent = 'PALYA ' + (idx + 1) + '/' + LEVELS.length;
     frameCount = 0;
+    if (!level.icicles) level.icicles = [];
+    if (!level.springs) level.springs = [];
     level._solidRects = level.platforms.concat(level.spikes).concat(level.ladders).concat(level.walls);
+    resetIcicles();
+    level.springs.forEach(function(sp) { sp._anim = 0; });
     updateMovingPlatforms();
     syncFollowSpikes();
     resetPlayer();
@@ -1000,6 +1204,16 @@
       dashUsed: false, dashFrames: 0, dashDir: 1,
       slowUntilFrame: 0
     };
+    if (level && level.icicles) resetIcicles();
+  }
+
+  function resetIcicles() {
+    level.icicles.forEach(function(ic) {
+      ic._st = 'idle';
+      ic._fy = ic.y;
+      ic._vy = 0;
+      ic._t = 0;
+    });
   }
 
   keys = { left: false, right: false, up: false, down: false, jumpHeld: false };
@@ -1016,7 +1230,9 @@
     elapsed = 0;
     transitioning = false;
     allDone = false;
-    loadLevel(0);
+    var hashMatch = (location.hash || '').match(/palya=(\d+)/);
+    var startIdx = hashMatch ? Math.min(LEVELS.length - 1, Math.max(0, parseInt(hashMatch[1], 10) - 1)) : 0;
+    loadLevel(startIdx);
     beginLoop();
     startMusic();
   }
@@ -1123,6 +1339,11 @@
         rects.push({ x: fx - f.r, y: fy - f.r, w: f.r * 2, h: f.r * 2 });
       }
     });
+    level.icicles.forEach(function(ic) {
+      if (ic._st === 'gone') return;
+      var yy = ic._st === 'fall' ? ic._fy : ic.y;
+      rects.push({ x: ic.x + 2, y: yy + 2, w: ic.w - 4, h: ic.h - 2 });
+    });
     return rects;
   }
 
@@ -1156,6 +1377,49 @@
       else if (p.y > targetY) p.y = Math.max(targetY, p.y - p.sink.speed);
       p._deltaY = (p._deltaY || 0) + (p.y - oldY);
     });
+  }
+
+  function updateIcicles() {
+    level.icicles.forEach(function(ic) {
+      if (ic._st === 'idle') {
+        var pcx = player.x + player.w / 2;
+        var icx = ic.x + ic.w / 2;
+        if (Math.abs(pcx - icx) < ic.w / 2 + 32 && player.y + player.h > ic.y + ic.h) {
+          ic._st = 'shake';
+          ic._t = 0;
+        }
+      } else if (ic._st === 'shake') {
+        ic._t += 1;
+        if (ic._t >= 18) { ic._st = 'fall'; ic._vy = 0; }
+      } else if (ic._st === 'fall') {
+        ic._vy = Math.min(10, ic._vy + 0.5);
+        ic._fy += ic._vy;
+        var solids = level._solidRects;
+        for (var i = 0; i < solids.length; i++) {
+          var r = solids[i];
+          if (ic.x < r.x + r.w && ic.x + ic.w > r.x && ic._fy < r.y + r.h && ic._fy + ic.h > r.y) {
+            ic._st = 'gone';
+            spawnIceShards(ic.x + ic.w / 2, ic._fy + ic.h);
+            break;
+          }
+        }
+        if (ic._st === 'fall' && ic._fy > H) ic._st = 'gone';
+      }
+    });
+  }
+
+  function spawnIceShards(cx, cy) {
+    for (var i = 0; i < 7; i++) {
+      particles.push({
+        x: cx, y: cy - 3,
+        vx: (Math.random() - 0.5) * 4,
+        vy: -Math.random() * 2.5 - 0.5,
+        r: 1.5 + Math.random() * 1.5,
+        life: 26 + Math.random() * 12,
+        rgb: '205,232,255',
+        shortLived: true
+      });
+    }
   }
 
   function updateFishSpawners() {
@@ -1270,6 +1534,31 @@
     });
   }
 
+  function springBounce() {
+    level.springs.forEach(function(sp) {
+      if (player.vy < 0) return;
+      var xOverlap = player.x + player.w > sp.x + 2 && player.x < sp.x + sp.w - 2;
+      if (!xOverlap) return;
+      var bottom = player.y + player.h;
+      if (bottom >= sp.y && bottom <= sp.y + sp.h + Math.max(6, player.vy + 1)) {
+        player.y = sp.y - player.h;
+        player.vy = -(sp.power || 11);
+        player.onGround = false;
+        player.ridingPlatform = null;
+        player.isJumping = false;
+        player.jumpTime = 0;
+        player.jumpsUsed = 1;
+        player.dashUsed = false;
+        sp._anim = 12;
+        if (audioCtx) {
+          var t0 = audioCtx.currentTime;
+          playNote(180, t0, 0.08, 'square', 0.08, 900);
+          playNote(360, t0 + 0.06, 0.12, 'square', 0.07, 1400);
+        }
+      }
+    });
+  }
+
   function startJump() {
     player.vy = JUMP_MIN_FORCE;
     player.isJumping = true;
@@ -1361,6 +1650,7 @@
     updateMovingPlatforms();
     updateSinkingPlatforms();
     updateFishSpawners();
+    updateIcicles();
 
     var hazardRects = currentHazardRects();
 
@@ -1429,6 +1719,10 @@
           player.vx = DASH_SPEED * player.dashDir;
           player.vy = 0;
           player.dashFrames -= 1;
+        } else if (player.onGround && player.ridingPlatform && player.ridingPlatform.ice) {
+          if (keys.left) { player.vx = Math.max(player.vx - 0.22, -effMoveSpeed); player.facing = -1; }
+          else if (keys.right) { player.vx = Math.min(player.vx + 0.22, effMoveSpeed); player.facing = 1; }
+          else player.vx *= 0.965;
         } else if (keys.left) { player.vx = -effMoveSpeed; player.facing = -1; }
         else if (keys.right) { player.vx = effMoveSpeed; player.facing = 1; }
         else player.vx = 0;
@@ -1457,6 +1751,7 @@
         platformCollision();
         slopeCollision();
         wallCollision();
+        springBounce();
 
         var wallZone = (!player.onGround && frameCount > (player.wallJumpLockUntil || 0)) ? wallOverlap() : null;
         player.onWall = null;
@@ -1519,7 +1814,7 @@
           pt.landed = true;
           pt.vx = 0;
           pt.vy = 0;
-          pt.life = 420;
+          pt.life = pt.shortLived ? 60 : 420;
           pt.followRect = hitRect;
           pt.offsetX = pt.x - hitRect.x;
           pt.offsetY = pt.y - hitRect.y;
@@ -2100,6 +2395,121 @@
     }
   }
 
+  function drawIcicle(ic) {
+    if (ic._st === 'gone') return;
+    var yy = ic._st === 'fall' ? ic._fy : ic.y;
+    var wobble = ic._st === 'shake' ? Math.sin(ic._t * 1.3) * 1.6 : 0;
+    var cx = ic.x + ic.w / 2 + wobble;
+    ctx.fillStyle = 'rgba(198,228,252,0.92)';
+    ctx.beginPath();
+    ctx.moveTo(ic.x + wobble, yy);
+    ctx.lineTo(ic.x + ic.w + wobble, yy);
+    ctx.lineTo(cx + ic.w * 0.12, yy + ic.h * 0.55);
+    ctx.lineTo(cx, yy + ic.h);
+    ctx.lineTo(cx - ic.w * 0.12, yy + ic.h * 0.55);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(120,170,215,0.9)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,0.75)';
+    ctx.beginPath();
+    ctx.moveTo(cx - ic.w * 0.2, yy + 2);
+    ctx.lineTo(cx - ic.w * 0.08, yy + ic.h * 0.6);
+    ctx.stroke();
+  }
+
+  function drawSpring(sp) {
+    var compress = sp._anim > 0 ? sp._anim / 12 : 0;
+    if (sp._anim > 0) sp._anim -= 1;
+    var padH = 4;
+    var bodyH = (sp.h - padH) * (1 - compress * 0.5);
+    var topY = sp.y + sp.h - padH - bodyH;
+    ctx.strokeStyle = '#8a95a5';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    var coils = 3;
+    for (var i = 0; i <= coils; i++) {
+      var cy2 = sp.y + sp.h - (bodyH * i / coils);
+      var cx2 = sp.x + (i % 2 === 0 ? 4 : sp.w - 4);
+      if (i === 0) ctx.moveTo(sp.x + sp.w / 2, sp.y + sp.h);
+      ctx.lineTo(cx2, cy2);
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#c8323e';
+    ctx.fillRect(sp.x, topY - padH, sp.w, padH + 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.fillRect(sp.x, topY - padH, sp.w, 2);
+    ctx.fillStyle = '#5a6472';
+    ctx.fillRect(sp.x - 2, sp.y + sp.h - 2, sp.w + 4, 3);
+  }
+
+  function drawIceCrystal(tx, ty) {
+    var pulse = 0.6 + 0.25 * Math.sin(frameCount * 0.05 + tx);
+    var glow = ctx.createRadialGradient(tx, ty, 2, tx, ty, 26 + pulse * 6);
+    glow.addColorStop(0, 'rgba(150,220,255,' + (0.35 * pulse) + ')');
+    glow.addColorStop(1, 'rgba(100,180,255,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(tx, ty, 26 + pulse * 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(205,240,255,0.95)';
+    ctx.beginPath();
+    ctx.moveTo(tx, ty - 9);
+    ctx.lineTo(tx + 5, ty);
+    ctx.lineTo(tx, ty + 9);
+    ctx.lineTo(tx - 5, ty);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(120,180,230,0.8)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  function drawIceBackground() {
+    var grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, '#0d1626');
+    grad.addColorStop(0.45, '#14263e');
+    grad.addColorStop(1, '#0a1220');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    var blockW = 56, blockH = 30;
+    var rows = Math.ceil(H / blockH) + 1;
+    for (var row = 0; row < rows; row++) {
+      var offset = (row % 2 === 0) ? 0 : blockW / 2;
+      for (var bx = -blockW; bx < W + blockW; bx += blockW) {
+        var x = bx + offset;
+        var seed = Math.sin(row * 12.9898 + x * 78.233) * 43758.5453;
+        var shade = seed - Math.floor(seed);
+        var b = 30 + shade * 14;
+        ctx.fillStyle = 'rgb(' + Math.round(b * 0.55) + ',' + Math.round(b + 14) + ',' + Math.round(b + 34) + ')';
+        ctx.fillRect(x + 1, row * blockH + 1, blockW - 2, blockH - 2);
+        ctx.fillStyle = 'rgba(190,230,255,0.06)';
+        ctx.fillRect(x + 1, row * blockH + 1, blockW - 2, 4);
+      }
+    }
+
+    for (var i = 0; i < 34; i++) {
+      var speed = 0.35 + (i % 3) * 0.22;
+      var fy = ((i * 61.7 + frameCount * speed) % (H + 12)) - 6;
+      var fx = ((i * 137.5) % W) + Math.sin(frameCount * 0.02 + i * 1.7) * 9;
+      var fr = 1 + (i % 3) * 0.55;
+      ctx.fillStyle = 'rgba(225,240,255,' + (0.25 + (i % 4) * 0.12) + ')';
+      ctx.beginPath();
+      ctx.arc(fx, fy, fr, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    var vgrad = ctx.createLinearGradient(0, 0, 0, H);
+    vgrad.addColorStop(0, 'rgba(0,0,10,0.5)');
+    vgrad.addColorStop(0.3, 'rgba(0,0,10,0.1)');
+    vgrad.addColorStop(0.75, 'rgba(0,0,10,0.15)');
+    vgrad.addColorStop(1, 'rgba(0,0,10,0.55)');
+    ctx.fillStyle = vgrad;
+    ctx.fillRect(0, 0, W, H);
+  }
+
   function drawSaw(s) {
     var cx = s._cx !== undefined ? s._cx : s.cx;
     var cy = s._cy !== undefined ? s._cy : s.cy;
@@ -2322,9 +2732,23 @@
 
   function drawWater(w) {
     var swamp = level.theme === 'rainforest';
-    ctx.fillStyle = swamp ? '#3a3a1c' : '#1a4a6e';
+    var icy = level.theme === 'ice';
+    ctx.fillStyle = swamp ? '#3a3a1c' : (icy ? '#0f3050' : '#1a4a6e');
     ctx.fillRect(w.x, w.y, w.w, w.h);
-    ctx.strokeStyle = swamp ? 'rgba(150,170,90,0.5)' : 'rgba(140,210,240,0.6)';
+    if (icy) {
+      ctx.fillStyle = 'rgba(215,240,255,0.55)';
+      var floeCount = Math.max(2, Math.floor(w.w / 60));
+      for (var fI = 0; fI < floeCount; fI++) {
+        var fseed = Math.sin(fI * 73.3 + w.x) * 43758.5453;
+        var ffrac = fseed - Math.floor(fseed);
+        var flx = w.x + 18 + fI * 60 + ffrac * 22;
+        var fly = w.y + 5 + Math.sin(frameCount * 0.025 + fI) * 1.5;
+        ctx.beginPath();
+        ctx.ellipse(flx, fly, 11, 3.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.strokeStyle = swamp ? 'rgba(150,170,90,0.5)' : (icy ? 'rgba(170,220,255,0.5)' : 'rgba(140,210,240,0.6)');
     ctx.lineWidth = 2;
     for (var i = 0; i < 3; i++) {
       var wy = w.y + 6 + i * 8 + Math.sin(frameCount * 0.06 + i) * 2;
@@ -2794,6 +3218,44 @@
       return;
     }
 
+    if (level.theme === 'ice') {
+      if (p.ice) {
+        var iceR = 118 + seed * 22, iceG = 176 + seed * 18, iceB = 216 + seed * 16;
+        ctx.fillStyle = 'rgb(' + Math.round(iceR) + ',' + Math.round(iceG) + ',' + Math.round(iceB) + ')';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+        ctx.fillStyle = 'rgba(255,255,255,0.55)';
+        ctx.fillRect(p.x, p.y, p.w, 3);
+        ctx.fillStyle = 'rgba(30,70,110,0.35)';
+        ctx.fillRect(p.x, p.y + p.h - 4, p.w, 4);
+        ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+        ctx.lineWidth = 1.5;
+        var sheenCount = 1 + Math.floor(seed * 3);
+        for (var sh = 0; sh < sheenCount; sh++) {
+          var sx0 = p.x + ((sh * 71 + seed * 431) % Math.max(1, p.w - 22)) + 4;
+          ctx.beginPath();
+          ctx.moveTo(sx0, p.y + p.h - 4);
+          ctx.lineTo(sx0 + 14, p.y + 3);
+          ctx.stroke();
+        }
+      } else {
+        var rockB = 66 + seed * 14;
+        ctx.fillStyle = 'rgb(' + Math.round(rockB * 0.82) + ',' + Math.round(rockB * 0.9) + ',' + Math.round(rockB) + ')';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+        ctx.fillStyle = 'rgba(235,245,255,0.92)';
+        ctx.fillRect(p.x, p.y, p.w, 5);
+        ctx.fillStyle = 'rgba(0,0,20,0.3)';
+        ctx.fillRect(p.x, p.y + p.h - 5, p.w, 5);
+        ctx.fillStyle = 'rgba(0,0,20,0.18)';
+        var icrackCount = 2 + Math.floor(seed * 4);
+        for (var ic2 = 0; ic2 < icrackCount; ic2++) {
+          var icx2 = p.x + ((ic2 * 43 + seed * 887) % Math.max(1, p.w - 5)) + 2;
+          var icy2 = p.y + 8 + ((ic2 * 59 + seed * 593) % Math.max(1, p.h - 13));
+          ctx.fillRect(icx2, icy2, 3 + (ic2 % 2), 1.5);
+        }
+      }
+      return;
+    }
+
     var baseR = 88 + seed * 22, baseG = 72 + seed * 16, baseB = 54 + seed * 10;
     ctx.fillStyle = 'rgb(' + Math.round(baseR) + ',' + Math.round(baseG) + ',' + Math.round(baseB) + ')';
     ctx.fillRect(p.x, p.y, p.w, p.h);
@@ -2827,6 +3289,9 @@
     if (level.theme === 'rainforest') {
       drawRainforestBackground();
       FIREFLY_POSITIONS.forEach(function(t) { drawFirefly(t.x, t.y); });
+    } else if (level.theme === 'ice') {
+      drawIceBackground();
+      TORCH_POSITIONS.forEach(function(t) { drawIceCrystal(t.x, t.y); });
     } else {
       drawDungeonBackground();
       TORCH_POSITIONS.forEach(function(t) { drawTorch(t.x, t.y); });
@@ -2840,6 +3305,8 @@
 
     level.walls.forEach(drawWall);
     level.ladders.forEach(drawLadder);
+    level.springs.forEach(drawSpring);
+    level.icicles.forEach(drawIcicle);
     level.spikes.forEach(drawSpikeShape);
     level.saws.forEach(drawSaw);
     level.blades.forEach(drawBlade);
@@ -2860,7 +3327,7 @@
 
     particles.forEach(function(pt) {
       var alpha = pt.landed ? Math.max(0, Math.min(0.75, 0.75 * pt.life / 120)) : Math.max(0, pt.life / 50);
-      ctx.fillStyle = 'rgba(220,20,40,' + alpha + ')';
+      ctx.fillStyle = 'rgba(' + (pt.rgb || '220,20,40') + ',' + alpha + ')';
       ctx.beginPath();
       if (pt.landed) {
         ctx.ellipse(pt.x, pt.y, pt.r * 1.1, pt.r * 0.55, 0, 0, Math.PI * 2);

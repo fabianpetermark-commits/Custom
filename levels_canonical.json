@@ -7,6 +7,7 @@
    "x": 565,
    "y": 150
   },
+  "icicles": [],
   "ladders": [],
   "leeches": [],
   "mosquitoSwarms": [],
@@ -68,6 +69,7 @@
     "y": 308
    }
   ],
+  "springs": [],
   "start": {
    "x": 20,
    "y": 294
@@ -97,6 +99,7 @@
    "x": 540,
    "y": 60
   },
+  "icicles": [],
   "ladders": [
    {
     "h": 150,
@@ -219,6 +222,7 @@
     "y": 138
    }
   ],
+  "springs": [],
   "start": {
    "x": 20,
    "y": 294
@@ -258,6 +262,7 @@
    "x": 450,
    "y": 90
   },
+  "icicles": [],
   "ladders": [
    {
     "h": 240,
@@ -319,6 +324,7 @@
     "y": 118
    }
   ],
+  "springs": [],
   "start": {
    "x": 20,
    "y": 274
@@ -362,6 +368,7 @@
    "x": 560,
    "y": 260
   },
+  "icicles": [],
   "ladders": [],
   "leeches": [],
   "mosquitoSwarms": [],
@@ -441,6 +448,7 @@
     "w": 24
    }
   ],
+  "springs": [],
   "start": {
    "x": 20,
    "y": 274
@@ -477,6 +485,7 @@
    "x": 560,
    "y": 200
   },
+  "icicles": [],
   "ladders": [
    {
     "h": 120,
@@ -568,6 +577,7 @@
     "y": 88
    }
   ],
+  "springs": [],
   "start": {
    "x": 20,
    "y": 274
@@ -620,6 +630,7 @@
    "x": 560,
    "y": 260
   },
+  "icicles": [],
   "ladders": [],
   "leeches": [],
   "mosquitoSwarms": [],
@@ -690,6 +701,7 @@
     "y": 288
    }
   ],
+  "springs": [],
   "start": {
    "x": 20,
    "y": 274
@@ -735,6 +747,7 @@
    "x": 560,
    "y": 60
   },
+  "icicles": [],
   "ladders": [],
   "leeches": [],
   "mosquitoSwarms": [],
@@ -804,6 +817,7 @@
     "w": 20
    }
   ],
+  "springs": [],
   "start": {
    "x": 20,
    "y": 274
@@ -851,6 +865,7 @@
    "x": 560,
    "y": 140
   },
+  "icicles": [],
   "ladders": [],
   "leeches": [
    {
@@ -955,6 +970,7 @@
     "y": 228
    }
   ],
+  "springs": [],
   "start": {
    "x": 20,
    "y": 274
@@ -978,6 +994,7 @@
    "x": 540,
    "y": -20
   },
+  "icicles": [],
   "ladders": [
    {
     "h": 190,
@@ -1042,6 +1059,7 @@
   "saws": [],
   "slopes": [],
   "spikes": [],
+  "springs": [],
   "start": {
    "x": 20,
    "y": 274
@@ -1096,6 +1114,7 @@
    "x": 560,
    "y": 50
   },
+  "icicles": [],
   "ladders": [],
   "leeches": [],
   "mosquitoSwarms": [],
@@ -1200,6 +1219,7 @@
     "y": 178
    }
   ],
+  "springs": [],
   "start": {
    "x": 20,
    "y": 274
@@ -1211,6 +1231,539 @@
     "h": 30,
     "w": 510,
     "x": 90,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 260
+  },
+  "icicles": [
+   {
+    "h": 24,
+    "w": 12,
+    "x": 284,
+    "y": 166
+   }
+  ],
+  "ladders": [],
+  "leeches": [],
+  "mosquitoSwarms": [],
+  "name": "HOMEZO",
+  "pendulums": [],
+  "platforms": [
+   {
+    "color": "#8a99aa",
+    "h": 20,
+    "w": 140,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 20,
+    "ice": true,
+    "w": 180,
+    "x": 200,
+    "y": 300
+   },
+   {
+    "color": "#8a99aa",
+    "h": 20,
+    "w": 160,
+    "x": 440,
+    "y": 300
+   },
+   {
+    "color": "#8a99aa",
+    "h": 16,
+    "w": 80,
+    "x": 250,
+    "y": 150
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 16,
+    "ice": true,
+    "w": 80,
+    "x": 520,
+    "y": 190
+   }
+  ],
+  "ropes": [],
+  "saws": [],
+  "slopes": [],
+  "spikes": [],
+  "springs": [
+   {
+    "h": 12,
+    "power": 12,
+    "w": 24,
+    "x": 500,
+    "y": 288
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "ice",
+  "walls": [],
+  "water": [
+   {
+    "h": 30,
+    "w": 60,
+    "x": 140,
+    "y": 310
+   },
+   {
+    "h": 30,
+    "w": 60,
+    "x": 380,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 260
+  },
+  "icicles": [
+   {
+    "h": 24,
+    "w": 12,
+    "x": 458,
+    "y": 136
+   }
+  ],
+  "ladders": [],
+  "leeches": [],
+  "mosquitoSwarms": [],
+  "name": "JEGPARKANY",
+  "pendulums": [],
+  "platforms": [
+   {
+    "color": "#8a99aa",
+    "h": 20,
+    "w": 120,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 16,
+    "ice": true,
+    "w": 90,
+    "x": 170,
+    "y": 260
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 16,
+    "ice": true,
+    "w": 90,
+    "x": 310,
+    "y": 220
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 16,
+    "ice": true,
+    "w": 90,
+    "x": 450,
+    "y": 260
+   },
+   {
+    "color": "#8a99aa",
+    "h": 20,
+    "w": 50,
+    "x": 550,
+    "y": 300
+   },
+   {
+    "color": "#8a99aa",
+    "h": 16,
+    "w": 70,
+    "x": 430,
+    "y": 120
+   }
+  ],
+  "ropes": [],
+  "saws": [],
+  "slopes": [],
+  "spikes": [
+   {
+    "h": 12,
+    "w": 30,
+    "x": 310,
+    "y": 208
+   }
+  ],
+  "springs": [],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "ice",
+  "walls": [],
+  "water": [
+   {
+    "h": 30,
+    "w": 430,
+    "x": 120,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 260
+  },
+  "icicles": [
+   {
+    "h": 24,
+    "w": 12,
+    "x": 114,
+    "y": 166
+   },
+   {
+    "h": 24,
+    "w": 12,
+    "x": 244,
+    "y": 166
+   },
+   {
+    "h": 24,
+    "w": 12,
+    "x": 304,
+    "y": 166
+   },
+   {
+    "h": 24,
+    "w": 12,
+    "x": 434,
+    "y": 166
+   }
+  ],
+  "ladders": [],
+  "leeches": [],
+  "mosquitoSwarms": [],
+  "name": "JEGCSAP_FOLYOSO",
+  "pendulums": [],
+  "platforms": [
+   {
+    "color": "#8a99aa",
+    "h": 20,
+    "w": 150,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 20,
+    "ice": true,
+    "w": 150,
+    "x": 210,
+    "y": 300
+   },
+   {
+    "color": "#8a99aa",
+    "h": 20,
+    "w": 180,
+    "x": 420,
+    "y": 300
+   },
+   {
+    "color": "#8a99aa",
+    "h": 16,
+    "w": 340,
+    "x": 140,
+    "y": 150
+   }
+  ],
+  "ropes": [],
+  "saws": [],
+  "slopes": [],
+  "spikes": [
+   {
+    "h": 12,
+    "w": 30,
+    "x": 500,
+    "y": 288
+   }
+  ],
+  "springs": [],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "ice",
+  "walls": [],
+  "water": [
+   {
+    "h": 30,
+    "w": 60,
+    "x": 150,
+    "y": 310
+   },
+   {
+    "h": 30,
+    "w": 60,
+    "x": 360,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 160
+  },
+  "icicles": [
+   {
+    "h": 24,
+    "w": 12,
+    "x": 210,
+    "y": 96
+   }
+  ],
+  "ladders": [],
+  "leeches": [],
+  "mosquitoSwarms": [],
+  "name": "FAGYOS_TORONY",
+  "pendulums": [
+   {
+    "anchorX": 400,
+    "anchorY": 0,
+    "length": 60,
+    "maxAngle": 0.5,
+    "minAngle": -0.5,
+    "phase": 0,
+    "r": 12,
+    "speed": 0.04
+   }
+  ],
+  "platforms": [
+   {
+    "color": "#8a99aa",
+    "h": 20,
+    "w": 240,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#8a99aa",
+    "h": 16,
+    "w": 120,
+    "x": 60,
+    "y": 180
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 16,
+    "ice": true,
+    "w": 140,
+    "x": 140,
+    "y": 80
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 16,
+    "ice": true,
+    "w": 120,
+    "x": 340,
+    "y": 80
+   },
+   {
+    "color": "#8a99aa",
+    "h": 16,
+    "w": 100,
+    "x": 500,
+    "y": 200
+   }
+  ],
+  "ropes": [],
+  "saws": [],
+  "slopes": [],
+  "spikes": [],
+  "springs": [
+   {
+    "h": 12,
+    "power": 12,
+    "w": 24,
+    "x": 180,
+    "y": 288
+   },
+   {
+    "h": 12,
+    "power": 12,
+    "w": 24,
+    "x": 80,
+    "y": 168
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "ice",
+  "walls": [],
+  "water": [
+   {
+    "h": 30,
+    "w": 360,
+    "x": 240,
+    "y": 310
+   }
+  ]
+ },
+ {
+  "fishSpawners": [
+   {
+    "cooldownMax": 150,
+    "cooldownMin": 90,
+    "cruise": false,
+    "jumpDuration": 42,
+    "jumpHeight": 85,
+    "r": 12,
+    "spots": [
+     120,
+     270
+    ],
+    "timer": 70,
+    "waterY": 310
+   }
+  ],
+  "goal": {
+   "h": 40,
+   "w": 30,
+   "x": 560,
+   "y": 180
+  },
+  "icicles": [
+   {
+    "h": 24,
+    "w": 12,
+    "x": 480,
+    "y": 116
+   },
+   {
+    "h": 24,
+    "w": 12,
+    "x": 516,
+    "y": 116
+   }
+  ],
+  "ladders": [],
+  "leeches": [],
+  "mosquitoSwarms": [],
+  "name": "ZUZMARA_FINALE",
+  "pendulums": [],
+  "platforms": [
+   {
+    "color": "#8a99aa",
+    "h": 20,
+    "w": 100,
+    "x": 0,
+    "y": 300
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 36,
+    "ice": true,
+    "move": {
+     "axis": "x",
+     "max": 230,
+     "min": 140,
+     "phase": 0,
+     "speed": 0.025
+    },
+    "w": 90,
+    "x": 140,
+    "y": 300
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 40,
+    "ice": true,
+    "w": 120,
+    "x": 310,
+    "y": 300
+   },
+   {
+    "color": "#9fd4ee",
+    "h": 16,
+    "ice": true,
+    "w": 130,
+    "x": 470,
+    "y": 220
+   },
+   {
+    "color": "#8a99aa",
+    "h": 16,
+    "w": 80,
+    "x": 460,
+    "y": 100
+   }
+  ],
+  "ropes": [],
+  "saws": [
+   {
+    "axis": "y",
+    "cx": 560,
+    "cy": 0,
+    "max": 260,
+    "min": 140,
+    "phase": 0,
+    "r": 12,
+    "speed": 0.05
+   }
+  ],
+  "slopes": [],
+  "spikes": [
+   {
+    "h": 12,
+    "w": 30,
+    "x": 365,
+    "y": 288
+   }
+  ],
+  "springs": [
+   {
+    "h": 12,
+    "power": 12,
+    "w": 24,
+    "x": 318,
+    "y": 288
+   }
+  ],
+  "start": {
+   "x": 20,
+   "y": 274
+  },
+  "theme": "ice",
+  "walls": [],
+  "water": [
+   {
+    "h": 30,
+    "w": 500,
+    "x": 100,
     "y": 310
    }
   ]
