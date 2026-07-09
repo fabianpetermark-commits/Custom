@@ -7283,81 +7283,6 @@
        ]
       },
       {
-       "__identifier": "MosquitoSwarm",
-       "__grid": [
-        25,
-        23
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#28282C",
-       "__worldX": 3350,
-       "__worldY": 230,
-       "iid": "007fb8cc-a04a-4c37-96c0-3ae44b7c59a2",
-       "width": 32,
-       "height": 32,
-       "defUid": 141,
-       "px": [
-        250,
-        230
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "r",
-         "__type": "Float",
-         "__value": 16,
-         "defUid": 134,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampX",
-         "__type": "Float",
-         "__value": 12,
-         "defUid": 135,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampY",
-         "__type": "Float",
-         "__value": 8,
-         "defUid": 136,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedX",
-         "__type": "Float",
-         "__value": 0.045,
-         "defUid": 137,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedY",
-         "__type": "Float",
-         "__value": 0.07,
-         "defUid": 138,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseX",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 139,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseY",
-         "__type": "Float",
-         "__value": 2,
-         "defUid": 140,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
        "__identifier": "Slope",
        "__grid": [
         25,
@@ -7538,14 +7463,14 @@
         {
          "__identifier": "cooldownMin",
          "__type": "Float",
-         "__value": 70,
+         "__value": 110,
          "defUid": 157,
          "realEditorValues": []
         },
         {
          "__identifier": "cooldownMax",
          "__type": "Float",
-         "__value": 100,
+         "__value": 170,
          "defUid": 158,
          "realEditorValues": []
         },
@@ -8173,156 +8098,6 @@
          "__type": "Float",
          "__value": 0,
          "defUid": 125,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "MosquitoSwarm",
-       "__grid": [
-        15,
-        23
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#28282C",
-       "__worldX": 3870,
-       "__worldY": 230,
-       "iid": "11ee4923-ac98-49f9-9a05-9d719e0c80d5",
-       "width": 30,
-       "height": 30,
-       "defUid": 141,
-       "px": [
-        150,
-        230
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "r",
-         "__type": "Float",
-         "__value": 15,
-         "defUid": 134,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampX",
-         "__type": "Float",
-         "__value": 10,
-         "defUid": 135,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampY",
-         "__type": "Float",
-         "__value": 14,
-         "defUid": 136,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedX",
-         "__type": "Float",
-         "__value": 0.05,
-         "defUid": 137,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedY",
-         "__type": "Float",
-         "__value": 0.06,
-         "defUid": 138,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseX",
-         "__type": "Float",
-         "__value": 0.5,
-         "defUid": 139,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseY",
-         "__type": "Float",
-         "__value": 1.8,
-         "defUid": 140,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "MosquitoSwarm",
-       "__grid": [
-        40,
-        15
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#28282C",
-       "__worldX": 4120,
-       "__worldY": 150,
-       "iid": "d07f1759-51aa-4dfd-89ea-9460d4973a1d",
-       "width": 32,
-       "height": 32,
-       "defUid": 141,
-       "px": [
-        400,
-        150
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "r",
-         "__type": "Float",
-         "__value": 16,
-         "defUid": 134,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampX",
-         "__type": "Float",
-         "__value": 14,
-         "defUid": 135,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampY",
-         "__type": "Float",
-         "__value": 8,
-         "defUid": 136,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedX",
-         "__type": "Float",
-         "__value": 0.06,
-         "defUid": 137,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedY",
-         "__type": "Float",
-         "__value": 0.045,
-         "defUid": 138,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseX",
-         "__type": "Float",
-         "__value": 2,
-         "defUid": 139,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseY",
-         "__type": "Float",
-         "__value": 0.3,
-         "defUid": 140,
          "realEditorValues": []
         }
        ]
@@ -9250,81 +9025,6 @@
        ]
       },
       {
-       "__identifier": "MosquitoSwarm",
-       "__grid": [
-        27,
-        23
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#28282C",
-       "__worldX": 4615,
-       "__worldY": 230,
-       "iid": "3eb36218-3bba-4633-b35b-e36ef069f0b2",
-       "width": 32,
-       "height": 32,
-       "defUid": 141,
-       "px": [
-        275,
-        230
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "r",
-         "__type": "Float",
-         "__value": 16,
-         "defUid": 134,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampX",
-         "__type": "Float",
-         "__value": 8,
-         "defUid": 135,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampY",
-         "__type": "Float",
-         "__value": 10,
-         "defUid": 136,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedX",
-         "__type": "Float",
-         "__value": 0.06,
-         "defUid": 137,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedY",
-         "__type": "Float",
-         "__value": 0.05,
-         "defUid": 138,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseX",
-         "__type": "Float",
-         "__value": 1,
-         "defUid": 139,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseY",
-         "__type": "Float",
-         "__value": 0.4,
-         "defUid": 140,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
        "__identifier": "Leech",
        "__grid": [
         40,
@@ -9582,14 +9282,14 @@
         {
          "__identifier": "cooldownMin",
          "__type": "Float",
-         "__value": 70,
+         "__value": 100,
          "defUid": 157,
          "realEditorValues": []
         },
         {
          "__identifier": "cooldownMax",
          "__type": "Float",
-         "__value": 110,
+         "__value": 160,
          "defUid": 158,
          "realEditorValues": []
         },
@@ -10179,81 +9879,6 @@
          "__type": "Float",
          "__value": 12,
          "defUid": 132,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
-       "__identifier": "MosquitoSwarm",
-       "__grid": [
-        7,
-        15
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#28282C",
-       "__worldX": 5030,
-       "__worldY": 150,
-       "iid": "d14dbc4d-7fc0-47d0-a766-3b970541c856",
-       "width": 28,
-       "height": 28,
-       "defUid": 141,
-       "px": [
-        70,
-        150
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "r",
-         "__type": "Float",
-         "__value": 14,
-         "defUid": 134,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampX",
-         "__type": "Float",
-         "__value": 10,
-         "defUid": 135,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampY",
-         "__type": "Float",
-         "__value": 16,
-         "defUid": 136,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedX",
-         "__type": "Float",
-         "__value": 0.05,
-         "defUid": 137,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedY",
-         "__type": "Float",
-         "__value": 0.06,
-         "defUid": 138,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseX",
-         "__type": "Float",
-         "__value": 0,
-         "defUid": 139,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseY",
-         "__type": "Float",
-         "__value": 1,
-         "defUid": 140,
          "realEditorValues": []
         }
        ]
@@ -11168,81 +10793,6 @@
        ]
       },
       {
-       "__identifier": "MosquitoSwarm",
-       "__grid": [
-        40,
-        15
-       ],
-       "__pivot": [
-        0,
-        0
-       ],
-       "__tags": [],
-       "__tile": null,
-       "__smartColor": "#28282C",
-       "__worldX": 5980,
-       "__worldY": 150,
-       "iid": "5842b45b-e7d8-48bf-815f-df40a7f7e6d2",
-       "width": 32,
-       "height": 32,
-       "defUid": 141,
-       "px": [
-        400,
-        150
-       ],
-       "fieldInstances": [
-        {
-         "__identifier": "r",
-         "__type": "Float",
-         "__value": 16,
-         "defUid": 134,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampX",
-         "__type": "Float",
-         "__value": 12,
-         "defUid": 135,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "ampY",
-         "__type": "Float",
-         "__value": 10,
-         "defUid": 136,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedX",
-         "__type": "Float",
-         "__value": 0.055,
-         "defUid": 137,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "speedY",
-         "__type": "Float",
-         "__value": 0.05,
-         "defUid": 138,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseX",
-         "__type": "Float",
-         "__value": 1.2,
-         "defUid": 139,
-         "realEditorValues": []
-        },
-        {
-         "__identifier": "phaseY",
-         "__type": "Float",
-         "__value": 0.7,
-         "defUid": 140,
-         "realEditorValues": []
-        }
-       ]
-      },
-      {
        "__identifier": "Slope",
        "__grid": [
         34,
@@ -11412,14 +10962,14 @@
         {
          "__identifier": "cooldownMin",
          "__type": "Float",
-         "__value": 70,
+         "__value": 90,
          "defUid": 157,
          "realEditorValues": []
         },
         {
          "__identifier": "cooldownMax",
          "__type": "Float",
-         "__value": 100,
+         "__value": 150,
          "defUid": 158,
          "realEditorValues": []
         },

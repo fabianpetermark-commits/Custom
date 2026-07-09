@@ -599,8 +599,8 @@
  {
   "fishSpawners": [
    {
-    "cooldownMax": 100,
-    "cooldownMin": 70,
+    "cooldownMax": 170,
+    "cooldownMin": 110,
     "cruise": false,
     "jumpDuration": 42,
     "jumpHeight": 90,
@@ -622,19 +622,7 @@
   },
   "ladders": [],
   "leeches": [],
-  "mosquitoSwarms": [
-   {
-    "ampX": 12,
-    "ampY": 8,
-    "phaseX": 0,
-    "phaseY": 2,
-    "r": 16,
-    "speedX": 0.045,
-    "speedY": 0.07,
-    "x": 250,
-    "y": 230
-   }
-  ],
+  "mosquitoSwarms": [],
   "name": "INGOVANY",
   "pendulums": [],
   "platforms": [
@@ -749,30 +737,7 @@
   },
   "ladders": [],
   "leeches": [],
-  "mosquitoSwarms": [
-   {
-    "ampX": 10,
-    "ampY": 14,
-    "phaseX": 0.5,
-    "phaseY": 1.8,
-    "r": 15,
-    "speedX": 0.05,
-    "speedY": 0.06,
-    "x": 150,
-    "y": 230
-   },
-   {
-    "ampX": 14,
-    "ampY": 8,
-    "phaseX": 2,
-    "phaseY": 0.3,
-    "r": 16,
-    "speedX": 0.06,
-    "speedY": 0.045,
-    "x": 400,
-    "y": 150
-   }
-  ],
+  "mosquitoSwarms": [],
   "name": "LOMBKORONA",
   "pendulums": [],
   "platforms": [
@@ -866,8 +831,8 @@
     "x": 300
    },
    {
-    "cooldownMax": 110,
-    "cooldownMin": 70,
+    "cooldownMax": 160,
+    "cooldownMin": 100,
     "cruise": false,
     "jumpDuration": 44,
     "jumpHeight": 95,
@@ -895,19 +860,7 @@
     "y": 224
    }
   ],
-  "mosquitoSwarms": [
-   {
-    "ampX": 8,
-    "ampY": 10,
-    "phaseX": 1,
-    "phaseY": 0.4,
-    "r": 16,
-    "speedX": 0.06,
-    "speedY": 0.05,
-    "x": 275,
-    "y": 230
-   }
-  ],
+  "mosquitoSwarms": [],
   "name": "PIOCAS MOCSAR",
   "pendulums": [
    {
@@ -1034,19 +987,7 @@
    }
   ],
   "leeches": [],
-  "mosquitoSwarms": [
-   {
-    "ampX": 10,
-    "ampY": 16,
-    "phaseX": 0,
-    "phaseY": 1,
-    "r": 14,
-    "speedX": 0.05,
-    "speedY": 0.06,
-    "x": 70,
-    "y": 150
-   }
-  ],
+  "mosquitoSwarms": [],
   "name": "ODU",
   "pendulums": [
    {
@@ -1126,8 +1067,8 @@
  {
   "fishSpawners": [
    {
-    "cooldownMax": 100,
-    "cooldownMin": 70,
+    "cooldownMax": 150,
+    "cooldownMin": 90,
     "cruise": false,
     "jumpDuration": 44,
     "jumpHeight": 95,
@@ -1157,19 +1098,7 @@
   },
   "ladders": [],
   "leeches": [],
-  "mosquitoSwarms": [
-   {
-    "ampX": 12,
-    "ampY": 10,
-    "phaseX": 1.2,
-    "phaseY": 0.7,
-    "r": 16,
-    "speedX": 0.055,
-    "speedY": 0.05,
-    "x": 400,
-    "y": 150
-   }
-  ],
+  "mosquitoSwarms": [],
   "name": "VADON FINALE",
   "pendulums": [
    {
