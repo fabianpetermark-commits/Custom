@@ -33,6 +33,7 @@
     font-family: 'Courier New', Courier, monospace;
   }
   .frame {
+    position: relative;
     background: #1a1a22;
     border-radius: 16px;
     padding: 18px;
@@ -392,7 +393,18 @@
   html.standalone-app .stick:active { opacity: 0.75; }
 
   /* Egyedi elrendezes (athelyezett gombok): minden csoport abszolut */
-  .touch-controls.custom-layout { justify-content: flex-start; }
+  /* A .touch-controls-nak ugyanazt a teljes-keret referenciat kell hasznalnia
+     itt is, mint szerkesztes kozben (lasd .editing lejjebb) -- kulonben a
+     szerkesztes kozben elmentett szazalekos pozicio egy egeszen mas meretu/
+     helyzetu doboz(hoz kepest) ertelmezodik utana normal jatek soran, es a
+     gomb "lemehet a kepernyorol" meretvaltas/ujratoltes utan. A .frame most
+     mar position:relative, ez adja a kozos viszonyitasi keretet mindket
+     esetben. */
+  .touch-controls.custom-layout {
+    justify-content: flex-start;
+    position: absolute;
+    left: 0; right: 0; top: 0; bottom: 0;
+  }
   .touch-controls.custom-layout .action-buttons { display: contents; }
   .touch-controls.custom-layout .move-control,
   .touch-controls.custom-layout .jump-btn,
@@ -3910,6 +3922,30 @@
 
   function setGroupPos(el, p) { el.style.left = p.x + '%'; el.style.top = p.y + '%'; }
 
+  // Meret- (scale-) valtas vagy kepernyo-atmeretezes utan a korabban elmentett
+  // szazalekos pozicio mar nagyobb/kisebb gombot es/vagy mas konteneretmeretet
+  // takarhat el -- ezert minden alkalmazas utan visszaigazitjuk, hogy a gomb
+  // teljes egeszeben a lathato touchControls teruleten belul maradjon.
+  function clampCustomPositions() {
+    if (!controlSettings.pos) return;
+    if (touchControlsEl.classList.contains('editing')) return; // szerkesztes kozben a sajat drag/pinch-kezelo mar clampel
+    var tc = touchControlsEl.getBoundingClientRect();
+    if (tc.width <= 0 || tc.height <= 0) return;
+    [[moveControlEl, 'move'], [jumpBtnEl, 'jump'], [dashBtnEl, 'dash']].forEach(function(pair) {
+      var el = pair[0], key = pair[1];
+      var r = el.getBoundingClientRect();
+      var left = r.left - tc.left, top = r.top - tc.top;
+      var maxLeft = Math.max(0, tc.width - r.width), maxTop = Math.max(0, tc.height - r.height);
+      var clampedLeft = Math.max(0, Math.min(maxLeft, left));
+      var clampedTop = Math.max(0, Math.min(maxTop, top));
+      if (Math.abs(clampedLeft - left) > 0.5 || Math.abs(clampedTop - top) > 0.5) {
+        var p = { x: clampedLeft / tc.width * 100, y: clampedTop / tc.height * 100 };
+        controlSettings.pos[key] = p;
+        setGroupPos(el, p);
+      }
+    });
+  }
+
   function applyControlSettings() {
     touchControlsEl.style.setProperty('--ctrl-scale', controlSettings.scale);
     var stick = controlSettings.mode === 'stick';
@@ -3920,6 +3956,10 @@
       setGroupPos(moveControlEl, controlSettings.pos.move);
       setGroupPos(jumpBtnEl, controlSettings.pos.jump);
       setGroupPos(dashBtnEl, controlSettings.pos.dash);
+      if (!touchControlsEl.classList.contains('editing')) {
+        clampCustomPositions();
+        saveControlSettings();
+      }
     } else {
       touchControlsEl.classList.remove('custom-layout');
       moveControlEl.style.left = moveControlEl.style.top = '';
@@ -3928,6 +3968,10 @@
     }
     if (!stick) stickEnd();
   }
+
+  window.addEventListener('resize', function() {
+    if (!touchControlsEl.classList.contains('editing')) clampCustomPositions();
+  });
 
   // ---- Analog stick input ----
   var stickActive = false, stickTouchId = null, stickCX = 0, stickCY = 0, stickRad = 60;
