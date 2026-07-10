@@ -931,7 +931,10 @@
         ],
         icicles: [],
         springs: [],
-        rocks: [],
+        rocks: [
+          { x: 0, y: 0, w: 600, h: 20 },
+          { x: 0, y: 20, w: 20, h: 254 }
+        ],
         fishSpawners: [
           { waterY: 312, r: 11, cruise: true, x: 480, rangeMin: 395, rangeMax: 585, speed: 0.02, phase: 0 }
         ],
@@ -969,7 +972,10 @@
         ],
         icicles: [],
         springs: [],
-        rocks: [],
+        rocks: [
+          { x: 0, y: 0, w: 600, h: 16 },
+          { x: 0, y: 16, w: 20, h: 258 }
+        ],
         fishSpawners: [
           { waterY: 310, r: 12, rangeMin: 410, rangeMax: 410, jumpHeight: 75, jumpDuration: 40, timer: 90, cooldownMin: 90, cooldownMax: 210, active: false, phase: 0 }
         ],
@@ -1008,7 +1014,10 @@
         ],
         icicles: [],
         springs: [],
-        rocks: [],
+        rocks: [
+          { x: 0, y: 0, w: 600, h: 16 },
+          { x: 0, y: 16, w: 20, h: 258 }
+        ],
         fishSpawners: [
           { waterY: 310, r: 11, rangeMin: 120, rangeMax: 200, jumpHeight: 65, jumpDuration: 36, timer: 70, cooldownMin: 80, cooldownMax: 190, active: false, phase: 0 }
         ],
@@ -2981,38 +2990,75 @@
     }
   }
 
+  function rockJagPath(r, seed, step) {
+    // szabalytalan, "eros sziklat" ado korvonal a sima teglalap helyett
+    var pts = [];
+    var jag = Math.min(7, step * 0.4);
+    function push(x, y, nx, ny, idx) {
+      var j = (Math.sin(idx * 12.9898 + seed * 78.233) * 43758.5453);
+      j = (j - Math.floor(j)) * jag;
+      pts.push([x + nx * j, y + ny * j]);
+    }
+    var idx = 0;
+    for (var x = r.x; x < r.x + r.w; x += step) push(x, r.y, 0, -1, idx++);
+    push(r.x + r.w, r.y, 0, -1, idx++);
+    for (var y = r.y; y < r.y + r.h; y += step) push(r.x + r.w, y, 1, 0, idx++);
+    push(r.x + r.w, r.y + r.h, 1, 0, idx++);
+    for (var x2 = r.x + r.w; x2 > r.x; x2 -= step) push(x2, r.y + r.h, 0, 1, idx++);
+    push(r.x, r.y + r.h, 0, 1, idx++);
+    for (var y2 = r.y + r.h; y2 > r.y; y2 -= step) push(r.x, y2, -1, 0, idx++);
+    return pts;
+  }
+
   function drawRock(r) {
-    if (r._seed === undefined) r._seed = Math.random();
+    if (r._seed === undefined) r._seed = Math.random() * 1000;
     var seed = r._seed;
     var icy = level.theme === 'ice';
-    var base = icy ? [70, 110, 145] : [46, 40, 34];
-    var edge = icy ? [200, 232, 250] : [18, 15, 12];
-    ctx.fillStyle = 'rgb(' + base[0] + ',' + base[1] + ',' + base[2] + ')';
-    ctx.fillRect(r.x, r.y, r.w, r.h);
+    var base = icy ? [58, 108, 150] : [24, 20, 17];
+    var baseLite = icy ? [110, 172, 212] : [52, 44, 36];
+    var edge = icy ? [210, 240, 255] : [8, 6, 5];
 
-    // szemcses/repedt textura
-    ctx.fillStyle = icy ? 'rgba(210,238,255,0.10)' : 'rgba(0,0,0,0.18)';
-    var speckCount = Math.max(6, Math.round((r.w * r.h) / 900));
-    for (var i = 0; i < speckCount; i++) {
-      var sx = r.x + ((i * 53 + seed * 971) % Math.max(1, r.w - 4)) + 2;
-      var sy = r.y + ((i * 37 + seed * 613) % Math.max(1, r.h - 4)) + 2;
-      var sr = 1.5 + ((i * 7) % 3);
+    var pts = rockJagPath(r, seed, 14);
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.closePath();
+    ctx.clip();
+
+    var grad = ctx.createLinearGradient(r.x, r.y, r.x, r.y + r.h);
+    grad.addColorStop(0, 'rgb(' + baseLite[0] + ',' + baseLite[1] + ',' + baseLite[2] + ')');
+    grad.addColorStop(1, 'rgb(' + base[0] + ',' + base[1] + ',' + base[2] + ')');
+    ctx.fillStyle = grad;
+    ctx.fillRect(r.x - 4, r.y - 4, r.w + 8, r.h + 8);
+
+    ctx.fillStyle = icy ? 'rgba(230,248,255,0.16)' : 'rgba(0,0,0,0.28)';
+    var speckCount = Math.max(8, Math.round((r.w * r.h) / 700));
+    for (var s = 0; s < speckCount; s++) {
+      var sx = r.x + ((s * 53 + seed * 971) % Math.max(1, r.w - 4)) + 2;
+      var sy = r.y + ((s * 37 + seed * 613) % Math.max(1, r.h - 4)) + 2;
+      var sr = 1.5 + ((s * 7) % 4);
       ctx.beginPath();
       ctx.arc(sx, sy, sr, 0, Math.PI * 2);
       ctx.fill();
     }
+    ctx.restore();
 
-    // korberajzolt szel: a barlang/jegfal masszivitasat adja
-    ctx.strokeStyle = 'rgba(' + edge[0] + ',' + edge[1] + ',' + edge[2] + ',' + (icy ? 0.55 : 0.5) + ')';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(r.x + 1.5, r.y + 1.5, r.w - 3, r.h - 3);
+    ctx.strokeStyle = 'rgba(' + edge[0] + ',' + edge[1] + ',' + edge[2] + ',0.85)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (var j = 1; j < pts.length; j++) ctx.lineTo(pts[j][0], pts[j][1]);
+    ctx.closePath();
+    ctx.stroke();
 
     if (icy) {
-      ctx.fillStyle = 'rgba(255,255,255,0.4)';
-      ctx.fillRect(r.x, r.y, r.w, 4);
-    } else {
-      ctx.fillStyle = 'rgba(0,0,0,0.35)';
-      ctx.fillRect(r.x, r.y + r.h - 4, r.w, 4);
+      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(pts[0][0], pts[0][1]);
+      for (var k = 1; k < pts.length; k++) ctx.lineTo(pts[k][0], pts[k][1]);
+      ctx.stroke();
     }
   }
 

@@ -5018,6 +5018,56 @@
         90
        ],
        "fieldInstances": []
+      },
+      {
+       "__identifier": "Rock",
+       "__grid": [
+        0,
+        0
+       ],
+       "__pivot": [
+        0,
+        0
+       ],
+       "__tags": [],
+       "__tile": null,
+       "__smartColor": "#3A3F4A",
+       "__worldX": 0,
+       "__worldY": 0,
+       "iid": "61fad17c-4d51-427e-970a-b1b4416c0398",
+       "width": 600,
+       "height": 20,
+       "defUid": 167,
+       "px": [
+        0,
+        0
+       ],
+       "fieldInstances": []
+      },
+      {
+       "__identifier": "Rock",
+       "__grid": [
+        0,
+        2
+       ],
+       "__pivot": [
+        0,
+        0
+       ],
+       "__tags": [],
+       "__tile": null,
+       "__smartColor": "#3A3F4A",
+       "__worldX": 0,
+       "__worldY": 20,
+       "iid": "a85d4dcf-dc45-4289-bf68-6b387c99d658",
+       "width": 20,
+       "height": 254,
+       "defUid": 167,
+       "px": [
+        0,
+        20
+       ],
+       "fieldInstances": []
       }
      ]
     }
@@ -5920,6 +5970,56 @@
        "px": [
         560,
         260
+       ],
+       "fieldInstances": []
+      },
+      {
+       "__identifier": "Rock",
+       "__grid": [
+        0,
+        0
+       ],
+       "__pivot": [
+        0,
+        0
+       ],
+       "__tags": [],
+       "__tile": null,
+       "__smartColor": "#3A3F4A",
+       "__worldX": 0,
+       "__worldY": 0,
+       "iid": "8cf6550c-ffb5-41a9-9c0e-084c61a8e945",
+       "width": 600,
+       "height": 16,
+       "defUid": 167,
+       "px": [
+        0,
+        0
+       ],
+       "fieldInstances": []
+      },
+      {
+       "__identifier": "Rock",
+       "__grid": [
+        0,
+        1
+       ],
+       "__pivot": [
+        0,
+        0
+       ],
+       "__tags": [],
+       "__tile": null,
+       "__smartColor": "#3A3F4A",
+       "__worldX": 0,
+       "__worldY": 16,
+       "iid": "f26b2507-ef64-4191-af37-ace220e92a60",
+       "width": 20,
+       "height": 258,
+       "defUid": 167,
+       "px": [
+        0,
+        16
        ],
        "fieldInstances": []
       }
@@ -6829,6 +6929,56 @@
        "px": [
         560,
         200
+       ],
+       "fieldInstances": []
+      },
+      {
+       "__identifier": "Rock",
+       "__grid": [
+        0,
+        0
+       ],
+       "__pivot": [
+        0,
+        0
+       ],
+       "__tags": [],
+       "__tile": null,
+       "__smartColor": "#3A3F4A",
+       "__worldX": 0,
+       "__worldY": 0,
+       "iid": "bd2abded-d9fa-4da3-8a16-afb9cc7e6e5c",
+       "width": 600,
+       "height": 16,
+       "defUid": 167,
+       "px": [
+        0,
+        0
+       ],
+       "fieldInstances": []
+      },
+      {
+       "__identifier": "Rock",
+       "__grid": [
+        0,
+        1
+       ],
+       "__pivot": [
+        0,
+        0
+       ],
+       "__tags": [],
+       "__tile": null,
+       "__smartColor": "#3A3F4A",
+       "__worldX": 0,
+       "__worldY": 16,
+       "iid": "6768eff4-6a4b-4818-bd35-8364b20a94e3",
+       "width": 20,
+       "height": 258,
+       "defUid": 167,
+       "px": [
+        0,
+        16
        ],
        "fieldInstances": []
       }

@@ -1,4 +1,4 @@
-var CACHE_NAME = 'splat-run-v26';
+var CACHE_NAME = 'splat-run-v27';
 var FILES_TO_CACHE = [
   './index.html',
   './splat_run.html',
