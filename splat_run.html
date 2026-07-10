@@ -222,7 +222,7 @@
   }
   .jump-btn:active {
     box-shadow: 0 2px 0 #5c0e22, inset 0 0 0 2px rgba(255,255,255,0.15);
-    transform: translateY(4px);
+    transform: translateY(4px) scale(var(--ctrl-scale));
   }
   .action-buttons {
     display: flex;
@@ -247,7 +247,7 @@
   }
   .dash-btn:active {
     box-shadow: 0 2px 0 #0e3d5c, inset 0 0 0 2px rgba(255,255,255,0.15);
-    transform: translateY(4px);
+    transform: translateY(4px) scale(var(--ctrl-scale));
   }
   @media (pointer: coarse) {
     .touch-controls { display: flex; }
@@ -350,7 +350,11 @@
   /* === Vezerlo testreszabas: meret + stick + athelyezes === */
   .touch-controls { --ctrl-scale: 1; }
   .dpad { transform: scale(var(--ctrl-scale)); transform-origin: left bottom; }
-  .action-buttons { transform: scale(var(--ctrl-scale)); transform-origin: right bottom; }
+  /* A meretezes kozvetlenul a gombokon van, nem a .action-buttons wrapperen,
+     mert az display:contents-re valt egyedi athelyezeskor (lasd lejjebb),
+     ami eltuntetne a szulon levo transform-ot. */
+  .jump-btn { transform: scale(var(--ctrl-scale)); transform-origin: right bottom; }
+  .dash-btn { transform: scale(var(--ctrl-scale)); transform-origin: right bottom; }
 
   /* Analog stick */
   .move-control { position: relative; }
@@ -517,7 +521,7 @@
     </div>
   </div>
   <div class="edit-banner hidden" id="editBanner">
-    <span>HUZD A GOMBOKAT A HELYUKRE</span>
+    <span>HUZD A GOMBOKAT A HELYUKRE &mdash; KET UJJAL CSIPPENTVE MERETEZD</span>
     <button id="editReset">ALAPHELYZET</button>
     <button class="primary" id="editDone">KESZ</button>
   </div>
@@ -3773,7 +3777,10 @@
     stickKnobEl.style.transform = 'translate(0px,0px)';
   }
 
+  function stickEditing() { return touchControlsEl.classList.contains('editing'); }
+
   stickEl.addEventListener('touchstart', function(e) {
+    if (stickEditing()) return; // athelyezes/atmeretezes mod: hagyjuk a szulo drag/pinch-kezelojere
     e.preventDefault();
     if (stickTouchId !== null) return;
     var t = e.changedTouches[0];
@@ -3781,6 +3788,7 @@
     stickBegin(t.clientX, t.clientY);
   }, { passive: false });
   stickEl.addEventListener('touchmove', function(e) {
+    if (stickEditing()) return;
     e.preventDefault();
     for (var i = 0; i < e.changedTouches.length; i++) {
       var t = e.changedTouches[i];
@@ -3795,6 +3803,7 @@
   stickEl.addEventListener('touchend', stickTouchEnd, { passive: false });
   stickEl.addEventListener('touchcancel', stickTouchEnd, { passive: false });
   stickEl.addEventListener('mousedown', function(e) {
+    if (stickEditing()) return;
     e.preventDefault();
     stickBegin(e.clientX, e.clientY);
     function mm(ev) { stickApply(ev.clientX, ev.clientY); }
@@ -3923,6 +3932,7 @@
   function enterRepositionMode() {
     gameState = 'reposition';
     overlay.classList.add('hidden');
+    stickEnd();
     touchControlsEl.classList.add('editing');
     if (!controlSettings.pos) {
       // varjunk egy frame-et hogy az editing-layout kiszamolodjon, majd bake
@@ -3950,10 +3960,70 @@
     dragCleanup = [];
     touchControlsEl.classList.remove('editing');
     editBannerEl.classList.add('hidden');
+    pinchTouches = {};
+    pinchStartDist = null;
     saveControlSettings();
     applyControlSettings();
     showSettings();
   }
+
+  // ---- Ket ujjas csippentes: meretezes athelyezes kozben ----
+  var pinchTouches = {};
+  var pinchStartDist = null;
+  var pinchStartScale = 1;
+
+  function pinchIds() { return Object.keys(pinchTouches); }
+  function pinchDist() {
+    var ids = pinchIds();
+    var a = pinchTouches[ids[0]], b = pinchTouches[ids[1]];
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  }
+
+  document.addEventListener('touchstart', function(e) {
+    if (!touchControlsEl.classList.contains('editing')) return;
+    for (var i = 0; i < e.changedTouches.length; i++) {
+      var t = e.changedTouches[i];
+      pinchTouches[t.identifier] = { x: t.clientX, y: t.clientY };
+    }
+    if (pinchIds().length === 2) {
+      pinchStartDist = pinchDist();
+      pinchStartScale = controlSettings.scale;
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchmove', function(e) {
+    if (!touchControlsEl.classList.contains('editing')) return;
+    var changed = false;
+    for (var i = 0; i < e.changedTouches.length; i++) {
+      var t = e.changedTouches[i];
+      if (pinchTouches[t.identifier]) {
+        pinchTouches[t.identifier] = { x: t.clientX, y: t.clientY };
+        changed = true;
+      }
+    }
+    if (changed && pinchIds().length === 2 && pinchStartDist) {
+      e.preventDefault();
+      var ratio = pinchDist() / pinchStartDist;
+      controlSettings.scale = Math.min(1.4, Math.max(0.6, pinchStartScale * ratio));
+      applyControlSettings();
+    }
+  }, { passive: false });
+
+  function pinchRelease(e) {
+    for (var i = 0; i < e.changedTouches.length; i++) {
+      delete pinchTouches[e.changedTouches[i].identifier];
+    }
+    if (pinchIds().length < 2) {
+      if (pinchStartDist) {
+        controlSettings.scale = Math.round(controlSettings.scale * 20) / 20;
+        applyControlSettings();
+        saveControlSettings();
+      }
+      pinchStartDist = null;
+    }
+  }
+  document.addEventListener('touchend', pinchRelease, { passive: true });
+  document.addEventListener('touchcancel', pinchRelease, { passive: true });
 
   editBannerEl.querySelector('#editDone').addEventListener('click', exitRepositionMode);
   editBannerEl.querySelector('#editReset').addEventListener('click', function() {
