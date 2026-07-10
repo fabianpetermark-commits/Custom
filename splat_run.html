@@ -346,6 +346,131 @@
   html.standalone-app .action-buttons {
     gap: 8px;
   }
+
+  /* === Vezerlo testreszabas: meret + stick + athelyezes === */
+  .touch-controls { --ctrl-scale: 1; }
+  .dpad { transform: scale(var(--ctrl-scale)); transform-origin: left bottom; }
+  .action-buttons { transform: scale(var(--ctrl-scale)); transform-origin: right bottom; }
+
+  /* Analog stick */
+  .move-control { position: relative; }
+  .stick {
+    position: relative;
+    width: clamp(150px, 44vw, 210px);
+    height: clamp(150px, 44vw, 210px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, rgba(60,60,74,0.55), rgba(30,30,38,0.75));
+    border: 2px solid rgba(120,120,140,0.5);
+    transform: scale(var(--ctrl-scale));
+    transform-origin: left bottom;
+    touch-action: none;
+    display: none;
+  }
+  .stick-knob {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 42%;
+    height: 42%;
+    margin-left: -21%;
+    margin-top: -21%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, #d8d8e4, #7a7a8c);
+    border: 2px solid rgba(255,255,255,0.35);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+    transition: transform 0.05s linear;
+  }
+  html.standalone-app .stick {
+    width: clamp(96px, 26vh, 150px);
+    height: clamp(96px, 26vh, 150px);
+    opacity: 0.5;
+  }
+  html.standalone-app .stick:active { opacity: 0.75; }
+
+  /* Egyedi elrendezes (athelyezett gombok): minden csoport abszolut */
+  .touch-controls.custom-layout { justify-content: flex-start; }
+  .touch-controls.custom-layout .action-buttons { display: contents; }
+  .touch-controls.custom-layout .move-control,
+  .touch-controls.custom-layout .jump-btn,
+  .touch-controls.custom-layout .dash-btn {
+    position: absolute;
+    margin: 0;
+  }
+
+  /* Szerkeszto mod: a vezerlok mindig lathatoak, huzhatoak */
+  .touch-controls.editing { display: flex !important; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 40; align-items: flex-end; justify-content: space-between; padding: 0 24px 28px; }
+  .touch-controls.editing .move-control,
+  .touch-controls.editing .jump-btn,
+  .touch-controls.editing .dash-btn {
+    outline: 2px dashed rgba(255,220,80,0.8);
+    outline-offset: 4px;
+    border-radius: 14px;
+  }
+  .edit-banner {
+    position: fixed;
+    left: 50%;
+    top: 12px;
+    transform: translateX(-50%);
+    z-index: 60;
+    background: rgba(18,18,26,0.92);
+    border: 1px solid #45454f;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: #e6e6ee;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  .edit-banner.hidden { display: none; }
+  .edit-banner button {
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #45454f;
+    background: #2a2a34;
+    color: #e6e6ee;
+    cursor: pointer;
+  }
+  .edit-banner button.primary { background: #a3183a; border-color: #ff5c7a; }
+
+  /* Beallitas menu sorok */
+  .set-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: min(340px, 82vw);
+    margin: 8px auto;
+  }
+  .set-row .set-label { color: #b8b8c4; font-size: 14px; letter-spacing: 1px; }
+  .set-seg { display: flex; gap: 6px; }
+  .set-seg .seg {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #45454f;
+    background: #2a2a34;
+    color: #e6e6ee;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+  }
+  .set-seg .seg.on { background: #a3183a; border-color: #ff5c7a; }
+  .set-step { display: flex; align-items: center; gap: 10px; }
+  .set-step .stepbtn {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1px solid #45454f;
+    background: #2a2a34;
+    color: #e6e6ee;
+    font-size: 22px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .set-step .stepval { min-width: 54px; text-align: center; color: #e6e6ee; font-size: 15px; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
@@ -369,22 +494,32 @@
     </div>
   </div>
   <div class="hint">NYIL / WASD MOZGAS ES MASZAS &mdash; SZOKOZ: UGRAS (LEVEGOBEN MEG EGYSZER: DUPLA UGRAS) &mdash; SHIFT: DASH &mdash; FALNAL: IRANY-GOMB TARTASA CSUSZASHOZ, UGRAS A FALTOL ELLOKESHEZ</div>
-  <div class="touch-controls">
-    <div class="dpad">
-      <div class="touch-btn empty"></div>
-      <div class="touch-btn" id="btnUp">&#9650;</div>
-      <div class="touch-btn empty"></div>
-      <div class="touch-btn" id="btnLeft">&#9664;</div>
-      <div class="touch-btn empty"></div>
-      <div class="touch-btn" id="btnRight">&#9654;</div>
-      <div class="touch-btn empty"></div>
-      <div class="touch-btn" id="btnDown">&#9660;</div>
-      <div class="touch-btn empty"></div>
+  <div class="touch-controls" id="touchControls">
+    <div class="move-control" id="moveControl">
+      <div class="dpad" id="dpad">
+        <div class="touch-btn empty"></div>
+        <div class="touch-btn" id="btnUp">&#9650;</div>
+        <div class="touch-btn empty"></div>
+        <div class="touch-btn" id="btnLeft">&#9664;</div>
+        <div class="touch-btn empty"></div>
+        <div class="touch-btn" id="btnRight">&#9654;</div>
+        <div class="touch-btn empty"></div>
+        <div class="touch-btn" id="btnDown">&#9660;</div>
+        <div class="touch-btn empty"></div>
+      </div>
+      <div class="stick" id="stick">
+        <div class="stick-knob" id="stickKnob"></div>
+      </div>
     </div>
     <div class="action-buttons">
       <div class="dash-btn" id="btnDash">DASH</div>
       <div class="jump-btn" id="btnJump">UGRAS</div>
     </div>
+  </div>
+  <div class="edit-banner hidden" id="editBanner">
+    <span>HUZD A GOMBOKAT A HELYUKRE</span>
+    <button id="editReset">ALAPHELYZET</button>
+    <button class="primary" id="editDone">KESZ</button>
   </div>
 </div>
 
@@ -2078,6 +2213,7 @@
       { action: 'load', label: 'JATEK BETOLTESE', disabled: savingInFlight },
       { action: 'save', label: 'JATEK MENTESE', disabled: savingInFlight },
       { action: 'rank', label: 'RANGSOR' },
+      { action: 'settings', label: 'BEALLITASOK' },
       { action: 'install', label: 'TELEPITES' }
     ]);
     return items;
@@ -2170,6 +2306,7 @@
     else if (action === 'load') loadGame();
     else if (action === 'save') saveGame();
     else if (action === 'rank') showRanking();
+    else if (action === 'settings') showSettings();
     else if (action === 'install') triggerInstall();
   }
 
@@ -3493,6 +3630,11 @@
 
     if (gameState === 'menu') { handleMenuKeydown(e); return; }
     if (gameState === 'nameEntry') { return; }
+    if (gameState === 'reposition') { if (key === 'escape' || key === 'enter') exitRepositionMode(); return; }
+    if (gameState === 'settings') {
+      if (key === 'escape') { e.preventDefault(); showMenu(); }
+      return;
+    }
     if (gameState === 'ranking' || gameState === 'install') {
       if (key === 'enter' || key === ' ' || key === 'escape' || key === 'arrowup' || key === 'arrowdown') {
         e.preventDefault();
@@ -3541,6 +3683,294 @@
     if (key === ' ') { keys.up = false; keys.jumpHeld = false; spaceDown = false; }
   });
 
+  // ===================== VEZERLO BEALLITASOK =====================
+  var CTRL_KEY = 'splatControls';
+  var touchControlsEl = document.getElementById('touchControls');
+  var dpadEl = document.getElementById('dpad');
+  var stickEl = document.getElementById('stick');
+  var stickKnobEl = document.getElementById('stickKnob');
+  var moveControlEl = document.getElementById('moveControl');
+  var jumpBtnEl = document.getElementById('btnJump');
+  var dashBtnEl = document.getElementById('btnDash');
+  var editBannerEl = document.getElementById('editBanner');
+
+  function defaultControlSettings() { return { mode: 'dpad', scale: 1, pos: null }; }
+
+  function loadControlSettings() {
+    try {
+      var raw = localStorage.getItem(CTRL_KEY);
+      if (raw) {
+        var s = JSON.parse(raw);
+        var pos = (s.pos && s.pos.move && s.pos.jump && s.pos.dash) ? s.pos : null;
+        return {
+          mode: s.mode === 'stick' ? 'stick' : 'dpad',
+          scale: Math.min(1.4, Math.max(0.6, parseFloat(s.scale) || 1)),
+          pos: pos
+        };
+      }
+    } catch (e) {}
+    return defaultControlSettings();
+  }
+
+  var controlSettings = loadControlSettings();
+
+  function saveControlSettings() {
+    try { localStorage.setItem(CTRL_KEY, JSON.stringify(controlSettings)); } catch (e) {}
+  }
+
+  function setGroupPos(el, p) { el.style.left = p.x + '%'; el.style.top = p.y + '%'; }
+
+  function applyControlSettings() {
+    touchControlsEl.style.setProperty('--ctrl-scale', controlSettings.scale);
+    var stick = controlSettings.mode === 'stick';
+    dpadEl.style.display = stick ? 'none' : '';
+    stickEl.style.display = stick ? 'block' : 'none';
+    if (controlSettings.pos) {
+      touchControlsEl.classList.add('custom-layout');
+      setGroupPos(moveControlEl, controlSettings.pos.move);
+      setGroupPos(jumpBtnEl, controlSettings.pos.jump);
+      setGroupPos(dashBtnEl, controlSettings.pos.dash);
+    } else {
+      touchControlsEl.classList.remove('custom-layout');
+      moveControlEl.style.left = moveControlEl.style.top = '';
+      jumpBtnEl.style.left = jumpBtnEl.style.top = '';
+      dashBtnEl.style.left = dashBtnEl.style.top = '';
+    }
+    if (!stick) stickEnd();
+  }
+
+  // ---- Analog stick input ----
+  var stickActive = false, stickTouchId = null, stickCX = 0, stickCY = 0, stickRad = 60;
+
+  function stickBegin(clientX, clientY) {
+    var rect = stickEl.getBoundingClientRect();
+    stickCX = rect.left + rect.width / 2;
+    stickCY = rect.top + rect.height / 2;
+    stickRad = rect.width * 0.42;
+    stickActive = true;
+    stickApply(clientX, clientY);
+  }
+
+  function stickApply(clientX, clientY) {
+    if (!stickActive) return;
+    var dx = clientX - stickCX, dy = clientY - stickCY;
+    var dist = Math.hypot(dx, dy) || 0.0001;
+    var max = stickRad;
+    var cx = dx, cy = dy;
+    if (dist > max) { cx = dx / dist * max; cy = dy / dist * max; }
+    stickKnobEl.style.transform = 'translate(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px)';
+    var nx = cx / max, ny = cy / max, dz = 0.30;
+    keys.left = nx < -dz;
+    keys.right = nx > dz;
+    keys.up = ny < -dz;
+    keys.down = ny > dz;
+  }
+
+  function stickEnd() {
+    stickActive = false;
+    stickTouchId = null;
+    keys.left = keys.right = keys.up = keys.down = false;
+    stickKnobEl.style.transform = 'translate(0px,0px)';
+  }
+
+  stickEl.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    if (stickTouchId !== null) return;
+    var t = e.changedTouches[0];
+    stickTouchId = t.identifier;
+    stickBegin(t.clientX, t.clientY);
+  }, { passive: false });
+  stickEl.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    for (var i = 0; i < e.changedTouches.length; i++) {
+      var t = e.changedTouches[i];
+      if (t.identifier === stickTouchId) stickApply(t.clientX, t.clientY);
+    }
+  }, { passive: false });
+  function stickTouchEnd(e) {
+    for (var i = 0; i < e.changedTouches.length; i++) {
+      if (e.changedTouches[i].identifier === stickTouchId) stickEnd();
+    }
+  }
+  stickEl.addEventListener('touchend', stickTouchEnd, { passive: false });
+  stickEl.addEventListener('touchcancel', stickTouchEnd, { passive: false });
+  stickEl.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    stickBegin(e.clientX, e.clientY);
+    function mm(ev) { stickApply(ev.clientX, ev.clientY); }
+    function mu() { stickEnd(); window.removeEventListener('mousemove', mm); window.removeEventListener('mouseup', mu); }
+    window.addEventListener('mousemove', mm);
+    window.addEventListener('mouseup', mu);
+  });
+
+  // ---- Beallitas kepernyo ----
+  function showSettings() {
+    gameState = 'settings';
+    renderSettings();
+    overlay.classList.remove('hidden');
+  }
+
+  function renderSettings() {
+    var s = controlSettings;
+    overlay.innerHTML =
+      '<div class="overlay-title">BEALLITASOK</div>' +
+      '<div class="set-row"><span class="set-label">VEZERLES</span><div class="set-seg">' +
+        '<div class="seg ' + (s.mode === 'dpad' ? 'on' : '') + '" data-mode="dpad">D-PAD</div>' +
+        '<div class="seg ' + (s.mode === 'stick' ? 'on' : '') + '" data-mode="stick">STICK</div>' +
+      '</div></div>' +
+      '<div class="set-row"><span class="set-label">GOMBMERET</span><div class="set-step">' +
+        '<div class="stepbtn" data-step="-1">&minus;</div>' +
+        '<div class="stepval">' + Math.round(s.scale * 100) + '%</div>' +
+        '<div class="stepbtn" data-step="1">+</div>' +
+      '</div></div>' +
+      '<div class="menu-list">' +
+        '<div class="menu-item" data-act="reposition">GOMBOK ATHELYEZESE</div>' +
+        '<div class="menu-item" data-act="resetpos">ELRENDEZES ALAPHELYZET</div>' +
+        '<div class="menu-item selected" data-act="back">VISSZA</div>' +
+      '</div>' +
+      '<div class="menu-msg">A VALTOZASOK AZONNAL ELMENTODNEK</div>';
+    Array.prototype.forEach.call(overlay.querySelectorAll('.seg'), function(el) {
+      el.addEventListener('click', function() {
+        controlSettings.mode = el.getAttribute('data-mode');
+        saveControlSettings(); applyControlSettings(); renderSettings();
+      });
+    });
+    Array.prototype.forEach.call(overlay.querySelectorAll('.stepbtn'), function(el) {
+      el.addEventListener('click', function() {
+        var d = parseInt(el.getAttribute('data-step'), 10) * 0.1;
+        controlSettings.scale = Math.min(1.4, Math.max(0.6, Math.round((controlSettings.scale + d) * 10) / 10));
+        saveControlSettings(); applyControlSettings(); renderSettings();
+      });
+    });
+    Array.prototype.forEach.call(overlay.querySelectorAll('.menu-item'), function(el) {
+      el.addEventListener('click', function() {
+        var act = el.getAttribute('data-act');
+        if (act === 'back') { showMenu(); }
+        else if (act === 'reposition') { enterRepositionMode(); }
+        else if (act === 'resetpos') { controlSettings.pos = null; saveControlSettings(); applyControlSettings(); renderSettings(); }
+      });
+    });
+  }
+
+  // ---- Gombok athelyezese (drag szerkeszto) ----
+  function bakeCurrentPositions() {
+    var tc = touchControlsEl.getBoundingClientRect();
+    function pct(el) {
+      var r = el.getBoundingClientRect();
+      return { x: (r.left - tc.left) / tc.width * 100, y: (r.top - tc.top) / tc.height * 100 };
+    }
+    controlSettings.pos = { move: pct(moveControlEl), jump: pct(jumpBtnEl), dash: pct(dashBtnEl) };
+  }
+
+  var dragCleanup = [];
+  function enableDrag(el, keyName) {
+    function startDrag(clientX, clientY, onMove, onEnd) {
+      var tc = touchControlsEl.getBoundingClientRect();
+      var er = el.getBoundingClientRect();
+      var offX = clientX - er.left, offY = clientY - er.top;
+      var w = er.width, h = er.height;
+      function moveTo(cx, cy) {
+        var left = Math.max(0, Math.min(tc.width - w, cx - offX - tc.left));
+        var top = Math.max(0, Math.min(tc.height - h, cy - offY - tc.top));
+        var px = left / tc.width * 100, py = top / tc.height * 100;
+        el.style.left = px + '%'; el.style.top = py + '%';
+        controlSettings.pos[keyName] = { x: px, y: py };
+      }
+      onMove(moveTo); onEnd();
+    }
+    function td(e) {
+      e.preventDefault();
+      var t = e.changedTouches[0], id = t.identifier;
+      startDrag(t.clientX, t.clientY, function(moveTo) {
+        el._dragMove = function(ev) {
+          for (var i = 0; i < ev.changedTouches.length; i++) {
+            var ct = ev.changedTouches[i];
+            if (ct.identifier === id) { ev.preventDefault(); moveTo(ct.clientX, ct.clientY); }
+          }
+        };
+        el._dragEnd = function(ev) {
+          for (var i = 0; i < ev.changedTouches.length; i++) {
+            if (ev.changedTouches[i].identifier === id) endTouch();
+          }
+        };
+        window.addEventListener('touchmove', el._dragMove, { passive: false });
+        window.addEventListener('touchend', el._dragEnd);
+        window.addEventListener('touchcancel', el._dragEnd);
+      }, function() {});
+      function endTouch() {
+        window.removeEventListener('touchmove', el._dragMove);
+        window.removeEventListener('touchend', el._dragEnd);
+        window.removeEventListener('touchcancel', el._dragEnd);
+      }
+    }
+    function md(e) {
+      e.preventDefault();
+      startDrag(e.clientX, e.clientY, function(moveTo) {
+        function mm(ev) { moveTo(ev.clientX, ev.clientY); }
+        function mu() { window.removeEventListener('mousemove', mm); window.removeEventListener('mouseup', mu); }
+        window.addEventListener('mousemove', mm);
+        window.addEventListener('mouseup', mu);
+      }, function() {});
+    }
+    el.addEventListener('touchstart', td, { passive: false });
+    el.addEventListener('mousedown', md);
+    dragCleanup.push(function() {
+      el.removeEventListener('touchstart', td);
+      el.removeEventListener('mousedown', md);
+    });
+  }
+
+  function enterRepositionMode() {
+    gameState = 'reposition';
+    overlay.classList.add('hidden');
+    touchControlsEl.classList.add('editing');
+    if (!controlSettings.pos) {
+      // varjunk egy frame-et hogy az editing-layout kiszamolodjon, majd bake
+      requestAnimationFrame(function() {
+        bakeCurrentPositions();
+        touchControlsEl.classList.add('custom-layout');
+        setGroupPos(moveControlEl, controlSettings.pos.move);
+        setGroupPos(jumpBtnEl, controlSettings.pos.jump);
+        setGroupPos(dashBtnEl, controlSettings.pos.dash);
+      });
+    } else {
+      touchControlsEl.classList.add('custom-layout');
+      setGroupPos(moveControlEl, controlSettings.pos.move);
+      setGroupPos(jumpBtnEl, controlSettings.pos.jump);
+      setGroupPos(dashBtnEl, controlSettings.pos.dash);
+    }
+    editBannerEl.classList.remove('hidden');
+    enableDrag(moveControlEl, 'move');
+    enableDrag(jumpBtnEl, 'jump');
+    enableDrag(dashBtnEl, 'dash');
+  }
+
+  function exitRepositionMode() {
+    dragCleanup.forEach(function(fn) { fn(); });
+    dragCleanup = [];
+    touchControlsEl.classList.remove('editing');
+    editBannerEl.classList.add('hidden');
+    saveControlSettings();
+    applyControlSettings();
+    showSettings();
+  }
+
+  editBannerEl.querySelector('#editDone').addEventListener('click', exitRepositionMode);
+  editBannerEl.querySelector('#editReset').addEventListener('click', function() {
+    controlSettings.pos = null;
+    touchControlsEl.classList.remove('custom-layout');
+    moveControlEl.style.left = moveControlEl.style.top = '';
+    jumpBtnEl.style.left = jumpBtnEl.style.top = '';
+    dashBtnEl.style.left = dashBtnEl.style.top = '';
+    requestAnimationFrame(function() {
+      bakeCurrentPositions();
+      touchControlsEl.classList.add('custom-layout');
+      setGroupPos(moveControlEl, controlSettings.pos.move);
+      setGroupPos(jumpBtnEl, controlSettings.pos.jump);
+      setGroupPos(dashBtnEl, controlSettings.pos.dash);
+    });
+  });
+
   function bindHold(el, onDown, onUp) {
     el.addEventListener('touchstart', function(e) { e.preventDefault(); onDown(); }, { passive: false });
     el.addEventListener('touchend', function(e) { e.preventDefault(); onUp(); }, { passive: false });
@@ -3555,7 +3985,7 @@
 
   document.getElementById('btnJump').addEventListener('touchstart', function(e) {
     e.preventDefault();
-    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install') return;
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition') return;
     if (!running && !transitioning) { startRun(); return; }
     if (!running && transitioning) { advanceAfterOverlay(); return; }
     if (player.onRope) { keys.up = true; setTimeout(function() { keys.up = false; }, 50); return; }
@@ -3570,7 +4000,7 @@
 
   document.getElementById('btnJump').addEventListener('mousedown', function(e) {
     e.preventDefault();
-    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install') return;
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition') return;
     if (!running && !transitioning) { startRun(); return; }
     if (!running && transitioning) { advanceAfterOverlay(); return; }
     if (player.onRope) { keys.up = true; setTimeout(function() { keys.up = false; }, 50); return; }
@@ -3590,14 +4020,14 @@
 
   document.getElementById('btnDash').addEventListener('touchstart', function(e) {
     e.preventDefault();
-    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install') return;
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition') return;
     if (!running) return;
     handleDashPress();
   }, { passive: false });
 
   document.getElementById('btnDash').addEventListener('mousedown', function(e) {
     e.preventDefault();
-    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install') return;
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition') return;
     if (!running) return;
     handleDashPress();
   });
@@ -3607,6 +4037,7 @@
   running = false;
   transitioning = false;
   allDone = false;
+  applyControlSettings();
   showMenu();
 })();
 </script>
