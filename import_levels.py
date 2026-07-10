@@ -146,7 +146,7 @@ def normalize_levels(levels):
                 nsp.append({k: _rnd(v) for k, v in s.items()})
         nl['spikes'] = nsp
         for key in ('saws', 'pendulums', 'mosquitoSwarms', 'leeches', 'ladders',
-                    'walls', 'slopes', 'water', 'icicles', 'springs'):
+                    'walls', 'slopes', 'water', 'icicles', 'springs', 'rocks'):
             nl[key] = [{k: _rnd(v) for k, v in e.items() if not k.startswith('_')}
                        for e in lv.get(key, [])]
         nrp = []
@@ -235,6 +235,7 @@ ENTITY_SPECS = {
         ('rangeMin', 'float'), ('rangeMax', 'float'), ('speed', 'float')]),
     'Icicle': (12, 24, True, '#BEE0FF', []),
     'Spring': (24, 12, True, '#C83240', [('power', 'float')]),
+    'Rock': (60, 40, True, '#3A3F4A', []),
     'Start': (18, 26, False, '#F4F1E6', [('followRef', 'ref')]),
     'Goal': (30, 40, True, '#FFE066', []),
 }
@@ -414,6 +415,8 @@ def export_ldtk(levels):
             add('Icicle', ic['x'], ic['y'], ic['w'], ic['h'], {})
         for sp in lv.get('springs', []):
             add('Spring', sp['x'], sp['y'], sp['w'], sp['h'], {'power': sp.get('power', 11)})
+        for rk in lv.get('rocks', []):
+            add('Rock', rk['x'], rk['y'], rk['w'], rk['h'], {})
         for f in lv.get('fishSpawners', []):
             if f.get('cruise'):
                 variant, ex = 'cruise', f.get('x', (f['rangeMin'] + f['rangeMax']) / 2)
@@ -513,7 +516,7 @@ def read_ldtk(path):
               'platforms': [], 'spikes': [], 'saws': [], 'blades': [],
               'mosquitoSwarms': [], 'leeches': [], 'pendulums': [],
               'ladders': [], 'walls': [], 'slopes': [], 'ropes': [],
-              'water': [], 'icicles': [], 'springs': [],
+              'water': [], 'icicles': [], 'springs': [], 'rocks': [],
               'fishSpawners': [], 'start': None, 'goal': None}
         plat_by_iid = {}
         for i in insts:
@@ -590,6 +593,8 @@ def read_ldtk(path):
             elif ident == 'Spring':
                 lv['springs'].append({'x': x, 'y': y, 'w': w, 'h': h,
                                       'power': f.get('power') or 11})
+            elif ident == 'Rock':
+                lv['rocks'].append({'x': x, 'y': y, 'w': w, 'h': h})
             elif ident == 'FishSpawner':
                 variant = f.get('variant') or 'range'
                 fs = {'waterY': y, 'r': f.get('r') or 12}
@@ -689,7 +694,7 @@ def generate_js(levels):
         lines.append('        start: { %s },' % st_inner)
         for key in ('platforms', 'spikes', 'saws', 'blades', 'mosquitoSwarms',
                     'leeches', 'pendulums', 'ladders', 'walls', 'slopes',
-                    'ropes', 'water', 'icicles', 'springs', 'fishSpawners'):
+                    'ropes', 'water', 'icicles', 'springs', 'rocks', 'fishSpawners'):
             items = lv.get(key, [])
             if key == 'ropes':
                 items = [dict(r, angle=0, angVel=0) for r in items]
