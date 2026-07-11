@@ -1657,6 +1657,7 @@
 
   var levelIndex, level, player, keys, particles, bloodStains, pops, chunks, running, transitioning, allDone;
   var frameCount, startTime, elapsed, deaths, loopId;
+  var camera = { x: 0, y: 0 };
 
   var gameState = 'menu';
   var pausedGame = false;
@@ -1715,6 +1716,8 @@
     if (!level.rocks) level.rocks = [];
     if (!level.portcullis) level.portcullis = [];
     if (!level.cannons) level.cannons = [];
+    if (!level.worldW) level.worldW = W;
+    if (!level.worldH) level.worldH = H;
     level._solidRects = level.platforms.concat(level.spikes).concat(level.ladders).concat(level.walls).concat(level.rocks).concat(level.portcullis);
     level._cannonballs = [];
     resetIcicles();
@@ -1729,7 +1732,17 @@
     pops = [];
     chunks = [];
     level.ropes.forEach(function(r) { r.angle = 0; r.angVel = 0; });
+    camera.x = 0; camera.y = 0;
+    updateCamera();
     draw();
+  }
+
+  function updateCamera() {
+    if (!player) return;
+    var targetX = player.x + player.w / 2 - W / 2;
+    var targetY = player.y + player.h / 2 - H / 2;
+    camera.x = Math.max(0, Math.min(level.worldW - W, targetX));
+    camera.y = Math.max(0, Math.min(level.worldH - H, targetY));
   }
 
   function resetPlayer() {
@@ -2028,7 +2041,7 @@
     for (var i = balls.length - 1; i >= 0; i--) {
       var b = balls[i];
       b.x += b.vx;
-      if (b.x < -20 || b.x > W + 20 || Math.abs(b.x - b.spawnX) > b.range || cannonballHitsSolid(b)) {
+      if (b.x < -20 || b.x > level.worldW + 20 || Math.abs(b.x - b.spawnX) > b.range || cannonballHitsSolid(b)) {
         balls.splice(i, 1);
       }
     }
@@ -2070,7 +2083,7 @@
             break;
           }
         }
-        if (ic._st === 'fall' && ic._fy > H) ic._st = 'gone';
+        if (ic._st === 'fall' && ic._fy > level.worldH) ic._st = 'gone';
       }
     });
   }
@@ -2390,7 +2403,8 @@
         r.angVel = 0;
       } else {
         if (checkHazards(hazardRects)) { killPlayer(); return; }
-        if (player.x + player.w >= W - 0.5 || goalReached()) { reachGoal(); return; }
+        if (player.x + player.w >= level.worldW - 0.5 || goalReached()) { reachGoal(); return; }
+        updateCamera();
         return;
       }
     }
@@ -2473,7 +2487,7 @@
       }
 
       if (player.x < 0) player.x = 0;
-      if (player.x + player.w > W) player.x = W - player.w;
+      if (player.x + player.w > level.worldW) player.x = level.worldW - player.w;
       if (player.y < 0) { player.y = 0; if (player.vy < 0) player.vy = 0; }
 
       if (!player.onLadder) {
@@ -2486,10 +2500,11 @@
 
     if (leechOverlap()) { player.slowUntilFrame = frameCount + 90; }
 
-    if (player.y > H) { killPlayer(); return; }
+    if (player.y > level.worldH) { killPlayer(); return; }
     if (checkHazards(hazardRects)) { killPlayer(); return; }
-    if (player.x + player.w >= W - 0.5 || goalReached()) { reachGoal(); return; }
+    if (player.x + player.w >= level.worldW - 0.5 || goalReached()) { reachGoal(); return; }
 
+    updateCamera();
     updateParticles();
     updateChunks();
   }
@@ -2526,7 +2541,7 @@
           pt.followRect = hitRect;
           pt.offsetX = pt.x - hitRect.x;
           pt.offsetY = pt.y - hitRect.y;
-        } else if (pt.y > H || pt.life <= 0) {
+        } else if (pt.y > level.worldH || pt.life <= 0) {
           particles.splice(j, 1);
           continue;
         }
@@ -2569,7 +2584,7 @@
       c.y += c.vy;
       c.rot += c.vrot;
       c.life -= 1;
-      if (c.life <= 0 || c.y > H) chunks.splice(i, 1);
+      if (c.life <= 0 || c.y > level.worldH) chunks.splice(i, 1);
     }
   }
 
@@ -3206,18 +3221,19 @@
   }
 
   function drawIceBackground() {
-    var grad = ctx.createLinearGradient(0, 0, 0, H);
+    var ww = level.worldW, wh = level.worldH;
+    var grad = ctx.createLinearGradient(0, 0, 0, wh);
     grad.addColorStop(0, '#0d1626');
     grad.addColorStop(0.45, '#14263e');
     grad.addColorStop(1, '#0a1220');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, ww, wh);
 
     var blockW = 56, blockH = 30;
-    var rows = Math.ceil(H / blockH) + 1;
+    var rows = Math.ceil(wh / blockH) + 1;
     for (var row = 0; row < rows; row++) {
       var offset = (row % 2 === 0) ? 0 : blockW / 2;
-      for (var bx = -blockW; bx < W + blockW; bx += blockW) {
+      for (var bx = -blockW; bx < ww + blockW; bx += blockW) {
         var x = bx + offset;
         var seed = Math.sin(row * 12.9898 + x * 78.233) * 43758.5453;
         var shade = seed - Math.floor(seed);
@@ -3231,8 +3247,8 @@
 
     for (var i = 0; i < 34; i++) {
       var speed = 0.35 + (i % 3) * 0.22;
-      var fy = ((i * 61.7 + frameCount * speed) % (H + 12)) - 6;
-      var fx = ((i * 137.5) % W) + Math.sin(frameCount * 0.02 + i * 1.7) * 9;
+      var fy = ((i * 61.7 + frameCount * speed) % (wh + 12)) - 6;
+      var fx = ((i * 137.5) % ww) + Math.sin(frameCount * 0.02 + i * 1.7) * 9;
       var fr = 1 + (i % 3) * 0.55;
       ctx.fillStyle = 'rgba(225,240,255,' + (0.25 + (i % 4) * 0.12) + ')';
       ctx.beginPath();
@@ -3240,13 +3256,13 @@
       ctx.fill();
     }
 
-    var vgrad = ctx.createLinearGradient(0, 0, 0, H);
+    var vgrad = ctx.createLinearGradient(0, 0, 0, wh);
     vgrad.addColorStop(0, 'rgba(0,0,10,0.5)');
     vgrad.addColorStop(0.3, 'rgba(0,0,10,0.1)');
     vgrad.addColorStop(0.75, 'rgba(0,0,10,0.15)');
     vgrad.addColorStop(1, 'rgba(0,0,10,0.55)');
     ctx.fillStyle = vgrad;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, ww, wh);
   }
 
   function drawSaw(s) {
@@ -3803,15 +3819,16 @@
   var TORCH_POSITIONS = [{ x: 70, y: 28 }, { x: 300, y: 28 }, { x: 530, y: 28 }];
 
   function drawDungeonBackground() {
+    var ww = level.worldW, wh = level.worldH;
     ctx.fillStyle = '#120e0c';
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, ww, wh);
 
     var brickW = 42, brickH = 24;
-    var rows = Math.ceil(H / brickH) + 1;
+    var rows = Math.ceil(wh / brickH) + 1;
     for (var row = 0; row < rows; row++) {
       var offset = (row % 2 === 0) ? 0 : brickW / 2;
       var by = row * brickH;
-      for (var bx = -brickW; bx < W + brickW; bx += brickW) {
+      for (var bx = -brickW; bx < ww + brickW; bx += brickW) {
         var x = bx + offset;
         var seed = Math.sin(row * 12.9898 + x * 78.233) * 43758.5453;
         var shade = seed - Math.floor(seed);
@@ -3823,13 +3840,13 @@
       }
     }
 
-    var vgrad = ctx.createLinearGradient(0, 0, 0, H);
+    var vgrad = ctx.createLinearGradient(0, 0, 0, wh);
     vgrad.addColorStop(0, 'rgba(0,0,0,0.6)');
     vgrad.addColorStop(0.3, 'rgba(0,0,0,0.15)');
     vgrad.addColorStop(0.75, 'rgba(0,0,0,0.2)');
     vgrad.addColorStop(1, 'rgba(0,0,0,0.65)');
     ctx.fillStyle = vgrad;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, ww, wh);
   }
 
   function drawTorch(tx, ty) {
@@ -3870,15 +3887,16 @@
   var CASTLE_WINDOW_POSITIONS = [{ x: 100, y: 10 }, { x: 300, y: 10 }, { x: 500, y: 10 }];
 
   function drawCastleBackground() {
+    var ww = level.worldW, wh = level.worldH;
     ctx.fillStyle = '#3a3630';
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, ww, wh);
 
     var brickW = 46, brickH = 26;
-    var rows = Math.ceil(H / brickH) + 1;
+    var rows = Math.ceil(wh / brickH) + 1;
     for (var row = 0; row < rows; row++) {
       var offset = (row % 2 === 0) ? 0 : brickW / 2;
       var by = row * brickH;
-      for (var bx = -brickW; bx < W + brickW; bx += brickW) {
+      for (var bx = -brickW; bx < ww + brickW; bx += brickW) {
         var x = bx + offset;
         var seed = Math.sin(row * 12.9898 + x * 78.233) * 43758.5453;
         var shade = seed - Math.floor(seed);
@@ -3890,13 +3908,13 @@
       }
     }
 
-    var vgrad = ctx.createLinearGradient(0, 0, 0, H);
+    var vgrad = ctx.createLinearGradient(0, 0, 0, wh);
     vgrad.addColorStop(0, 'rgba(20,14,8,0.42)');
     vgrad.addColorStop(0.3, 'rgba(20,14,8,0.08)');
     vgrad.addColorStop(0.75, 'rgba(20,14,8,0.14)');
     vgrad.addColorStop(1, 'rgba(20,14,8,0.5)');
     ctx.fillStyle = vgrad;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, ww, wh);
   }
 
   function drawCastleWindow(tx, ty) {
@@ -3996,13 +4014,14 @@
   }
 
   function drawRainforestBackground() {
-    var grad = ctx.createLinearGradient(0, 0, 0, H);
+    var ww = level.worldW, wh = level.worldH;
+    var grad = ctx.createLinearGradient(0, 0, 0, wh);
     grad.addColorStop(0, '#4a5c56');
     grad.addColorStop(0.4, '#33443d');
     grad.addColorStop(0.75, '#1c2b24');
     grad.addColorStop(1, '#0d1712');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, ww, wh);
 
     ctx.fillStyle = 'rgba(60,80,72,0.18)';
     for (var mi = 0; mi < 3; mi++) {
@@ -4028,15 +4047,15 @@
     mist.addColorStop(0, 'rgba(20,28,24,0)');
     mist.addColorStop(1, 'rgba(20,28,24,0.6)');
     ctx.fillStyle = mist;
-    ctx.fillRect(0, H * 0.62, W, H * 0.38);
+    ctx.fillRect(0, H * 0.62, ww, H * 0.38);
 
-    var vgrad = ctx.createLinearGradient(0, 0, 0, H);
+    var vgrad = ctx.createLinearGradient(0, 0, 0, wh);
     vgrad.addColorStop(0, 'rgba(0,0,0,0.35)');
     vgrad.addColorStop(0.3, 'rgba(0,0,0,0.08)');
     vgrad.addColorStop(0.75, 'rgba(0,0,0,0.15)');
     vgrad.addColorStop(1, 'rgba(0,0,0,0.5)');
     ctx.fillStyle = vgrad;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, ww, wh);
   }
 
   function drawFirefly(fx, fy) {
@@ -4058,12 +4077,13 @@
   }
 
   function drawFinishEdge() {
+    var ww = level.worldW, wh = level.worldH;
     var pulse = 0.5 + 0.5 * Math.sin(frameCount * 0.08);
-    var grad = ctx.createLinearGradient(W - 26, 0, W, 0);
+    var grad = ctx.createLinearGradient(ww - 26, 0, ww, 0);
     grad.addColorStop(0, 'rgba(255,224,102,0)');
     grad.addColorStop(1, 'rgba(255,224,102,' + (0.3 + 0.25 * pulse) + ')');
     ctx.fillStyle = grad;
-    ctx.fillRect(W - 26, 0, 26, H);
+    ctx.fillRect(ww - 26, 0, 26, wh);
   }
 
   function drawMossTuft(x, y) {
@@ -4300,6 +4320,7 @@
 
   function draw() {
     ctx.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
+    ctx.translate(-camera.x, -camera.y);
 
     if (level.theme === 'rainforest') {
       drawRainforestBackground();
