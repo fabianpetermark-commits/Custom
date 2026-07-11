@@ -146,9 +146,16 @@ def normalize_levels(levels):
                 nsp.append({k: _rnd(v) for k, v in s.items()})
         nl['spikes'] = nsp
         for key in ('saws', 'pendulums', 'mosquitoSwarms', 'leeches', 'ladders',
-                    'walls', 'slopes', 'water', 'icicles', 'springs', 'rocks'):
+                    'walls', 'slopes', 'water', 'icicles', 'springs', 'rocks', 'cannons'):
             nl[key] = [{k: _rnd(v) for k, v in e.items() if not k.startswith('_')}
                        for e in lv.get(key, [])]
+        ngp = []
+        for g in lv.get('portcullis', []):
+            ng = {k: _rnd(v) for k, v in g.items() if not k.startswith('_') and k != 'move'}
+            if g.get('move'):
+                ng['move'] = {k: _rnd(v) for k, v in g['move'].items() if k != 'active'}
+            ngp.append(ng)
+        nl['portcullis'] = ngp
         nrp = []
         for r in lv.get('ropes', []):
             nrp.append({'anchorX': _rnd(r['anchorX']), 'anchorY': _rnd(r['anchorY']),
@@ -211,7 +218,7 @@ ENTITY_SPECS = {
         ('color', 'string'), ('moveAxis', 'enum', 'MoveAxis'),
         ('moveMin', 'float'), ('moveMax', 'float'), ('moveSpeed', 'float'), ('movePhase', 'float'),
         ('sinkMaxY', 'float'), ('sinkSpeed', 'float'),
-        ('tiltMaxAngle', 'float'), ('tiltSpeed', 'float'), ('ice', 'bool')]),
+        ('tiltMaxAngle', 'float'), ('tiltSpeed', 'float'), ('ice', 'bool'), ('crumble', 'bool')]),
     'Spike': (40, 12, True, '#9C1524', [('followRef', 'ref')]),
     'Saw': (26, 26, False, '#C9C9D4', [
         ('r', 'float'), ('axis', 'enum', 'SawAxis'),
@@ -236,6 +243,12 @@ ENTITY_SPECS = {
     'Icicle': (12, 24, True, '#BEE0FF', []),
     'Spring': (24, 12, True, '#C83240', [('power', 'float')]),
     'Rock': (60, 40, True, '#3A3F4A', []),
+    'Portcullis': (20, 100, True, '#6B6258', [
+        ('moveAxis', 'enum', 'MoveAxis'),
+        ('moveMin', 'float'), ('moveMax', 'float'), ('moveSpeed', 'float'), ('movePhase', 'float')]),
+    'Cannon': (20, 16, True, '#4A463E', [
+        ('dir', 'enum', 'CannonDir'), ('interval', 'float'), ('speed', 'float'), ('r', 'float'),
+        ('range', 'float')]),
     'Start': (18, 26, False, '#F4F1E6', [('followRef', 'ref')]),
     'Goal': (30, 40, True, '#FFE066', []),
 }
@@ -245,7 +258,8 @@ ENUMS = {
     'SawAxis': ['x', 'y'],
     'SlopeDir': ['up', 'down'],
     'FishVariant': ['spots', 'range', 'cruise'],
-    'Theme': ['dungeon', 'rainforest', 'ice'],
+    'CannonDir': ['left', 'right'],
+    'Theme': ['dungeon', 'rainforest', 'ice', 'castle'],
 }
 
 
@@ -365,7 +379,7 @@ def export_ldtk(levels):
             fields = {'color': p.get('color', '#3ee08a'), 'moveAxis': 'none',
                       'moveMin': 0, 'moveMax': 0, 'moveSpeed': 0, 'movePhase': 0,
                       'sinkMaxY': 0, 'sinkSpeed': 0, 'tiltMaxAngle': 0, 'tiltSpeed': 0,
-                      'ice': bool(p.get('ice'))}
+                      'ice': bool(p.get('ice')), 'crumble': bool(p.get('crumble'))}
             if p.get('move'):
                 mv = p['move']
                 fields.update({'moveAxis': mv['axis'], 'moveMin': mv['min'],
@@ -417,6 +431,19 @@ def export_ldtk(levels):
             add('Spring', sp['x'], sp['y'], sp['w'], sp['h'], {'power': sp.get('power', 11)})
         for rk in lv.get('rocks', []):
             add('Rock', rk['x'], rk['y'], rk['w'], rk['h'], {})
+        for g in lv.get('portcullis', []):
+            fields = {'moveAxis': 'none', 'moveMin': 0, 'moveMax': 0, 'moveSpeed': 0, 'movePhase': 0}
+            if g.get('move'):
+                mv = g['move']
+                fields.update({'moveAxis': mv['axis'], 'moveMin': mv['min'],
+                               'moveMax': mv['max'], 'moveSpeed': mv['speed'],
+                               'movePhase': mv['phase']})
+            add('Portcullis', g['x'], g['y'], g['w'], g['h'], fields)
+        for c in lv.get('cannons', []):
+            add('Cannon', c['x'], c['y'], c['w'], c['h'], {
+                'dir': 'left' if c.get('dir', 1) < 0 else 'right',
+                'interval': c.get('interval', 90), 'speed': c.get('speed', 3.2),
+                'r': c.get('r', 6), 'range': c.get('range', 260)})
         for f in lv.get('fishSpawners', []):
             if f.get('cruise'):
                 variant, ex = 'cruise', f.get('x', (f['rangeMin'] + f['rangeMax']) / 2)
@@ -517,6 +544,7 @@ def read_ldtk(path):
               'mosquitoSwarms': [], 'leeches': [], 'pendulums': [],
               'ladders': [], 'walls': [], 'slopes': [], 'ropes': [],
               'water': [], 'icicles': [], 'springs': [], 'rocks': [],
+              'portcullis': [], 'cannons': [],
               'fishSpawners': [], 'start': None, 'goal': None}
         plat_by_iid = {}
         for i in insts:
@@ -536,6 +564,8 @@ def read_ldtk(path):
                 p['tilt'] = {'maxAngle': f.get('tiltMaxAngle') or 0.1, 'speed': f['tiltSpeed']}
             if f.get('ice'):
                 p['ice'] = True
+            if f.get('crumble'):
+                p['crumble'] = True
             lv['platforms'].append(p)
             plat_by_iid[i['iid']] = p
         for i in insts:
@@ -595,6 +625,20 @@ def read_ldtk(path):
                                       'power': f.get('power') or 11})
             elif ident == 'Rock':
                 lv['rocks'].append({'x': x, 'y': y, 'w': w, 'h': h})
+            elif ident == 'Portcullis':
+                g = {'x': x, 'y': y, 'w': w, 'h': h}
+                if (f.get('moveAxis') or 'none') != 'none':
+                    g['move'] = {'axis': f['moveAxis'], 'min': f.get('moveMin') or 0,
+                                 'max': f.get('moveMax') or 0, 'speed': f.get('moveSpeed') or 0.02,
+                                 'phase': f.get('movePhase') or 0}
+                lv['portcullis'].append(g)
+            elif ident == 'Cannon':
+                lv['cannons'].append({'x': x, 'y': y, 'w': w, 'h': h,
+                                      'dir': -1 if (f.get('dir') or 'right') == 'left' else 1,
+                                      'interval': f.get('interval') or 90,
+                                      'speed': f.get('speed') or 3.2,
+                                      'r': f.get('r') or 6,
+                                      'range': f.get('range') or 260})
             elif ident == 'FishSpawner':
                 variant = f.get('variant') or 'range'
                 fs = {'waterY': y, 'r': f.get('r') or 12}
@@ -694,7 +738,8 @@ def generate_js(levels):
         lines.append('        start: { %s },' % st_inner)
         for key in ('platforms', 'spikes', 'saws', 'blades', 'mosquitoSwarms',
                     'leeches', 'pendulums', 'ladders', 'walls', 'slopes',
-                    'ropes', 'water', 'icicles', 'springs', 'rocks', 'fishSpawners'):
+                    'ropes', 'water', 'icicles', 'springs', 'rocks',
+                    'portcullis', 'cannons', 'fishSpawners'):
             items = lv.get(key, [])
             if key == 'ropes':
                 items = [dict(r, angle=0, angVel=0) for r in items]

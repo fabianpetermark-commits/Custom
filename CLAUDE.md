@@ -121,3 +121,11 @@ Tájékoztató nagyságrendek (nem helyettesítik a szimulációt, csak gyors be
 - **Ne bízz a "van megoldás" eredményben vakon** — mindig kérdezd meg a
   szimulátort: mekkora a biztonsági ablak, és mi történik, ha a bot/játékos
   egy kicsit korábban vagy később reagál.
+- **Lövedék/mozgó veszély hatótávja**: egy `Cannon`-szerű, folyamatosan
+  mozgó veszélynek (ami nem áll meg szilárd testen, csak becsapódáskor vagy
+  hatótáv-limitnél tűnik el) MINDIG legyen explicit hatótáv-korlátja
+  (`range`), különben visszasodródhat a pálya korábbi, már bejárt
+  szakaszaira, és ott okoz megjósolhatatlan, igazságtalan halált — ezt csak
+  valós Playwright-lejátszással (nem csak elméleti szimulációval) sikerült
+  elkapni, mert a szimulátor nem modellezte a lövedék teljes pálya-hosszú
+  útját.
