@@ -1478,10 +1478,10 @@
         theme: 'castle',
         start: { x: 20, y: 274 },
         platforms: [
-          { x: 0, y: 300, w: 110, h: 20, color: '#8f8474' },
-          { x: 180, y: 300, w: 90, h: 20, color: '#8f8474', crumble: true },
-          { x: 340, y: 300, w: 90, h: 20, color: '#8f8474', crumble: true },
-          { x: 500, y: 300, w: 100, h: 20, color: '#8f8474' }
+          { x: 0, y: 300, w: 100, h: 20, color: '#8f8474' },
+          { x: 150, y: 235, w: 90, h: 20, color: '#8f8474' },
+          { x: 290, y: 170, w: 90, h: 20, color: '#8f8474' },
+          { x: 470, y: 260, w: 100, h: 20, color: '#8f8474', crumble: true }
         ],
         spikes: [],
         saws: [],
@@ -1494,9 +1494,7 @@
         slopes: [],
         ropes: [],
         water: [
-          { x: 110, y: 310, w: 70, h: 30 },
-          { x: 270, y: 310, w: 70, h: 30 },
-          { x: 430, y: 310, w: 70, h: 30 }
+          { x: 100, y: 310, w: 500, h: 30 }
         ],
         icicles: [],
         springs: [],
@@ -1507,14 +1505,15 @@
         portcullis: [],
         cannons: [],
         fishSpawners: [],
-        goal: { x: 560, y: 260, w: 30, h: 40 }
+        goal: { x: 540, y: 220, w: 30, h: 40 }
       },
       {
         name: 'RACS_UDVAR',
         theme: 'castle',
         start: { x: 20, y: 274 },
         platforms: [
-          { x: 0, y: 300, w: 600, h: 20, color: '#8f8474' }
+          { x: 0, y: 300, w: 150, h: 20, color: '#8f8474' },
+          { x: 200, y: 235, w: 400, h: 20, color: '#8f8474' }
         ],
         spikes: [],
         saws: [],
@@ -1526,7 +1525,9 @@
         walls: [],
         slopes: [],
         ropes: [],
-        water: [],
+        water: [
+          { x: 150, y: 310, w: 50, h: 30 }
+        ],
         icicles: [],
         springs: [],
         rocks: [
@@ -1534,18 +1535,19 @@
           { x: 0, y: 20, w: 20, h: 254 }
         ],
         portcullis: [
-          { x: 300, y: 20, w: 20, h: 280, move: { axis: 'y', min: -260, max: 20, speed: 0.02, phase: 0 } }
+          { x: 380, y: 20, w: 20, h: 215, move: { axis: 'y', min: -195, max: 20, speed: 0.02, phase: 0 } }
         ],
         cannons: [],
         fishSpawners: [],
-        goal: { x: 560, y: 260, w: 30, h: 40 }
+        goal: { x: 560, y: 195, w: 30, h: 40 }
       },
       {
         name: 'AGYU_FOLYOSO',
         theme: 'castle',
         start: { x: 20, y: 274 },
         platforms: [
-          { x: 0, y: 300, w: 600, h: 20, color: '#8f8474' }
+          { x: 0, y: 300, w: 140, h: 20, color: '#8f8474' },
+          { x: 190, y: 235, w: 410, h: 20, color: '#8f8474' }
         ],
         spikes: [],
         saws: [],
@@ -1557,7 +1559,9 @@
         walls: [],
         slopes: [],
         ropes: [],
-        water: [],
+        water: [
+          { x: 140, y: 310, w: 50, h: 30 }
+        ],
         icicles: [],
         springs: [],
         rocks: [
@@ -1566,19 +1570,20 @@
         ],
         portcullis: [],
         cannons: [
-          { x: 450, y: 284, w: 20, h: 16, dir: -1, interval: 100, speed: 3.5, r: 6, range: 300 }
+          { x: 450, y: 219, w: 20, h: 16, dir: -1, interval: 100, speed: 3.5, r: 6, range: 250 }
         ],
         fishSpawners: [],
-        goal: { x: 560, y: 260, w: 30, h: 40 }
+        goal: { x: 560, y: 195, w: 30, h: 40 }
       },
       {
         name: 'VAR_FOLYOSO',
         theme: 'castle',
         start: { x: 20, y: 274 },
         platforms: [
-          { x: 0, y: 300, w: 140, h: 20, color: '#8f8474' },
-          { x: 210, y: 300, w: 90, h: 20, color: '#8f8474', crumble: true },
-          { x: 370, y: 300, w: 230, h: 20, color: '#8f8474' }
+          { x: 0, y: 300, w: 120, h: 20, color: '#8f8474' },
+          { x: 170, y: 235, w: 90, h: 20, color: '#8f8474' },
+          { x: 330, y: 235, w: 90, h: 20, color: '#8f8474', crumble: true },
+          { x: 470, y: 170, w: 130, h: 20, color: '#8f8474' }
         ],
         spikes: [],
         saws: [],
@@ -1591,8 +1596,7 @@
         slopes: [],
         ropes: [],
         water: [
-          { x: 140, y: 310, w: 70, h: 30 },
-          { x: 300, y: 310, w: 70, h: 30 }
+          { x: 120, y: 310, w: 480, h: 30 }
         ],
         icicles: [],
         springs: [],
@@ -1601,23 +1605,23 @@
           { x: 0, y: 20, w: 20, h: 254 }
         ],
         portcullis: [
-          { x: 420, y: 20, w: 20, h: 280, move: { axis: 'y', min: -260, max: 20, speed: 0.022, phase: 0.8 } }
+          { x: 500, y: 20, w: 20, h: 150, move: { axis: 'y', min: -130, max: 20, speed: 0.022, phase: 0.8 } }
         ],
         cannons: [
-          { x: 500, y: 284, w: 20, h: 16, dir: -1, interval: 100, speed: 3.5, r: 6, range: 120 }
+          { x: 540, y: 154, w: 20, h: 16, dir: -1, interval: 100, speed: 3.5, r: 6, range: 60 }
         ],
         fishSpawners: [],
-        goal: { x: 560, y: 260, w: 30, h: 40 }
+        goal: { x: 570, y: 130, w: 30, h: 40 }
       },
       {
         name: 'VAR_FINALE',
         theme: 'castle',
         start: { x: 20, y: 274 },
         platforms: [
-          { x: 0, y: 300, w: 100, h: 20, color: '#8f8474' },
-          { x: 170, y: 300, w: 90, h: 20, color: '#8f8474', crumble: true },
-          { x: 330, y: 300, w: 90, h: 20, color: '#8f8474', crumble: true },
-          { x: 470, y: 300, w: 130, h: 20, color: '#8f8474' }
+          { x: 0, y: 300, w: 90, h: 20, color: '#8f8474' },
+          { x: 130, y: 235, w: 90, h: 20, color: '#8f8474', crumble: true },
+          { x: 260, y: 170, w: 90, h: 20, color: '#8f8474' },
+          { x: 440, y: 260, w: 150, h: 20, color: '#8f8474' }
         ],
         spikes: [],
         saws: [],
@@ -1630,9 +1634,7 @@
         slopes: [],
         ropes: [],
         water: [
-          { x: 100, y: 310, w: 70, h: 30 },
-          { x: 260, y: 310, w: 70, h: 30 },
-          { x: 420, y: 310, w: 50, h: 30 }
+          { x: 90, y: 310, w: 500, h: 30 }
         ],
         icicles: [],
         springs: [],
@@ -1641,13 +1643,13 @@
           { x: 0, y: 20, w: 20, h: 254 }
         ],
         portcullis: [
-          { x: 490, y: 20, w: 20, h: 280, move: { axis: 'y', min: -260, max: 20, speed: 0.025, phase: 1.5 } }
+          { x: 460, y: 20, w: 20, h: 240, move: { axis: 'y', min: -220, max: 20, speed: 0.025, phase: 1.5 } }
         ],
         cannons: [
-          { x: 530, y: 284, w: 20, h: 16, dir: -1, interval: 100, speed: 3.5, r: 6, range: 55 }
+          { x: 520, y: 244, w: 20, h: 16, dir: -1, interval: 100, speed: 3.5, r: 6, range: 60 }
         ],
         fishSpawners: [],
-        goal: { x: 560, y: 260, w: 30, h: 40 }
+        goal: { x: 560, y: 220, w: 30, h: 40 }
       }
     ];
     // === LDTK GENERATED LEVELS END ===
