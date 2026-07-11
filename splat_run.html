@@ -159,6 +159,15 @@
     width: 90%;
     max-width: 480px;
   }
+  .level-select-list {
+    margin-top: 14px;
+    max-height: 44vh;
+    overflow-y: auto;
+    width: 240px;
+  }
+  .level-select-list .menu-item {
+    text-align: left;
+  }
   .rank-row {
     display: flex;
     justify-content: space-between;
@@ -1657,6 +1666,22 @@
   var asyncOpToken = 0;
   var nameSubmitInFlight = false;
   var savingInFlight = false;
+  var pendingLevelIdx = null;
+
+  // Rejtett teszt-mod: a ?dev=1 URL-parammal egyszer bekapcsolva a device-on
+  // marad (localStorage), es a fomenube egy "PALYA VALASZTO" pontot tesz ki,
+  // ahonnan barmelyik palya kozvetlenul elindithato (a normal, sorban-halado
+  // jatekmenet valtozatlan marad a tobbi jatekosnak).
+  var DEV_KEY = 'splatDevMode';
+  (function() {
+    var m = (location.search || '').match(/[?&]dev=(\d)/);
+    if (m) {
+      try { localStorage.setItem(DEV_KEY, m[1] === '1' ? '1' : '0'); } catch (e) {}
+    }
+  })();
+  function isDevMode() {
+    try { return localStorage.getItem(DEV_KEY) === '1'; } catch (e) { return false; }
+  }
 
   var SUPABASE_URL = 'https://rrqrmbiclapopgrcypye.supabase.co';
   var SUPABASE_KEY = 'sb_publishable_hbjYoyagZNpg7tt90PlC0w_i-7TT1IR';
@@ -1752,6 +1777,12 @@
   var FIXED_DT = 1000 / 60;
 
   function startRun() {
+    var hashMatch = (location.hash || '').match(/palya=(\d+)/);
+    var startIdx = hashMatch ? Math.min(LEVELS.length - 1, Math.max(0, parseInt(hashMatch[1], 10) - 1)) : 0;
+    startAtLevel(startIdx);
+  }
+
+  function startAtLevel(idx) {
     asyncOpToken++;
     gameState = 'playing';
     pausedGame = false;
@@ -1759,9 +1790,7 @@
     elapsed = 0;
     transitioning = false;
     allDone = false;
-    var hashMatch = (location.hash || '').match(/palya=(\d+)/);
-    var startIdx = hashMatch ? Math.min(LEVELS.length - 1, Math.max(0, parseInt(hashMatch[1], 10) - 1)) : 0;
-    loadLevel(startIdx);
+    loadLevel(idx);
     beginLoop();
     startMusic();
   }
@@ -2644,6 +2673,7 @@
       { action: 'settings', label: 'BEALLITASOK' },
       { action: 'install', label: 'TELEPITES' }
     ]);
+    if (isDevMode()) items.push({ action: 'levelselect', label: 'PALYA VALASZTO' });
     return items;
   }
 
@@ -2736,6 +2766,28 @@
     else if (action === 'rank') showRanking();
     else if (action === 'settings') showSettings();
     else if (action === 'install') triggerInstall();
+    else if (action === 'levelselect') showLevelSelect();
+  }
+
+  function showLevelSelect() {
+    gameState = 'levelSelect';
+    var itemsHtml = LEVELS.map(function(lv, i) {
+      return '<div class="menu-item" data-idx="' + i + '">' + (i + 1) + '. ' + escapeHtml(lv.name) + '</div>';
+    }).join('');
+    overlay.innerHTML =
+      '<div class="overlay-title">PALYA VALASZTO</div>' +
+      '<div class="menu-list level-select-list">' + itemsHtml + '</div>' +
+      '<div class="menu-list"><div class="menu-item selected" id="levelSelectBack">VISSZA</div></div>';
+    overlay.classList.remove('hidden');
+    Array.prototype.forEach.call(overlay.querySelectorAll('[data-idx]'), function(el) {
+      el.addEventListener('click', function() {
+        var idx = parseInt(el.getAttribute('data-idx'), 10);
+        if (!playerIdentity) { pendingLevelIdx = idx; showNamePrompt(); return; }
+        startAtLevel(idx);
+      });
+    });
+    var backBtn = document.getElementById('levelSelectBack');
+    if (backBtn) backBtn.addEventListener('click', function() { showMenu(); });
   }
 
   function startNewGame() {
@@ -2793,7 +2845,13 @@
       }
       playerIdentity = { id: id, name: name };
       localStorage.setItem('splatRunPlayer', JSON.stringify(playerIdentity));
-      startRun();
+      if (pendingLevelIdx !== null) {
+        var idxToStart = pendingLevelIdx;
+        pendingLevelIdx = null;
+        startAtLevel(idxToStart);
+      } else {
+        startRun();
+      }
     }).catch(function() {
       if (myToken !== asyncOpToken) return;
       showNamePrompt('Nincs kapcsolat a szerverrel.');
@@ -4353,7 +4411,7 @@
       if (key === 'escape') { e.preventDefault(); showMenu(); }
       return;
     }
-    if (gameState === 'ranking' || gameState === 'install') {
+    if (gameState === 'ranking' || gameState === 'install' || gameState === 'levelSelect') {
       if (key === 'enter' || key === ' ' || key === 'escape' || key === 'arrowup' || key === 'arrowdown') {
         e.preventDefault();
         showMenu();
@@ -4801,7 +4859,7 @@
 
   document.getElementById('btnJump').addEventListener('touchstart', function(e) {
     e.preventDefault();
-    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition') return;
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition' || gameState === 'levelSelect') return;
     if (!running && !transitioning) { startRun(); return; }
     if (!running && transitioning) { advanceAfterOverlay(); return; }
     if (player.onRope) { keys.up = true; setTimeout(function() { keys.up = false; }, 50); return; }
@@ -4816,7 +4874,7 @@
 
   document.getElementById('btnJump').addEventListener('mousedown', function(e) {
     e.preventDefault();
-    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition') return;
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition' || gameState === 'levelSelect') return;
     if (!running && !transitioning) { startRun(); return; }
     if (!running && transitioning) { advanceAfterOverlay(); return; }
     if (player.onRope) { keys.up = true; setTimeout(function() { keys.up = false; }, 50); return; }
@@ -4836,14 +4894,14 @@
 
   document.getElementById('btnDash').addEventListener('touchstart', function(e) {
     e.preventDefault();
-    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition') return;
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition' || gameState === 'levelSelect') return;
     if (!running) return;
     handleDashPress();
   }, { passive: false });
 
   document.getElementById('btnDash').addEventListener('mousedown', function(e) {
     e.preventDefault();
-    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition') return;
+    if (gameState === 'menu' || gameState === 'nameEntry' || gameState === 'ranking' || gameState === 'install' || gameState === 'settings' || gameState === 'reposition' || gameState === 'levelSelect') return;
     if (!running) return;
     handleDashPress();
   });
