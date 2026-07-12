@@ -4,8 +4,8 @@
 Splat Run <-> LDtk palya-konverter.
 
 Hasznalat:
-  python import_levels.py export-ldtk   # egyszeri migracio: splat_run.html -> splat_levels.ldtk
-  python import_levels.py import        # rendszeres irany: splat_levels.ldtk -> splat_run.html (+index.html)
+  python import_levels.py export-ldtk   # egyszeri migracio: levels.js -> splat_levels.ldtk
+  python import_levels.py import        # rendszeres irany: splat_levels.ldtk -> levels.js
 
 Az 'import' automatikusan ellenorzi a kort a levels_canonical.json pillanatkep ellen
 (ha letezik), es csak akkor ir, ha a szemantikus diff ures (vagy --force).
@@ -17,8 +17,7 @@ import sys
 import uuid
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-HTML_PATH = os.path.join(BASE, 'splat_run.html')
-INDEX_PATH = os.path.join(BASE, 'index.html')
+LEVELS_JS_PATH = os.path.join(BASE, 'levels.js')
 LDTK_PATH = os.path.join(BASE, 'splat_levels.ldtk')
 SNAPSHOT_PATH = os.path.join(BASE, 'levels_canonical.json')
 
@@ -759,14 +758,14 @@ def generate_js(levels):
         lvl_texts.append('\n'.join(lines))
 
     body = []
-    body.append('  function buildLevels() {')
+    body.append('function buildLevels() {')
     body.append('    // === LDTK GENERATED LEVELS START (forras: splat_levels.ldtk - ne szerkeszd kezzel) ===')
     body.extend(decls)
     body.append('    return [')
     body.append(',\n'.join(lvl_texts))
     body.append('    ];')
     body.append('    // === LDTK GENERATED LEVELS END ===')
-    body.append('  }')
+    body.append('}')
     return '\n'.join(body)
 
 
@@ -780,10 +779,10 @@ def splice_into_html(html, new_fn):
 # ---------------------------------------------------------------------------
 
 def cmd_export_ldtk():
-    with open(HTML_PATH, 'r', encoding='utf-8') as fh:
-        html = fh.read()
-    levels = parse_levels_from_html(html)
-    print('Beolvasva %d palya a splat_run.html-bol.' % len(levels))
+    with open(LEVELS_JS_PATH, 'r', encoding='utf-8') as fh:
+        js = fh.read()
+    levels = parse_levels_from_html(js)
+    print('Beolvasva %d palya a levels.js-bol.' % len(levels))
     project = export_ldtk(levels)
     with open(LDTK_PATH, 'w', encoding='utf-8') as fh:
         json.dump(project, fh, indent=1)
@@ -804,14 +803,12 @@ def cmd_import(force=False):
         else:
             print('Megjegyzes: a palya-adatok elternek a pillanatkeptol (ez szerkesztes utan normalis).')
     new_fn = generate_js(levels)
-    with open(HTML_PATH, 'r', encoding='utf-8') as fh:
-        html = fh.read()
-    html = splice_into_html(html, new_fn)
-    with open(HTML_PATH, 'w', encoding='utf-8', newline='\n') as fh:
-        fh.write(html)
-    with open(INDEX_PATH, 'w', encoding='utf-8', newline='\n') as fh:
-        fh.write(html)
-    print('buildLevels() ujrageneralva: splat_run.html + index.html')
+    with open(LEVELS_JS_PATH, 'r', encoding='utf-8') as fh:
+        js = fh.read()
+    js = splice_into_html(js, new_fn)
+    with open(LEVELS_JS_PATH, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(js)
+    print('buildLevels() ujrageneralva: levels.js')
 
 
 def cmd_verify():

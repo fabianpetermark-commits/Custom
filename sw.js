@@ -1,7 +1,8 @@
-var CACHE_NAME = 'splat-run-v36';
+var CACHE_NAME = 'splat-run-v37';
 var FILES_TO_CACHE = [
   './index.html',
   './splat_run.html',
+  './levels.js',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'

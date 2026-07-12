@@ -7,15 +7,23 @@ végigjátszható legyen — ne csak "kinézetre jónak tűnjön".
 
 ## A projekt
 
-- `splat_run.html` és `index.html` — a játék maga, egyetlen self-contained
-  HTML fájl (a kettő tartalma mindig **azonos**, kettő van belőle, mert a
-  GitHub Pages `index.html`-t szolgál ki gyökérből).
+- `splat_run.html` és `index.html` — a játék maga (a kettő tartalma mindig
+  **azonos**, kettő van belőle, mert a GitHub Pages `index.html`-t szolgál ki
+  gyökérből). A pálya-adatokat leszámítva továbbra is egyetlen self-contained
+  HTML-ben él a teljes motor (fizika, rajzolás, UI) — ez a Sprint 1
+  "kódrendezés" folyamatban lévő célja, egyelőre csak a pályák lettek kiemelve.
+- `levels.js` — a `buildLevels()` függvény (a pálya-adatok), kiemelve a
+  HTML-ekből, mindkettő `<script src="levels.js">`-vel tölti be a fő játék-
+  script előtt. Ezt a fájlt az `import_levels.py` generálja/kezeli, kézzel ne
+  szerkeszd.
 - `splat_levels.ldtk` — a pályák szerkeszthető forrása LDtk-ban.
 - `levels_canonical.json` — pillanatkép a pálya-adatokról, az `import_levels.py verify`
   ezzel hasonlítja össze a `.ldtk`-ból beolvasott állapotot (kör-ellenőrzés).
-- `import_levels.py` — a pipeline: `.ldtk` ↔ a HTML-be ágyazott JS `buildLevels()`
+- `import_levels.py` — a pipeline: `.ldtk` ↔ `levels.js`-be írt JS `buildLevels()`
   ↔ `levels_canonical.json`. Lásd `PALYA_SZERKESZTES.md` a parancsokért.
 - `sw.js` — service worker, hálózat-előbb stratégiával (lásd lent, miért fontos).
+  A cache-listája (`FILES_TO_CACHE`) tartalmazza a `levels.js`-t is — ha új
+  megosztott JS/CSS fájlt adsz a projekthez, ide is vedd fel.
 
 ## A folyamat: ötlettől élesítésig
 
@@ -54,7 +62,7 @@ végigjátszható legyen — ne csak "kinézetre jónak tűnjön".
 
 4. **Pipeline-futtatás pálya-változtatás után:**
    ```
-   python3 import_levels.py import      # .ldtk -> HTML buildLevels()
+   python3 import_levels.py import      # .ldtk -> levels.js buildLevels()
    # majd patcheld a levels_canonical.json-t a módosított pálya(k) normalizált
    # adataival (ne futtass teljes export-ldtk-t, az felesleges zajt kelt a
    # nem érintett pályák iid/mező-sorrendjében)

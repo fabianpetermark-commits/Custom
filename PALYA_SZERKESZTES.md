@@ -27,7 +27,9 @@ Nyiss egy terminált a `Splat` mappában, és futtasd:
 python import_levels.py import
 ```
 
-Ez frissíti a `splat_run.html` és `index.html` fájlokat a szerkesztett pályákkal. Ezután nyisd meg a `splat_run.html`-t böngészőben, és próbáld ki.
+Ez frissíti a `levels.js` fájlt a szerkesztett pályákkal (ezt tölti be mind a
+`splat_run.html`, mind az `index.html`). Ezután nyisd meg a `splat_run.html`-t
+böngészőben, és próbáld ki.
 
 ## Ha végleges
 
@@ -35,5 +37,5 @@ Szólj Claude-nak, hogy publikálja (commit + push a GitHub Pages oldalra).
 
 ## Egyéb parancsok
 
-- `python import_levels.py export-ldtk` — a jelenlegi `splat_run.html`-ből újra legenerálja az `.ldtk` fájlt (csak akkor kell, ha valamiért teljesen elölről akarod kezdeni a szerkesztést a jelenlegi játék-állapotból).
+- `python import_levels.py export-ldtk` — a jelenlegi `levels.js`-ből újra legenerálja az `.ldtk` fájlt (csak akkor kell, ha valamiért teljesen elölről akarod kezdeni a szerkesztést a jelenlegi játék-állapotból).
 - `python import_levels.py verify` — ellenőrzi, hogy a `.ldtk` fájl és a `levels_canonical.json` pillanatkép összhangban van-e (csak diagnosztikai célra).
