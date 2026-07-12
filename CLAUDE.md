@@ -7,23 +7,40 @@ végigjátszható legyen — ne csak "kinézetre jónak tűnjön".
 
 ## A projekt
 
-- `splat_run.html` és `index.html` — a játék maga (a kettő tartalma mindig
+- `splat_run.html` és `index.html` — a játék HTML váza (a kettő tartalma mindig
   **azonos**, kettő van belőle, mert a GitHub Pages `index.html`-t szolgál ki
-  gyökérből). A pálya-adatokat leszámítva továbbra is egyetlen self-contained
-  HTML-ben él a teljes motor (fizika, rajzolás, UI) — ez a Sprint 1
-  "kódrendezés" folyamatban lévő célja, egyelőre csak a pályák lettek kiemelve.
-- `levels.js` — a `buildLevels()` függvény (a pálya-adatok), kiemelve a
-  HTML-ekből, mindkettő `<script src="levels.js">`-vel tölti be a fő játék-
-  script előtt. Ezt a fájlt az `import_levels.py` generálja/kezeli, kézzel ne
-  szerkeszd.
+  gyökérből). A Sprint 1 "kódrendezés" óta a HTML-ek csak a DOM-ot/CSS-t adják
+  és `<script src="...">`-vel betöltik a motort — a tényleges JS logika teljes
+  egészében külön fájlokban él (lásd lent). A fájlok NEM ES-modulok, hanem
+  klasszikus, egymást követő `<script>` tagek, amik egyetlen közös globális
+  scope-ot alkotnak (pont úgy, mint korábban egyetlen `(function(){...})()`-en
+  belül) — ezért a betöltési sorrend számít, de a fájlok közötti hívások/
+  hivatkozások szabadon mennek mindkét irányba.
+- `levels.js` — a `buildLevels()` függvény (a pálya-adatok). Ezt a fájlt az
+  `import_levels.py` generálja/kezeli, kézzel ne szerkeszd.
+- `audio.js` — zene- és hangmotor (Web Audio: chiptune zene, fűrész-zörej,
+  effektek). Csak a `level`/`player`/`running` globálisokat olvassa (a
+  fűrész-hangerő számításához), egyébként önálló.
+- `physics.js` — fizika-konstansok, ütközésdetekció, hazárdok (platformok,
+  fűrészek, ingák, kötelek, jégcsapok, ágyúgolyók, hal-spawnerek stb.)
+  frissítése, illetve a részecske/darab-effektek. Ide tartozik minden, ami a
+  játékos/pálya állapotát a fizikai szimuláció szintjén módosítja.
+- `draw.js` — a teljes canvas-rajzolás (háttér-témák, szereplő, platformok,
+  minden hazárd-típus, effektek). Nem módosít játékállapotot, csak olvas.
+- `game.js` — a "ragasztó": DOM-referenciák, játékállapot-változók, szint-
+  betöltés, kamera, a game loop indítása/futtatása, menü/UI, mentés-betöltés,
+  rangsor, érintővezérlők és azok szerkesztő módja. Ez a fájl köti össze a
+  másik hármat, és ez fut le utoljára (`showMenu()` a fájl végén indítja a
+  menüt).
 - `splat_levels.ldtk` — a pályák szerkeszthető forrása LDtk-ban.
 - `levels_canonical.json` — pillanatkép a pálya-adatokról, az `import_levels.py verify`
   ezzel hasonlítja össze a `.ldtk`-ból beolvasott állapotot (kör-ellenőrzés).
 - `import_levels.py` — a pipeline: `.ldtk` ↔ `levels.js`-be írt JS `buildLevels()`
   ↔ `levels_canonical.json`. Lásd `PALYA_SZERKESZTES.md` a parancsokért.
 - `sw.js` — service worker, hálózat-előbb stratégiával (lásd lent, miért fontos).
-  A cache-listája (`FILES_TO_CACHE`) tartalmazza a `levels.js`-t is — ha új
-  megosztott JS/CSS fájlt adsz a projekthez, ide is vedd fel.
+  A cache-listája (`FILES_TO_CACHE`) tartalmazza az összes megosztott JS
+  fájlt (`levels.js`, `audio.js`, `physics.js`, `draw.js`, `game.js`) — ha új
+  ilyen fájlt adsz a projekthez, ide is vedd fel.
 
 ## A folyamat: ötlettől élesítésig
 
