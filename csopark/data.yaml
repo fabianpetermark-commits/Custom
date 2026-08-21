@@ -1,0 +1,12 @@
+names:
+- '0'
+nc: 1
+roboflow:
+  license: CC BY 4.0
+  project: license-plate-recognition-8fvub
+  url: https://universe.roboflow.com/amykun-qoz6t/license-plate-recognition-8fvub/dataset/2
+  version: 2
+  workspace: amykun-qoz6t
+test: ../test/images
+train: /content/drive/MyDrive/Csopark/csopark/train/images
+val: /content/drive/MyDrive/Csopark/csopark/valid/images
