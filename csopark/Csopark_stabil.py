@@ -35,8 +35,13 @@ except AttributeError:
 # Configuration
 RELAY_PIN = 17
 LED_PIN = 18
-USERNAME = os.environ.get('APP_USERNAME', 'bence')
-PASSWORD = os.environ.get('APP_PASSWORD', 'SanchoPanza567')
+USERNAME = os.environ.get('APP_USERNAME')
+PASSWORD = os.environ.get('APP_PASSWORD')
+if not USERNAME or not PASSWORD:
+    sys.exit(
+        "ERROR: Az APP_USERNAME és APP_PASSWORD környezeti változókat be kell "
+        "állítani (nincs beégetett alapérték biztonsági okból)."
+    )
 WHITELIST_FILE = 'whitelist.txt'
 ERROR_LOG_FILE = 'system_errors.txt'
 OCR_LOG_FILE = 'logs/ocr_log.log'
@@ -110,7 +115,16 @@ else:
     gpio_available = False
 
 app = Flask(__name__, static_folder='static')
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', os.urandom(24))
+secret = os.environ.get('FLASK_SECRET_KEY')
+if not secret:
+    if os.path.exists('.flask_secret'):
+        with open('.flask_secret', 'rb') as f:
+            secret = f.read()
+    else:
+        secret = os.urandom(24)
+        with open('.flask_secret', 'wb') as f:
+            f.write(secret)
+app.secret_key = secret
 app.permanent_session_lifetime = timedelta(minutes=30)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
@@ -917,7 +931,7 @@ def add_plate():
     if not re.match(r'^[A-Z0-9-]{5,8}$', p):
         session['whitelist_error'] = "Érvénytelen rendszám formátum"
     else:
-        wl = load_whistelist()
+        wl = load_whitelist()
         if p and p not in wl:
             wl.append(p)
             save_whitelist(wl)
