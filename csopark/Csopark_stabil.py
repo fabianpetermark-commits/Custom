@@ -9,7 +9,7 @@ import numpy as np
 import easyocr
 from ultralytics import YOLO
 from loguru import logger as loguru_logger
-from flask import Flask, render_template_string, request, redirect, url_for, session, send_from_directory, Response
+from flask import Flask, render_template_string, request, redirect, url_for, session, send_from_directory, Response, abort
 from flask_socketio import SocketIO, emit
 from Levenshtein import distance as levenshtein_distance
 from datetime import timedelta, datetime
@@ -46,7 +46,13 @@ WHITELIST_FILE = 'whitelist.txt'
 ERROR_LOG_FILE = 'system_errors.txt'
 OCR_LOG_FILE = 'logs/ocr_log.log'
 APP_LOG_FILE = 'logs/app_log.log'
-CAMERA_INDEX = 0
+# Kamerák listája. Bővítéskor csak ide kell egy új bejegyzés
+# {"id": ..., "name": ..., "source": ...} - a "source" lehet egész szám
+# (USB/beépített kamera indexe, pl. 0, 1, 2...) vagy szöveg (RTSP URL egy
+# IP-kamerához), az OpenCV VideoCapture mindkettőt elfogadja.
+CAMERAS = [
+    {"id": "cam1", "name": "Kamera 1", "source": 0},
+]
 CAMERA_FPS = 20
 USE_MJPEG_DIRECT = False
 OCR_COOLDOWN = 10
@@ -380,80 +386,77 @@ def load_log(date_filter=None):
         logger.error(f"Failed to read log file: {str(e)}")
         return []
 
-def camera_ocr_loop():
+def camera_ocr_loop(cam_id, camera, recognizer, recognizer_lock):
     global last_ocr_message, last_recognized_plate, last_plate_time
-    whitelist = load_whitelist()
-    recognizer = None
-    try:
-        recognizer = LicensePlateRecognizer(YOLO_MODEL_PATH, CONFIDENCE_THRESHOLD)
-    except Exception as e:
-        logger.error(f"Failed to initialize LicensePlateRecognizer: {str(e)}")
-        socketio.emit('ocr_update', {'plate': '', 'status': 'error', 'message': f'OCR initialization failed: {str(e)}'})
-        app_logger.error(f"OCR initialization failed: {str(e)}")
-        return
     while True:
         try:
             frame = camera.get_frame(_bytes=False)
             if frame is None:
-                logger.debug("OCR: No frame available")
-                ocr_logger.warning("No frame available")
+                logger.debug(f"OCR ({cam_id}): No frame available")
+                ocr_logger.warning(f"{cam_id}: No frame available")
                 time.sleep(0.2)
                 continue
-            plate_text, annotated_frame = recognizer.process_image(frame)
-            ocr_logger.debug(f"Extracted plate: {plate_text}")
+            # A recognizer (YOLO+EasyOCR) egy közös, nehéz erőforrás - egy
+            # példányt osztanak meg a kamera-szálak, a lock csak a
+            # kikövetkeztetést (inference) szerializálja köztük, nem a
+            # képkocka-olvasást.
+            with recognizer_lock:
+                plate_text, annotated_frame = recognizer.process_image(frame)
+            ocr_logger.debug(f"{cam_id}: Extracted plate: {plate_text}")
             if plate_text:
-                ocr_logger.info(f"Recognized plate: {plate_text}")
-                app_logger.info(f"Plate {plate_text} recognized")
+                ocr_logger.info(f"{cam_id}: Recognized plate: {plate_text}")
+                app_logger.info(f"Plate {plate_text} recognized ({cam_id})")
                 last_recognized_plate = plate_text
-                socketio.emit('ocr_update', {'plate': plate_text, 'status': 'recognized'})
+                socketio.emit('ocr_update', {'plate': plate_text, 'status': 'recognized', 'cam': cam_id})
+                whitelist = load_whitelist()
                 if is_similar(plate_text, whitelist):
                     current_time = time.time()
                     if current_time - last_plate_time > OCR_COOLDOWN:
-                        ocr_logger.info(f"Plate {plate_text} matched whitelist, opening gate")
-                        app_logger.info(f"Plate {plate_text} matched whitelist, gate opened")
-                        socketio.emit('ocr_update', {'plate': plate_text, 'status': 'matched'})
-                        open_gate(source='OCR')
+                        ocr_logger.info(f"{cam_id}: Plate {plate_text} matched whitelist, opening gate")
+                        app_logger.info(f"Plate {plate_text} matched whitelist, gate opened ({cam_id})")
+                        socketio.emit('ocr_update', {'plate': plate_text, 'status': 'matched', 'cam': cam_id})
+                        open_gate(source=f'OCR:{cam_id}')
                         led_feedback(True)
                         last_ocr_message = f"Rendszám felismerve: {plate_text}, kapu nyitva"
                         last_plate_time = current_time
                     else:
-                        ocr_logger.info(f"Plate {plate_text} matched but in cooldown")
-                        app_logger.info(f"Plate {plate_text} matched but in cooldown")
+                        ocr_logger.info(f"{cam_id}: Plate {plate_text} matched but in cooldown")
+                        app_logger.info(f"Plate {plate_text} matched but in cooldown ({cam_id})")
                         last_ocr_message = f"Rendszám felismerve: {plate_text}, várakozás (cooldown)"
-                        socketio.emit('ocr_update', {'plate': plate_text, 'status': 'cooldown'})
+                        socketio.emit('ocr_update', {'plate': plate_text, 'status': 'cooldown', 'cam': cam_id})
                 else:
-                    ocr_logger.info(f"Plate {plate_text} not in whitelist")
-                    app_logger.info(f"Plate {plate_text} not in whitelist")
+                    ocr_logger.info(f"{cam_id}: Plate {plate_text} not in whitelist")
+                    app_logger.info(f"Plate {plate_text} not in whitelist ({cam_id})")
                     last_ocr_message = f"Rendszám felismerve: {plate_text}, nincs a whitelistben"
-                    socketio.emit('ocr_update', {'plate': plate_text, 'status': 'not_in_whitelist'})
+                    socketio.emit('ocr_update', {'plate': plate_text, 'status': 'not_in_whitelist', 'cam': cam_id})
             else:
-                ocr_logger.info("No valid plate detected")
+                ocr_logger.info(f"{cam_id}: No valid plate detected")
                 last_ocr_message = "Nem sikerült rendszámot felismerni"
-                socketio.emit('ocr_update', {'plate': '', 'status': 'not_detected'})
+                socketio.emit('ocr_update', {'plate': '', 'status': 'not_detected', 'cam': cam_id})
             time.sleep(0.5)
         except Exception as e:
-            logger.error(f"OCR loop error: {str(e)}")
-            ocr_logger.error(f"OCR error: {str(e)}")
-            app_logger.error(f"OCR error: {str(e)}")
+            logger.error(f"OCR loop error ({cam_id}): {str(e)}")
+            ocr_logger.error(f"OCR error ({cam_id}): {str(e)}")
+            app_logger.error(f"OCR error ({cam_id}): {str(e)}")
             last_ocr_message = "OCR hiba történt"
-            socketio.emit('ocr_update', {'plate': '', 'status': 'error'})
+            socketio.emit('ocr_update', {'plate': '', 'status': 'error', 'cam': cam_id})
             time.sleep(1)
 
-def gen_frames():
-    global camera
+def gen_frames(cam_id):
+    cam = cameras.get(cam_id)
     while True:
-        if camera_active:
+        if camera_active and cam is not None:
             try:
-                frame = camera.get_frame(_bytes=False)
+                frame = cam.get_frame(_bytes=False)
                 if frame is None:
-                    logger.warning("Stream: No frame available")
+                    logger.warning(f"Stream ({cam_id}): No frame available")
                 else:
-                    logger.debug(f"Stream: Frame shape {frame.shape}, dtype {frame.dtype}")
-                frame = camera.get_frame()
+                    logger.debug(f"Stream ({cam_id}): Frame shape {frame.shape}, dtype {frame.dtype}")
+                frame = cam.get_frame()
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
             except Exception as e:
-                logger.error(f"Stream error: {str(e)}")
+                logger.error(f"Stream error ({cam_id}): {str(e)}")
         else:
             with open("images/not_found.jpeg", "rb") as f:
                 frame = f.read()
@@ -696,23 +699,23 @@ control_page = base_head + """
 </div>
 <div class="container">
   <div class="camera-grid">
+    {% for cam in cams %}
     <div class="camera-window">
       {% if use_mjpeg_direct %}
-      <img src="/video_feed" alt="Kamera 1">
+      <img src="/video_feed/{{ cam.id }}" alt="{{ cam.name }}">
       {% else %}
-      <img id="cam" alt="Kamera 1">
+      <img id="cam-{{ cam.id }}" alt="{{ cam.name }}">
       <script>
-        function updateCam() {
-          const img = document.getElementById("cam");
-          img.src = "/video_feed?rand=" + Math.random();
-        }
-        setInterval(updateCam, 200);
+        (function() {
+          const img = document.getElementById("cam-{{ cam.id }}");
+          setInterval(function() {
+            img.src = "/video_feed/{{ cam.id }}?rand=" + Math.random();
+          }, 200);
+        })();
       </script>
       {% endif %}
     </div>
-    <div class="camera-window">Kamera 2 (inaktív)</div>
-    <div class="camera-window">Kamera 3 (inaktív)</div>
-    <div class="camera-window">Kamera 4 (inaktív)</div>
+    {% endfor %}
   </div>
   <div class="whitelist-section">
     <h2>Whitelist</h2>
@@ -772,23 +775,23 @@ live_camera_page = base_head + """
 </div>
 <div class="container">
   <div class="camera-grid">
+    {% for cam in cams %}
     <div class="camera-window">
       {% if use_mjpeg_direct %}
-      <img src="/video_feed" alt="Kamera 1">
+      <img src="/video_feed/{{ cam.id }}" alt="{{ cam.name }}">
       {% else %}
-      <img id="cam" alt="Kamera 1">
+      <img id="cam-{{ cam.id }}" alt="{{ cam.name }}">
       <script>
-        function updateCam() {
-          const img = document.getElementById("cam");
-          img.src = "/video_feed?rand=" + Math.random();
-        }
-        setInterval(updateCam, 200);
+        (function() {
+          const img = document.getElementById("cam-{{ cam.id }}");
+          setInterval(function() {
+            img.src = "/video_feed/{{ cam.id }}?rand=" + Math.random();
+          }, 200);
+        })();
       </script>
       {% endif %}
     </div>
-    <div class="camera-window">Kamera 2 (inaktív)</div>
-    <div class="camera-window">Kamera 3 (inaktív)</div>
-    <div class="camera-window">Kamera 4 (inaktív)</div>
+    {% endfor %}
   </div>
 </div>
 </body></html>
@@ -877,50 +880,56 @@ def control():
     button_color = "#4CAF50" if camera_active else "#f44336"
     wl = load_whitelist()
     error = session.pop('whitelist_error', None)
-    return render_template_string(control_page, camera_button_text=button_text, camera_button_color=button_color, message=last_ocr_message, last_plate=last_recognized_plate, wl=wl, error=error, use_mjpeg_direct=USE_MJPEG_DIRECT)
+    return render_template_string(control_page, camera_button_text=button_text, camera_button_color=button_color, message=last_ocr_message, last_plate=last_recognized_plate, wl=wl, error=error, use_mjpeg_direct=USE_MJPEG_DIRECT, cams=CAMERAS)
 
-@app.route('/video_feed')
-def video_feed():
+@app.route('/video_feed/<cam_id>')
+def video_feed(cam_id):
     if not session.get('logged_in'):
         return redirect('/')
+    if cam_id not in cameras:
+        abort(404)
     if not camera_active:
         with open("images/not_found.jpeg", "rb") as f:
             frame = f.read()
         return Response(frame, mimetype='image/jpeg')
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen_frames(cam_id), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/single_frame')
-def single_frame():
+@app.route('/single_frame/<cam_id>')
+def single_frame(cam_id):
     if not session.get('logged_in'):
         return redirect('/')
+    if cam_id not in cameras:
+        abort(404)
     if not camera_active:
         with open("images/not_found.jpeg", "rb") as f:
             return Response(f.read(), mimetype='image/jpeg')
-    frame = camera.get_frame()
+    frame = cameras[cam_id].get_frame()
     return Response(frame, mimetype='image/jpeg')
 
 @app.route('/camera_feed')
 def camera_feed():
     if not session.get('logged_in'):
         return redirect('/')
-    return render_template_string(live_camera_page, use_mjpeg_direct=USE_MJPEG_DIRECT)
+    return render_template_string(live_camera_page, use_mjpeg_direct=USE_MJPEG_DIRECT, cams=CAMERAS)
 
-@app.route('/capture')
-def capture():
+@app.route('/capture/<cam_id>')
+def capture(cam_id):
     if not session.get('logged_in'):
         return redirect('/')
+    if cam_id not in cameras:
+        abort(404)
     if not camera_active:
         return redirect('/camera_feed')
-    frame = camera.get_frame(_bytes=False)
+    frame = cameras[cam_id].get_frame(_bytes=False)
     if frame is not None:
         s = frame.shape
         font = cv2.FONT_HERSHEY_SIMPLEX
         cv2.putText(frame, time.strftime('%Y-%m-%d %H:%M:%S'),
                     (10, s[0]-10), font, 1, (20, 20, 20), 2)
-        cv2.imwrite("images/last.png", frame)
-        logger.info("Frame captured to images/last.png")
-        ocr_logger.info("Frame captured for OCR verification")
-        app_logger.info("Frame captured for OCR verification")
+        cv2.imwrite(f"images/last_{cam_id}.png", frame)
+        logger.info(f"Frame captured to images/last_{cam_id}.png")
+        ocr_logger.info(f"Frame captured for OCR verification ({cam_id})")
+        app_logger.info(f"Frame captured for OCR verification ({cam_id})")
     return redirect('/camera_feed')
 
 @app.route('/add', methods=['POST'])
@@ -984,10 +993,12 @@ def toggle_camera_feed():
         return redirect('/')
     camera_active = not camera_active
     if camera_active:
-        camera.run()
+        for cam in cameras.values():
+            cam.run()
         last_ocr_message = "Kamera feed elindítva."
     else:
-        camera.stop()
+        for cam in cameras.values():
+            cam.stop()
         last_ocr_message = "Kamera feed leállítva."
     socketio.emit('ocr_update', {'plate': '', 'status': 'camera_' + ('on' if camera_active else 'off')})
     app_logger.info(f"Camera feed toggled {'on' if camera_active else 'off'}")
@@ -1030,26 +1041,41 @@ def logout():
 def manifest():
     return send_from_directory(app.static_folder, 'manifest.json')
 
-def start_ocr_thread():
-    t = threading.Thread(target=camera_ocr_loop, daemon=True)
-    t.start()
+def start_ocr_threads():
+    try:
+        recognizer = LicensePlateRecognizer(YOLO_MODEL_PATH, CONFIDENCE_THRESHOLD)
+    except Exception as e:
+        logger.error(f"Failed to initialize LicensePlateRecognizer: {str(e)}")
+        socketio.emit('ocr_update', {'plate': '', 'status': 'error', 'message': f'OCR initialization failed: {str(e)}'})
+        app_logger.error(f"OCR initialization failed: {str(e)}")
+        return
+    # Egy recognizer-t (YOLO+EasyOCR modell) osztanak meg a kamera-szálak -
+    # ez sokkal kevesebb memóriát/CPU-t igényel, mint kamerénként egy-egy
+    # saját modell-példány, a recognizer_lock pedig biztosítja, hogy a
+    # kikövetkeztetés (ami nem feltétlenül szálbiztos) sosem fut párhuzamosan.
+    recognizer_lock = threading.Lock()
+    for cam_id, cam in cameras.items():
+        t = threading.Thread(target=camera_ocr_loop, args=(cam_id, cam, recognizer, recognizer_lock), daemon=True)
+        t.start()
 
 if __name__ == '__main__':
     camera_active = True
     last_ocr_message = ""
     last_recognized_plate = ""
     last_plate_time = 0
-    camera = None
+    cameras = {}
     try:
-        camera = Camera(fps=CAMERA_FPS, video_source=CAMERA_INDEX)
-        camera.run()
-        start_ocr_thread()
+        for cam_cfg in CAMERAS:
+            cam = Camera(fps=CAMERA_FPS, video_source=cam_cfg['source'])
+            cam.run()
+            cameras[cam_cfg['id']] = cam
+        start_ocr_threads()
         socketio.run(app, host='0.0.0.0', port=5000, debug=False)
     except Exception as e:
         logger.error(f"Application startup error: {str(e)}")
         app_logger.error(f"Application startup error: {str(e)}")
     finally:
-        if camera:
-            camera.stop()
+        for cam in cameras.values():
+            cam.stop()
         if gpio_available:
             GPIO.cleanup()
