@@ -36,7 +36,7 @@
     <p>Utolsó felismert rendszám: {{ last_plate }}</p>
     <ul>
       {% for p in wl %}
-      <li>{{ p }} <a href="/delete/{{ p }}">Törlés</a></li>
+      <li>{{ p }} <form class="delete-form" action="/delete/{{ p }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="delete-btn">Törlés</button></form></li>
       {% endfor %}
     </ul>
     <form action="/add" method="post">

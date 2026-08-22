@@ -646,7 +646,7 @@ def add_plate():
         session.pop('whitelist_error', None)
     return redirect('/control')
 
-@app.route('/delete/<plate>')
+@app.route('/delete/<plate>', methods=['POST'])
 def delete_plate(plate):
     if not session.get('logged_in'):
         return redirect('/')

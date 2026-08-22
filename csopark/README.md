@@ -74,11 +74,11 @@ konszolidáltuk:
   történt-e változás (duplikált hozzáadás/hiányzó törlés nem naplózódik
   feleslegesen).
 - **CSRF-védelem**: minden POST form (`/`, `/open`, `/close`,
-  `/toggle_camera_feed`, `/add`) rejtett `csrf_token` mezőt kap, a
-  session-ben tárolt tokenhez hasonlítva egy `@app.before_request`
-  hookban — eltérés esetén 403. (A `/delete/<plate>` GET-alapú marad,
-  ezért erre a CSRF-védelem nem vonatkozik — ez egy ismert, kisebb
-  hátralévő rés, lásd lent.)
+  `/toggle_camera_feed`, `/add`, `/delete/<plate>`) rejtett
+  `csrf_token` mezőt kap, a session-ben tárolt tokenhez hasonlítva egy
+  `@app.before_request` hookban — eltérés esetén 403. A `/delete`
+  végpont a korábbi GET-alapú linkről POST-ra (kis inline form +
+  gomb) került át, hogy ezt is lefedje a védelem.
 - **Rate-limit a login végponton**: 5 sikertelen próbálkozás után 5
   percre zárolja az adott IP-t (egyszerű, memóriában tartott számláló,
   külön függőség nélkül — egy-processzes kisüzemi telepítéshez elég,
@@ -93,9 +93,6 @@ konszolidáltuk:
   modell kevés, sokszorosan augmentált adaton lett tanítva. Ehhez előbb
   a tanító-adat mennyiségét/minőségét kell átnézni.
 - Valódi ikongrafika a placeholder PNG-k helyére.
-- A `/delete/<plate>` GET-alapú végpont POST-ra (form+gomb) cserélése,
-  hogy a CSRF-védelem ráterjedjen (jelenleg csak a POST végpontokra
-  vonatkozik).
 
 ## Fontos: nem futtatható/tesztelhető ebben a környezetben
 
