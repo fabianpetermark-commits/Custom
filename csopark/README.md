@@ -66,6 +66,23 @@ konszolidáltuk:
   Drive-on nem voltak tényleges ikonfájlok, ezek nélkül a manifest és a
   service worker ikon-hivatkozásai 404-et adtak volna. Cserélendők
   valódi grafikára élesítés előtt.
+- **Whitelist SQLite adatbázisban** (`whitelist.db`) a sima `.txt` fájl
+  helyett. Induláskor egyszeri migráció (`migrate_whitelist_txt_to_db`)
+  átveszi a régi `whitelist.txt` tartalmát, ha a DB még üres — így egy
+  korábban élesített telepítésen sem vesznek el a meglévő rendszámok.
+  `add_to_whitelist`/`remove_from_whitelist` visszaadja, hogy tényleg
+  történt-e változás (duplikált hozzáadás/hiányzó törlés nem naplózódik
+  feleslegesen).
+- **CSRF-védelem**: minden POST form (`/`, `/open`, `/close`,
+  `/toggle_camera_feed`, `/add`) rejtett `csrf_token` mezőt kap, a
+  session-ben tárolt tokenhez hasonlítva egy `@app.before_request`
+  hookban — eltérés esetén 403. (A `/delete/<plate>` GET-alapú marad,
+  ezért erre a CSRF-védelem nem vonatkozik — ez egy ismert, kisebb
+  hátralévő rés, lásd lent.)
+- **Rate-limit a login végponton**: 5 sikertelen próbálkozás után 5
+  percre zárolja az adott IP-t (egyszerű, memóriában tartott számláló,
+  külön függőség nélkül — egy-processzes kisüzemi telepítéshez elég,
+  több worker-processes/nagy forgalmú környezethez nem).
 
 ## Tervben (folyamatban)
 
@@ -76,20 +93,30 @@ konszolidáltuk:
   modell kevés, sokszorosan augmentált adaton lett tanítva. Ehhez előbb
   a tanító-adat mennyiségét/minőségét kell átnézni.
 - Valódi ikongrafika a placeholder PNG-k helyére.
-- Whitelist adatbázisba tétele (jelenleg sima `.txt` fájl).
-- CSRF-védelem és rate-limit a login/form végpontokra.
+- A `/delete/<plate>` GET-alapú végpont POST-ra (form+gomb) cserélése,
+  hogy a CSRF-védelem ráterjedjen (jelenleg csak a POST végpontokra
+  vonatkozik).
 
 ## Fontos: nem futtatható/tesztelhető ebben a környezetben
 
 A kód valódi kamerát, Raspberry Pi GPIO-t, és a repóba szándékosan nem
 felvett YOLO modell-fájlt (`license_plate_yolov8.pt`) igényel, a Python
 függőségei (Flask, OpenCV, EasyOCR, ultralytics stb.) sincsenek
-telepítve ebben a fejlesztői környezetben. A Python kódot szintaktikai
-ellenőrzéssel (`python3 -m py_compile`) és alapos manuális átolvasással
-igazoltuk; a Jinja sablonokat ténylegesen le is futtattuk Jinja2-vel
-(dummy adatokkal minden oldalt renderelve, a multi-kamera ciklust is
-2 kamerával tesztelve) — de valós hardveren még nincs kipróbálva, ezt
-az élesítés előtt érdemes elvégezni.
+telepítve ebben a fejlesztői környezetben. Amit valóban futtatva
+igazoltunk:
+- a Python kód szintaktikailag helyes (`python3 -m py_compile`);
+- a Jinja sablonok Jinja2-vel valós renderelést kaptak (dummy adatokkal
+  minden oldal, multi-kamera ciklus 2 kamerával, CSRF hidden mezők
+  jelenléte mind az 5 form-on);
+- a whitelist SQLite-migráció és CRUD logika (`migrate_whitelist_txt_to_db`,
+  `add_to_whitelist`, `remove_from_whitelist`) valós sqlite3-mal, kimásolt
+  logikával;
+- a login rate-limit logika (`is_login_rate_limited`, `record_failed_login`)
+  is valós, kimásolt logikával.
+
+Ami emiatt NINCS lefedve: a Flask-alkalmazás tényleges elindítása, valós
+HTTP-kérések a route-okon keresztül, kamera/GPIO/YOLO integráció. Ezeket
+valós hardveren/környezetben kell kipróbálni élesítés előtt.
 
 ## Szándékosan kimaradt a Drive-ról
 

@@ -2,8 +2,11 @@ import os
 import re
 import sys
 import logging
+import secrets
+import sqlite3
 import threading
 import time
+from collections import defaultdict
 import cv2
 import numpy as np
 import easyocr
@@ -43,7 +46,10 @@ if not USERNAME or not PASSWORD:
         "állítani (nincs beégetett alapérték biztonsági okból)."
     )
 WHITELIST_FILE = 'whitelist.txt'
+WHITELIST_DB_FILE = 'whitelist.db'
 ERROR_LOG_FILE = 'system_errors.txt'
+LOGIN_RATE_LIMIT = 5
+LOGIN_RATE_WINDOW = 300
 OCR_LOG_FILE = 'logs/ocr_log.log'
 APP_LOG_FILE = 'logs/app_log.log'
 # Kamerák listája. Bővítéskor csak ide kell egy új bejegyzés
@@ -140,6 +146,35 @@ def add_header(r):
     r.headers["Pragma"] = "no-cache"
     r.headers["Expires"] = "0"
     return r
+
+def get_csrf_token():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = secrets.token_hex(32)
+    return session['csrf_token']
+
+app.jinja_env.globals['csrf_token'] = get_csrf_token
+
+@app.before_request
+def csrf_protect():
+    if request.method == 'POST':
+        token = session.get('csrf_token')
+        if not token or request.form.get('csrf_token') != token:
+            abort(403)
+
+# Bejelentkezési próbálkozások IP-cím szerinti korlátozása - egyszerű,
+# egy-processzes memóriában tartott számláló, nem igényel külön
+# függőséget. Kisebb (otthoni/telepi) telepítéshez elég, nagy forgalmú
+# vagy több worker-processes környezethez ez nem elég (nem osztott
+# állapot).
+_login_attempts = defaultdict(list)
+
+def is_login_rate_limited(ip):
+    now = time.time()
+    _login_attempts[ip] = [t for t in _login_attempts[ip] if now - t < LOGIN_RATE_WINDOW]
+    return len(_login_attempts[ip]) >= LOGIN_RATE_LIMIT
+
+def record_failed_login(ip):
+    _login_attempts[ip].append(time.time())
 
 class LicensePlateRecognizer:
     def __init__(self, model_path: str, confidence_threshold: float = 0.5):
@@ -297,22 +332,78 @@ class Camera:
                 with open("images/not_found.jpeg", "rb") as f:
                     return f.read()
 
-def load_whitelist():
-    try:
-        with open(WHITELIST_FILE, 'r') as f:
-            return [line.strip().upper() for line in f if line.strip()]
-    except FileNotFoundError:
-        logger.warning(f"Whitelist file {WHITELIST_FILE} not found.")
-        return []
+def get_whitelist_db():
+    conn = sqlite3.connect(WHITELIST_DB_FILE)
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS whitelist ("
+        "plate TEXT PRIMARY KEY, added_at TEXT NOT NULL)"
+    )
+    return conn
 
-def save_whitelist(plates):
+def migrate_whitelist_txt_to_db():
+    # Egyszeri migráció: a korábbi sima whitelist.txt tartalmát átvesszük
+    # az SQLite adatbázisba, ha az még üres - ez véd attól, hogy egy
+    # korábban élesített telepítésen elvesszen a whitelist a frissítéskor.
+    if not os.path.exists(WHITELIST_FILE):
+        return
+    conn = get_whitelist_db()
     try:
-        with open(WHITELIST_FILE, 'w') as f:
-            for p in plates:
-                f.write(p + '\n')
+        count = conn.execute("SELECT COUNT(*) FROM whitelist").fetchone()[0]
+        if count > 0:
+            return
+        with open(WHITELIST_FILE, 'r') as f:
+            plates = [line.strip().upper() for line in f if line.strip()]
+        now = datetime.now().isoformat()
+        for p in plates:
+            conn.execute(
+                "INSERT OR IGNORE INTO whitelist (plate, added_at) VALUES (?, ?)",
+                (p, now),
+            )
+        conn.commit()
+        if plates:
+            logger.info(f"Migrated {len(plates)} plate(s) from {WHITELIST_FILE} to {WHITELIST_DB_FILE}")
+    finally:
+        conn.close()
+
+def load_whitelist():
+    conn = get_whitelist_db()
+    try:
+        rows = conn.execute("SELECT plate FROM whitelist ORDER BY added_at").fetchall()
+        return [r[0] for r in rows]
     except Exception as e:
-        logger.error(f"Failed to save whitelist: {str(e)}")
+        logger.error(f"Failed to load whitelist: {str(e)}")
+        return []
+    finally:
+        conn.close()
+
+def add_to_whitelist(plate):
+    conn = get_whitelist_db()
+    try:
+        cur = conn.execute(
+            "INSERT OR IGNORE INTO whitelist (plate, added_at) VALUES (?, ?)",
+            (plate, datetime.now().isoformat()),
+        )
+        conn.commit()
+        return cur.rowcount > 0
+    except Exception as e:
+        logger.error(f"Failed to add plate to whitelist: {str(e)}")
         raise
+    finally:
+        conn.close()
+
+def remove_from_whitelist(plate):
+    conn = get_whitelist_db()
+    try:
+        cur = conn.execute("DELETE FROM whitelist WHERE plate = ?", (plate,))
+        conn.commit()
+        return cur.rowcount > 0
+    except Exception as e:
+        logger.error(f"Failed to remove plate from whitelist: {str(e)}")
+        raise
+    finally:
+        conn.close()
+
+migrate_whitelist_txt_to_db()
 
 def is_similar(plate, whitelist):
     for valid in whitelist:
@@ -468,12 +559,17 @@ def gen_frames(cam_id):
 def login():
     err = None
     if request.method == 'POST':
-        if request.form['username'] == USERNAME and request.form['password'] == PASSWORD:
+        ip = request.remote_addr
+        if is_login_rate_limited(ip):
+            err = "Túl sok sikertelen próbálkozás, várj néhány percet."
+        elif request.form['username'] == USERNAME and request.form['password'] == PASSWORD:
             session['logged_in'] = True
             session.permanent = True
             app_logger.info("User logged in")
             return redirect('/control')
         else:
+            record_failed_login(ip)
+            app_logger.warning(f"Failed login attempt from {ip}")
             err = "Hibás adatok"
     return render_template('login.html', error=err)
 
@@ -545,10 +641,7 @@ def add_plate():
     if not re.match(r'^[A-Z0-9-]{5,8}$', p):
         session['whitelist_error'] = "Érvénytelen rendszám formátum"
     else:
-        wl = load_whitelist()
-        if p and p not in wl:
-            wl.append(p)
-            save_whitelist(wl)
+        if add_to_whitelist(p):
             app_logger.info(f"Plate {p} added to whitelist")
         session.pop('whitelist_error', None)
     return redirect('/control')
@@ -557,10 +650,7 @@ def add_plate():
 def delete_plate(plate):
     if not session.get('logged_in'):
         return redirect('/')
-    wl = load_whitelist()
-    if plate in wl:
-        wl.remove(plate)
-        save_whitelist(wl)
+    if remove_from_whitelist(plate):
         app_logger.info(f"Plate {plate} removed from whitelist")
     return redirect('/control')
 

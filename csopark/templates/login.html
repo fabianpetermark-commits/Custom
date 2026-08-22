@@ -3,6 +3,7 @@
 <div class="container">
 <h2>Bejelentkezés</h2>
 <form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
   <input type="text" name="username" placeholder="Felhasználónév">
   <input type="password" name="password" placeholder="Jelszó">
   <button type="submit">Belépés</button>

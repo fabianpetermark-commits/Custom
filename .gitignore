@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+
+# csopark runtime state (generált a szerveren, nem verziózandó)
+csopark/whitelist.db
+csopark/.flask_secret
+csopark/logs/
+csopark/images/

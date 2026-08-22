@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="navbar">
-  <form action="/open" method="post"><button>Kapunyitás</button></form>
-  <form action="/close" method="post"><button>Kapuzárás</button></form>
-  <form action="/toggle_camera_feed" method="post"><button style="background-color: {{ camera_button_color }};">{{ camera_button_text }}</button></form>
+  <form action="/open" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button>Kapunyitás</button></form>
+  <form action="/close" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button>Kapuzárás</button></form>
+  <form action="/toggle_camera_feed" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button style="background-color: {{ camera_button_color }};">{{ camera_button_text }}</button></form>
   <a href="/status"><button>Rendszerállapot</button></a>
   <a href="/log"><button>Napló</button></a>
   <a href="/logout" class="logout"><button>Kijelentkezés</button></a>
@@ -40,6 +40,7 @@
       {% endfor %}
     </ul>
     <form action="/add" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <input type="text" name="plate" placeholder="Új rendszám">
       <button>Hozzáadás</button>
     </form>
