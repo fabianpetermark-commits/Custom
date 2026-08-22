@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="navbar">
+  <a href="/control"><button>Vissza</button></a>
+</div>
+<div class="container">
+  <div class="camera-section">
+    <h2>Rendszerállapot</h2>
+    <p>Státusz: OK</p>
+    <p>Kamera feed: {% if camera_active %}<span style="color: green;">Bekapcsolva</span>{% else %}<span style="color: red;">Kikapcsolva</span>{% endif %}</p>
+    <p>Utolsó felismert rendszám: {{ last_plate }}</p>
+    <h3>Legutóbbi hibák:</h3>
+    <pre>{{ errors }}</pre>
+  </div>
+</div>
+{% endblock %}

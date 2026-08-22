@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<h2>Bejelentkezés</h2>
+<form method="post">
+  <input type="text" name="username" placeholder="Felhasználónév">
+  <input type="password" name="password" placeholder="Jelszó">
+  <button type="submit">Belépés</button>
+</form>
+{% if error %}<p style="color:red">{{ error }}</p>{% endif %}
+</div>
+{% endblock %}

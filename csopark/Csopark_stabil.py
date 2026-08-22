@@ -9,7 +9,7 @@ import numpy as np
 import easyocr
 from ultralytics import YOLO
 from loguru import logger as loguru_logger
-from flask import Flask, render_template_string, request, redirect, url_for, session, send_from_directory, Response, abort
+from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory, Response, abort
 from flask_socketio import SocketIO, emit
 from Levenshtein import distance as levenshtein_distance
 from datetime import timedelta, datetime
@@ -464,401 +464,6 @@ def gen_frames(cam_id):
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         time.sleep(0.05)
 
-base_head = """
-<!doctype html>
-<html lang="hu">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#4CAF50">
-  <meta name="description" content="Rendszámfelismerő és kapunyitó alkalmazás">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>Csopark</title>
-  <link rel="manifest" href="/manifest.json">
-  <link rel="icon" href="/static/icons/icon-192x192.png">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 0;
-    }
-    .navbar {
-      background-color: #333;
-      display: flex;
-      align-items: center;
-      padding: 10px 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      gap: 15px;
-    }
-    .navbar a, .navbar form {
-      display: block;
-    }
-    .navbar button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 8px 15px;
-      margin: 0;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .navbar button:hover {
-      background-color: #45a049;
-    }
-    .navbar .logout {
-      margin-left: auto;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 20px auto;
-      display: flex;
-      gap: 20px;
-      padding-left: 10px;
-    }
-    .camera-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 320px);
-      gap: 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 10px;
-    }
-    .camera-window {
-      width: 320px;
-      height: 240px;
-      background-color: #ccc;
-      border-radius: 5px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #666;
-      font-size: 14px;
-    }
-    .camera-window img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .whitelist-section, .log-section {
-      max-width: fit-content;
-      min-width: 200px;
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-    }
-    .whitelist-section h2, .log-section h2 {
-      margin-top: 0;
-      font-size: 18px;
-    }
-    input[type=text], input[type=password], input[type=date] {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 20px;
-      margin: 6px 0;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      width: 100%;
-    }
-    button:hover {
-      opacity: 0.8;
-    }
-    .message {
-      background-color: #ffffcc;
-      padding: 8px;
-      margin-top: 8px;
-      border-radius: 5px;
-      text-align: center;
-      font-size: 14px;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-    li {
-      padding: 6px;
-      background: #eee;
-      margin-top: 4px;
-      border-radius: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-    }
-    a {
-      text-decoration: none;
-    }
-    .whitelist-section a {
-      color: white;
-      background-color: #f44336;
-      padding: 4px 8px;
-      border-radius: 5px;
-      font-size: 12px;
-    }
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #333;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      display: none;
-      z-index: 1000;
-    }
-    .toast.show {
-      display: block;
-    }
-    .toast.success {
-      background-color: #4CAF50;
-    }
-    .toast.error {
-      background-color: #f44336;
-    }
-    .toast.info {
-      background-color: #2196F3;
-    }
-    .log-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    .log-table th, .log-table td {
-      padding: 8px;
-      border: 1px solid #ddd;
-      text-align: left;
-      font-size: 14px;
-    }
-    .log-table th {
-      background-color: #4CAF50;
-      color: white;
-    }
-    .log-table tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    .log-table tr:hover {
-      background-color: #f1f1f1;
-    }
-  </style>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/static/service-worker.js')
-          .then(registration => {
-            console.log('Service Worker registered with scope:', registration.scope);
-          })
-          .catch(error => {
-            console.error('Service Worker registration failed:', error);
-          });
-      });
-    }
-    console.log('base_head template loaded - version with navbar gap fix');
-  </script>
-</head>
-<body>
-<div id="toast" class="toast"></div>
-"""
-
-login_page = base_head + """
-<div class="container">
-<h2>Bejelentkezés</h2>
-<form method="post">
-  <input type="text" name="username" placeholder="Felhasználónév">
-  <input type="password" name="password" placeholder="Jelszó">
-  <button type="submit">Belépés</button>
-</form>
-{% if error %}<p style="color:red">{{ error }}</p>{% endif %}
-</div>
-</body></html>
-"""
-
-control_page = base_head + """
-<div class="navbar">
-  <form action="/open" method="post"><button>Kapunyitás</button></form>
-  <form action="/close" method="post"><button>Kapuzárás</button></form>
-  <form action="/toggle_camera_feed" method="post"><button style="background-color: {{ camera_button_color }};">{{ camera_button_text }}</button></form>
-  <a href="/status"><button>Rendszerállapot</button></a>
-  <a href="/log"><button>Napló</button></a>
-  <a href="/logout" class="logout"><button>Kijelentkezés</button></a>
-</div>
-<div class="container">
-  <div class="camera-grid">
-    {% for cam in cams %}
-    <div class="camera-window">
-      {% if use_mjpeg_direct %}
-      <img src="/video_feed/{{ cam.id }}" alt="{{ cam.name }}">
-      {% else %}
-      <img id="cam-{{ cam.id }}" alt="{{ cam.name }}">
-      <script>
-        (function() {
-          const img = document.getElementById("cam-{{ cam.id }}");
-          setInterval(function() {
-            img.src = "/video_feed/{{ cam.id }}?rand=" + Math.random();
-          }, 200);
-        })();
-      </script>
-      {% endif %}
-    </div>
-    {% endfor %}
-  </div>
-  <div class="whitelist-section">
-    <h2>Whitelist</h2>
-    {% if message %}
-    <div class="message">{{ message }}</div>
-    {% endif %}
-    <p>Utolsó felismert rendszám: {{ last_plate }}</p>
-    <ul>
-      {% for p in wl %}
-      <li>{{ p }} <a href="/delete/{{ p }}">Törlés</a></li>
-      {% endfor %}
-    </ul>
-    <form action="/add" method="post">
-      <input type="text" name="plate" placeholder="Új rendszám">
-      <button>Hozzáadás</button>
-    </form>
-    {% if error %}<p style="color:red">{{ error }}</p>{% endif %}
-  </div>
-</div>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  const socket = io();
-  socket.on('ocr_update', function(data) {
-    const toast = document.getElementById('toast');
-    let message = '';
-    let toastClass = '';
-    if (data.status === 'recognized') {
-      message = `Rendszám felismerve: ${data.plate}`;
-      toastClass = 'info';
-    } else if (data.status === 'matched') {
-      message = `Rendszám ${data.plate} egyezik, kapu nyitva`;
-      toastClass = 'success';
-    } else if (data.status === 'cooldown') {
-      message = `Rendszám ${data.plate} várakozik (cooldown)`;
-      toastClass = 'info';
-    } else if (data.status === 'not_in_whitelist') {
-      message = `Rendszám ${data.plate} nincs a whitelistben`;
-      toastClass = 'error';
-    } else if (data.status === 'not_detected') {
-      message = 'Nem sikerült rendszámot felismerni';
-      toastClass = 'error';
-    } else if (data.status === 'error') {
-      message = data.message || 'OCR hiba történt';
-      toastClass = 'error';
-    }
-    toast.textContent = message;
-    toast.className = `toast show ${toastClass}`;
-    setTimeout(() => { toast.className = 'toast'; }, 3000);
-  });
-</script>
-</body></html>
-"""
-
-live_camera_page = base_head + """
-<div class="navbar">
-  <a href="/control"><button>Vissza</button></a>
-</div>
-<div class="container">
-  <div class="camera-grid">
-    {% for cam in cams %}
-    <div class="camera-window">
-      {% if use_mjpeg_direct %}
-      <img src="/video_feed/{{ cam.id }}" alt="{{ cam.name }}">
-      {% else %}
-      <img id="cam-{{ cam.id }}" alt="{{ cam.name }}">
-      <script>
-        (function() {
-          const img = document.getElementById("cam-{{ cam.id }}");
-          setInterval(function() {
-            img.src = "/video_feed/{{ cam.id }}?rand=" + Math.random();
-          }, 200);
-        })();
-      </script>
-      {% endif %}
-    </div>
-    {% endfor %}
-  </div>
-</div>
-</body></html>
-"""
-
-status_page = base_head + """
-<div class="navbar">
-  <a href="/control"><button>Vissza</button></a>
-</div>
-<div class="container">
-  <div class="camera-section">
-    <h2>Rendszerállapot</h2>
-    <p>Státusz: OK</p>
-    <p>Kamera feed: {% if camera_active %}<span style="color: green;">Bekapcsolva</span>{% else %}<span style="color: red;">Kikapcsolva</span>{% endif %}</p>
-    <p>Utolsó felismert rendszám: {{ last_plate }}</p>
-    <h3>Legutóbbi hibák:</h3>
-    <pre>{{ errors }}</pre>
-  </div>
-</div>
-</body></html>
-"""
-
-log_page = base_head + """
-<div class="navbar">
-  <a href="/control"><button>Vissza</button></a>
-</div>
-<div class="container">
-  <div class="log-section">
-    <h2>Napló</h2>
-    <input type="date" id="dateFilter" onchange="filterLogs()">
-    <table class="log-table">
-      <thead>
-        <tr>
-          <th>Idő</th>
-          <th>Típus</th>
-          <th>Esemény</th>
-        </tr>
-      </thead>
-      <tbody id="logBody">
-        {% for log in logs %}
-        <tr data-date="{{ log.timestamp|truncate(10, true, '') }}">
-          <td>{{ log.timestamp }}</td>
-          <td>{{ log.type }}</td>
-          <td>{{ log.message }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
-<script>
-  function filterLogs() {
-    const dateFilter = document.getElementById('dateFilter').value;
-    const rows = document.querySelectorAll('#logBody tr');
-    rows.forEach(row => {
-      const rowDate = row.getAttribute('data-date');
-      if (!dateFilter || rowDate === dateFilter) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
-      }
-    });
-  }
-</script>
-</body></html>
-"""
-
 @app.route('/', methods=['GET', 'POST'])
 def login():
     err = None
@@ -870,7 +475,7 @@ def login():
             return redirect('/control')
         else:
             err = "Hibás adatok"
-    return render_template_string(login_page, error=err)
+    return render_template('login.html', error=err)
 
 @app.route('/control')
 def control():
@@ -880,7 +485,7 @@ def control():
     button_color = "#4CAF50" if camera_active else "#f44336"
     wl = load_whitelist()
     error = session.pop('whitelist_error', None)
-    return render_template_string(control_page, camera_button_text=button_text, camera_button_color=button_color, message=last_ocr_message, last_plate=last_recognized_plate, wl=wl, error=error, use_mjpeg_direct=USE_MJPEG_DIRECT, cams=CAMERAS)
+    return render_template('control.html', camera_button_text=button_text, camera_button_color=button_color, message=last_ocr_message, last_plate=last_recognized_plate, wl=wl, error=error, use_mjpeg_direct=USE_MJPEG_DIRECT, cams=CAMERAS)
 
 @app.route('/video_feed/<cam_id>')
 def video_feed(cam_id):
@@ -910,7 +515,7 @@ def single_frame(cam_id):
 def camera_feed():
     if not session.get('logged_in'):
         return redirect('/')
-    return render_template_string(live_camera_page, use_mjpeg_direct=USE_MJPEG_DIRECT, cams=CAMERAS)
+    return render_template('live_camera.html', use_mjpeg_direct=USE_MJPEG_DIRECT, cams=CAMERAS)
 
 @app.route('/capture/<cam_id>')
 def capture(cam_id):
@@ -970,7 +575,7 @@ def status_page_route():
                 errors = f.read().splitlines()[-10:]
         except Exception as e:
             logger.error(f"Failed to read error log: {str(e)}")
-    return render_template_string(status_page, errors="\n".join(errors), camera_active=camera_active, last_plate=last_recognized_plate)
+    return render_template('status.html', errors="\n".join(errors), camera_active=camera_active, last_plate=last_recognized_plate)
 
 @app.route('/log')
 def log_page_route():
@@ -984,7 +589,7 @@ def log_page_route():
         except ValueError:
             date_obj = None
     logs = load_log(date_filter=date_obj)
-    return render_template_string(log_page, logs=logs)
+    return render_template('log.html', logs=logs)
 
 @app.route('/toggle_camera_feed', methods=['POST'])
 def toggle_camera_feed():

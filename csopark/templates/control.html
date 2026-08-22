@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="navbar">
+  <form action="/open" method="post"><button>Kapunyitás</button></form>
+  <form action="/close" method="post"><button>Kapuzárás</button></form>
+  <form action="/toggle_camera_feed" method="post"><button style="background-color: {{ camera_button_color }};">{{ camera_button_text }}</button></form>
+  <a href="/status"><button>Rendszerállapot</button></a>
+  <a href="/log"><button>Napló</button></a>
+  <a href="/logout" class="logout"><button>Kijelentkezés</button></a>
+</div>
+<div class="container">
+  <div class="camera-grid">
+    {% for cam in cams %}
+    <div class="camera-window">
+      {% if use_mjpeg_direct %}
+      <img src="/video_feed/{{ cam.id }}" alt="{{ cam.name }}">
+      {% else %}
+      <img id="cam-{{ cam.id }}" alt="{{ cam.name }}">
+      <script>
+        (function() {
+          const img = document.getElementById("cam-{{ cam.id }}");
+          setInterval(function() {
+            img.src = "/video_feed/{{ cam.id }}?rand=" + Math.random();
+          }, 200);
+        })();
+      </script>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  <div class="whitelist-section">
+    <h2>Whitelist</h2>
+    {% if message %}
+    <div class="message">{{ message }}</div>
+    {% endif %}
+    <p>Utolsó felismert rendszám: {{ last_plate }}</p>
+    <ul>
+      {% for p in wl %}
+      <li>{{ p }} <a href="/delete/{{ p }}">Törlés</a></li>
+      {% endfor %}
+    </ul>
+    <form action="/add" method="post">
+      <input type="text" name="plate" placeholder="Új rendszám">
+      <button>Hozzáadás</button>
+    </form>
+    {% if error %}<p style="color:red">{{ error }}</p>{% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  socket.on('ocr_update', function(data) {
+    const toast = document.getElementById('toast');
+    let message = '';
+    let toastClass = '';
+    if (data.status === 'recognized') {
+      message = `Rendszám felismerve: ${data.plate}`;
+      toastClass = 'info';
+    } else if (data.status === 'matched') {
+      message = `Rendszám ${data.plate} egyezik, kapu nyitva`;
+      toastClass = 'success';
+    } else if (data.status === 'cooldown') {
+      message = `Rendszám ${data.plate} várakozik (cooldown)`;
+      toastClass = 'info';
+    } else if (data.status === 'not_in_whitelist') {
+      message = `Rendszám ${data.plate} nincs a whitelistben`;
+      toastClass = 'error';
+    } else if (data.status === 'not_detected') {
+      message = 'Nem sikerült rendszámot felismerni';
+      toastClass = 'error';
+    } else if (data.status === 'error') {
+      message = data.message || 'OCR hiba történt';
+      toastClass = 'error';
+    }
+    toast.textContent = message;
+    toast.className = `toast show ${toastClass}`;
+    setTimeout(() => { toast.className = 'toast'; }, 3000);
+  });
+</script>
+{% endblock %}

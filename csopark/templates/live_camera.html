@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="navbar">
+  <a href="/control"><button>Vissza</button></a>
+</div>
+<div class="container">
+  <div class="camera-grid">
+    {% for cam in cams %}
+    <div class="camera-window">
+      {% if use_mjpeg_direct %}
+      <img src="/video_feed/{{ cam.id }}" alt="{{ cam.name }}">
+      {% else %}
+      <img id="cam-{{ cam.id }}" alt="{{ cam.name }}">
+      <script>
+        (function() {
+          const img = document.getElementById("cam-{{ cam.id }}");
+          setInterval(function() {
+            img.src = "/video_feed/{{ cam.id }}?rand=" + Math.random();
+          }, 200);
+        })();
+      </script>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -48,6 +48,24 @@ konszolidáltuk:
   szál indulásakor töltötte be — ha valaki a webes felületen rendszámot
   adott hozzá/törölt, az csak újraindítás után érvényesült. Most minden
   ciklusban újratölti.
+- **HTML sablonok kiszedve Jinja `templates/` mappába**: a korábbi
+  hatalmas Python string-ek (`base_head`, `control_page`, stb.) helyett
+  `templates/base.html` (közös fejléc/CSS/toast, `{% block content %}`
+  és `{% block scripts %}` blokkokkal) + `login.html`, `control.html`,
+  `live_camera.html`, `status.html`, `log.html` — mindegyik
+  `{% extends "base.html" %}`. A route-ok `render_template_string`
+  helyett `render_template`-et hívnak.
+- **`static/` mappa rendbe téve**: a `manifest.json` és a
+  `service-worker.js`/`sw.js` eddig a projekt gyökerében voltak, de a
+  `/manifest.json` route `send_from_directory(app.static_folder, ...)`-
+  vel a `static/` mappából próbálta kiszolgálni őket — ez éles
+  szerveren 404-et adott volna. Most a helyükön vannak
+  (`static/manifest.json`, `static/service-worker.js`, `static/sw.js`).
+  A `static/icons/` alá egyszerű, egyszínű placeholder PNG-k kerültek
+  (`icon-192x192.png`, `icon-512x512.png`, `csopark_icon.png`) — a
+  Drive-on nem voltak tényleges ikonfájlok, ezek nélkül a manifest és a
+  service worker ikon-hivatkozásai 404-et adtak volna. Cserélendők
+  valódi grafikára élesítés előtt.
 
 ## Tervben (folyamatban)
 
@@ -57,8 +75,7 @@ konszolidáltuk:
   kereskedelmi SimpleLPR SDK) irányának eldöntése — a jelenlegi YOLO
   modell kevés, sokszorosan augmentált adaton lett tanítva. Ehhez előbb
   a tanító-adat mennyiségét/minőségét kell átnézni.
-- HTML sablonok kiszedése Jinja `templates/` mappába (jelenleg Python
-  string-ekbe égetve).
+- Valódi ikongrafika a placeholder PNG-k helyére.
 - Whitelist adatbázisba tétele (jelenleg sima `.txt` fájl).
 - CSRF-védelem és rate-limit a login/form végpontokra.
 
@@ -67,10 +84,12 @@ konszolidáltuk:
 A kód valódi kamerát, Raspberry Pi GPIO-t, és a repóba szándékosan nem
 felvett YOLO modell-fájlt (`license_plate_yolov8.pt`) igényel, a Python
 függőségei (Flask, OpenCV, EasyOCR, ultralytics stb.) sincsenek
-telepítve ebben a fejlesztői környezetben. A változásokat szintaktikai
+telepítve ebben a fejlesztői környezetben. A Python kódot szintaktikai
 ellenőrzéssel (`python3 -m py_compile`) és alapos manuális átolvasással
-igazoltuk, de valós hardveren még nincs kipróbálva — ezt az élesítés
-előtt érdemes elvégezni.
+igazoltuk; a Jinja sablonokat ténylegesen le is futtattuk Jinja2-vel
+(dummy adatokkal minden oldalt renderelve, a multi-kamera ciklust is
+2 kamerával tesztelve) — de valós hardveren még nincs kipróbálva, ezt
+az élesítés előtt érdemes elvégezni.
 
 ## Szándékosan kimaradt a Drive-ról
 
@@ -85,10 +104,11 @@ előtt érdemes elvégezni.
 - A Csopark Python kódja (`Csopark_stabil.py` és a hozzá tartozó modulok:
   `camera.py`, `camera1.py`, `capture.py`, `ocr.py`, `conf.py`,
   `train_yolo.py`, `LicensePR.py`).
-- Konfiguráció és adat: `data.yaml`, `manifest.json`,
-  `manifest(old).json`, `conf old.py`.
+- `templates/` — Jinja HTML sablonok.
+- `static/` — `manifest.json`, `service-worker.js`, `sw.js`,
+  `static/icons/` (placeholder ikonok).
+- Konfiguráció és adat: `data.yaml`, `manifest(old).json`, `conf old.py`.
 - Indító szkriptek: `inditás.bat`, `inditas_csopark teszt.bat`,
   `train.bat`.
-- Web/PWA: `service-worker.js`, `sw.js`.
 - Dokumentáció: `readme.txt`, `README.dataset.txt`, `README.roboflow.txt`,
   `whitelist.txt`, `LicensePR.txt` (üres a forrásban is).
